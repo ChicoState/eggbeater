@@ -10,3 +10,6 @@ USB attached encrypted storage and management software
 === Meet the team ===
 ==== Robert Beam ====
 I am a senior majoring in Computer Engineering. I am interested in real-time computing, embedded operating systems and programmable logic devices (eg FPGA, CPLD, etc).
+
+==== Sam Adams ====
+I am double majoring in computer and electrical engineering, I have about two years left at Chico State. I love to be outdoors and be with my friends and family.
