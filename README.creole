@@ -13,5 +13,7 @@ I am a senior majoring in Computer Engineering. I am interested in real-time com
 
 ==== Sam Adams ====
 I am double majoring in computer and electrical engineering, I have about two years left at Chico State. I love to be outdoors and be with my friends and family.
-=== Sam Whitsett ===
-Currently a senior in computer science. I like fast things, and turtles.
+
+
+== Taha Ainaddin ==
+I am a junior majoring in Computer Engineering. I have my senior project class this semester.I think, I will graduate in Fall 2015. I am intersted in C and C++ language.
