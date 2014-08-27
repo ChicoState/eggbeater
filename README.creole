@@ -5,3 +5,8 @@ USB attached encrypted storage and management software
 
 == TODO ==
 # Pick an FOSS license
+
+
+=== Meet the team ===
+==== Robert Beam ====
+I am a senior majoring in Computer Engineering. I am interested in real-time computing, embedded operating systems and programmable logic devices (eg FPGA, CPLD, etc).
