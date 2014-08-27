@@ -19,4 +19,4 @@ I am double majoring in computer and electrical engineering, I have about two ye
 I am a junior majoring in Computer Engineering. I have my senior project class in this semester.I think, I will graduate in Fall 2015. I am intersted in C and C++ language.
 
 === Yuki Ishikawa==
-I am majoring in computer science and from Japan, I am interested in network security and progtramming with C++. 
+I am majoring in computer science and from Japan, I am interested in network security and programming with C++. 
