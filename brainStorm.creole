@@ -20,4 +20,11 @@ Could have system email or take a picture via webcam if many failed password att
 Could have system shred file if too many failed pswrd attempts.
 Could have password change daily based on formula with the date or related data.
 Could use an RFID unit as a key.
-Could support multiple users 
+Could support multiple users
+
+== Encryption ==
+I know someone said that they had some background with encryption allready, so he may have a
+better say in this than me. I was looking into PGP encryption which could serve as a way to secure 
+things. Some quick examples below. 
+http://www.deepdotweb.com/2013/11/11/pgp-tutorial-for-newbs-gpg4win/
+https://xato.net/cryptography/pgp-10-minutes-or-less/#.U_9Z9GBdVQI
