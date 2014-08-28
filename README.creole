@@ -12,7 +12,7 @@ Ideally, the encrypted storage medium would appear exactly as a normal storage d
 == TODO ==
 # Pick an FOSS license
 # Determine feasability of USB interface and GUI for our project.
-
+# Create a project ouline and develop a rough time schedule
 
 === Meet the team ===
 ==== Robert Beam ====
