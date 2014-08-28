@@ -20,3 +20,4 @@ Could have system email or take a picture via webcam if many failed password att
 Could have system shred file if too many failed pswrd attempts.
 Could have password change daily based on formula with the date or related data.
 Could use an RFID unit as a key.
+Could support multiple users 
