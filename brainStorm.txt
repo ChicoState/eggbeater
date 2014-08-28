@@ -1,0 +1,22 @@
+=== Brain Storm Document ===
+
+== Objectives ==
+
+# Create an easy to use file encryption program.
+# Utilize hardware either for the encryption engine or for key generation.
+# Have a clean seamless user interface.
+
+== Design ==
+
+#Code will be C++.
+#Specific encryption technique needs to be decided.
+#specific hardware needs to be chosen. 
+
+== Ideas ==
+
+Could use thumb print reader for authentication. ( https://www.sparkfun.com/products/11792 )
+Could use micro-controller to encrypt data onto external storage from a pc.
+Could have system email or take a picture via webcam if many failed password attempts.
+Could have system shred file if too many failed pswrd attempts.
+Could have password change daily based on formula with the date or related data.
+Could use an RFID unit as a key.
