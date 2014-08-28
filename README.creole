@@ -2,6 +2,12 @@
 
 USB attached encrypted storage and management software
 
+== Purpose ==
+This project aims to create a seamless interface between a computer and an encrypted storage medium.
+Ideally, the encrypted storage medium would appear exactly as a normal storage device.
+* Should support several filesystems
+* Should be host OS agnostic
+
 
 == TODO ==
 # Pick an FOSS license
