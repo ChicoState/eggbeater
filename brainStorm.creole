@@ -28,3 +28,5 @@ better say in this than me. I was looking into PGP encryption which could serve 
 things. Some quick examples below. 
 http://www.deepdotweb.com/2013/11/11/pgp-tutorial-for-newbs-gpg4win/
 https://xato.net/cryptography/pgp-10-minutes-or-less/#.U_9Z9GBdVQI
+
+Robert: PGP may be cost prohibitive (http://buy.symantec.com/estore/clp/category-encryption) Although, there are claims that PGP is considered "military grade." An FOSS alternative is GNU PGP (GPG/GnuPGP), but I'm having a hard time finding security claims (http://www.openpgp.org/).
