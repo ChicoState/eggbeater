@@ -7,6 +7,7 @@ USB attached encrypted storage and management software
 # Pick an FOSS license
 # Determine feasability of USB interface and GUI for our project.
 
+
 === Meet the team ===
 ==== Robert Beam ====
 I am a senior majoring in Computer Engineering. I am interested in real-time computing, embedded operating systems and programmable logic devices (eg FPGA, CPLD, etc).
@@ -15,5 +16,17 @@ I am a senior majoring in Computer Engineering. I am interested in real-time com
 I am double majoring in computer and electrical engineering, I have about two years left at Chico State. I love to be outdoors and be with my friends and family.
 
 ==== Sterling Miller ====
-I am a senior majoring in Computer Engineering. I am interested in machine learning. I know C, C++, some powershell and bash, as well as thumb2 assembly. I own a 42U server rack, It is awesome.
+I am a senior majoring in Computer Engineering. I am interested in machine learning. I know C, C++, some powershell and bash, as well as thumb2 assembly. I like things that a simple and do what they are supposed to do.
+
+==== Sam Whitsett ====
+Currently a senior in computer science. I like fast things, and turtles.
+
+==== Taha Ainaddin ====
+I am a junior majoring in Computer Engineering. I have my senior project class in this semester.I think, I will graduate in Fall 2015. I am intersted in C and C++ language.
+
+==== Yuki Ishikawa====
+I am majoring in computer science and from Japan, I am interested in network security and programming with C++. 
+
+==== Andrew Barton ====
+I am majoring in computer and electrical engineering. I love programming and hands on work, but I am still developing an idea of what areas I want to focus my career on.
 
