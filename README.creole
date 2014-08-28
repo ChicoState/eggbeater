@@ -16,7 +16,7 @@ I am a senior majoring in Computer Engineering. I am interested in real-time com
 I am double majoring in computer and electrical engineering, I have about two years left at Chico State. I love to be outdoors and be with my friends and family.
 
 ==== Sterling Miller ====
-I am a senior majoring in Computer Engineering. I am interested in machine learning. I know C, C++, some powershell and bash, as well as thumb2 assembly. I like things that a simple and do what they are supposed to do.
+I am a senior majoring in Computer Engineering. I am interested in machine learning. I know C, C++, some powershell and bash, as well as thumb2 assembly. I like things that are simple and do what they are supposed to do.
 
 ==== Sam Whitsett ====
 Currently a senior in computer science. I like fast things, and turtles.
@@ -29,4 +29,5 @@ I am majoring in computer science and from Japan, I am interested in network sec
 
 ==== Andrew Barton ====
 I am majoring in computer and electrical engineering. I love programming and hands on work, but I am still developing an idea of what areas I want to focus my career on.
+
 
