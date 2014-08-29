@@ -33,3 +33,5 @@ Robert: PGP may be cost prohibitive (http://buy.symantec.com/estore/clp/category
 
 SamW: If you check out the first link i shows how it works a little bit. i am almost certian we will not need the Norton software. Just the file listed in there
 and maybe Kleopatra.
+
+Robert: Both links tell the user to install GPG4Win, the GnuPGP/OpenPGP implementation for use on Windows.
