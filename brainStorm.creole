@@ -35,3 +35,4 @@ SamW: If you check out the first link i shows how it works a little bit. i am al
 and maybe Kleopatra.
 
 Robert: Both links tell the user to install GPG4Win, the GnuPGP/OpenPGP implementation for use on Windows.
+Also, GnuPG doesn't seem to support embedded ARM processors (Cortex M/R series). It does support the general purpose chips though (Cortex A series).
