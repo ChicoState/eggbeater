@@ -36,3 +36,11 @@ and maybe Kleopatra.
 
 Robert: Both links tell the user to install GPG4Win, the GnuPGP/OpenPGP implementation for use on Windows.
 Also, GnuPG doesn't seem to support embedded ARM processors (Cortex M/R series). It does support the general purpose chips though (Cortex A series).
+
+Sterling: I have been messing around with "Microsoft Visual Studio Express" because it supports GUI's (for windows) and an encryption library Crypto++ (http://www.cryptopp.com/).
+So far both have been a bit of a head ache, but the crypt++ library seems to be a great resource. After some reading, I recommend we go with either AES or Twofish for our encryption.
+The hang up for me at this point is how to best implement a GUI. If we are doing all the encryption in the USB device, we may be able to have it be transparent to the computer. So 
+no GUI would be needed. Really we just need to meet and hammer out precisely how we want to implement this thing so we know where to put the bulk of our effort.
+
+
+
