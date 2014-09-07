@@ -12,6 +12,9 @@
 #Specific encryption technique needs to be decided.
 #specific hardware needs to be chosen. 
 
+Robert: One idea Sterling and I have been bouncing around is seperating any graphical portion from the actual core work. Much in the same was that Linux GUI tools "simply" call command line tools with the appropriate options.
+
+
 == Ideas ==
 
 Could use thumb print reader for authentication. ( https://www.sparkfun.com/products/11792 )
@@ -42,5 +45,5 @@ So far both have been a bit of a head ache, but the crypt++ library seems to be 
 The hang up for me at this point is how to best implement a GUI. If we are doing all the encryption in the USB device, we may be able to have it be transparent to the computer. So 
 no GUI would be needed. Really we just need to meet and hammer out precisely how we want to implement this thing so we know where to put the bulk of our effort.
 
-
+Robert: An option to allow a more portable graphical interface is wxWidgets, Qt or Mono/.NET all of which support some flavor of C++. Mono/.NET support a flavor of C++ that doesn't directly use pointers (pointers are there but abstracted from the programmer unless explicitly required).
 
