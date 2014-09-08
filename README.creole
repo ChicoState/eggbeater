@@ -2,6 +2,9 @@
 
 USB attached encrypted storage and management software
 
+=== Links ===
+[[https://www.pivotaltracker.com/s/projects/1162420|Pivotal Tracker]]
+
 == Purpose ==
 This project aims to create a seamless interface between a computer and an encrypted storage medium.
 Ideally, the encrypted storage medium would appear exactly as a normal storage device.
