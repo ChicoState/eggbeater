@@ -2,11 +2,28 @@ Group meeting 1 9/9/14
 
 Notes:
 
-1) Project
-  - AES using hardware for password
-  - pure software
-  - encrypt in hardware onto software
+1) Project ideas:
+  --  encrypt using hardware for password
+  -- GUI to specify file and operation
+  
+GUI: Sterling, Sam Adams, Sam W, Yuki
+  -- which is the easiest to work with
+  -- cross platform (linux, windows, mac)
+  --c/c++ bindings
+  -- PC GUI Library
+     - wxWidgets
+     - Qt
+     - GTkt
+     -.NET/Mono
+     
+Hardware: Sam Adams, Taha, Andrew
+   -- research finger print scanners
+      -what can it do
+      -how does it communicate
 
-GUI -- specify file and operation
-Hardware -- generate password
-AES -- enc/decrypt
+enc/decrypt: Sterling, Sam W, Robert
+  --Twofish 
+  --AES
+  --openSSL
+  --Crypto++
+  --cyaSSL
