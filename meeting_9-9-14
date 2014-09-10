@@ -1,0 +1,12 @@
+Group meeting 1 9/9/14
+
+Notes:
+
+1) Project
+  - AES using hardware for password
+  - pure software
+  - encrypt in hardware onto software
+
+GUI -- specify file and operation
+Hardware -- generate password
+AES -- enc/decrypt
