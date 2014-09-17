@@ -1,0 +1,39 @@
+Group meeting 2 9/16/14
+
+Note:
+
+1) Project ideas:
+  -- encrypt using hardware for password
+  -- GUI to specify file and operation
+  
+GUI
+  --wxWidgits: SM
+    -example code
+    -GUI tool
+    
+  --Qt: YI
+    -fewer dependencies
+    -GUI tool
+  
+  --Build enviroment: RB
+  
+Crypto
+  --crypto++(blovfish, twofish, AES)
+    -lots of algos
+    -wolf SSL/cya SSL(Check HW support)
+  --openAES
+    -GIC
+  --openSSL
+    -no cygwin-x86_64
+
+Hardware
+  --GT511C3
+    -$50
+  --GT511CIR
+    -$32/$27
+    -aharduino.com
+    -Spakfun Library: AB
+    -Datasheet Commands: TA
+
+To do (eventually)
+  --Embed->PC communication
