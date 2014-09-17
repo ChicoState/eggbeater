@@ -18,11 +18,11 @@ GUI
   --Build enviroment: RB
   
 Crypto
-  --crypto++(blovfish, twofish, AES)
+  --crypto++(blowfish, twofish, AES)
     -lots of algos
     -wolf SSL/cya SSL(Check HW support)
   --openAES
-    -GIC
+    -GIC (got it compiled)
   --openSSL
     -no cygwin-x86_64
 
@@ -31,7 +31,7 @@ Hardware
     -$50
   --GT511CIR
     -$32/$27
-    -aharduino.com
+    -anarduino.com
     -Spakfun Library: AB
     -Datasheet Commands: TA
 
