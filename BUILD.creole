@@ -1,0 +1,46 @@
+== Egg Beater ==
+
+=== Table of contents ===
+# Build dependencies
+# How to build
+## Windows
+## Linux
+## Mac
+# Common issues
+
+
+== Build dependencies ==
+
+Compiler support
+* GCC 4.8 or newer (or MinGW on Windows)
+* MinGW 4.8 or newer
+* Clang 3.4 or newer
+
+Required libraries
+* [[http://www.cryptopp.com/|Crypto++]]
+* [[https://code.google.com/p/googletest/|Google Test]]
+
+Required software
+* CMake 2.8 or newer
+* GNU compatible make
+** Comes with CygWin
+** Likely installed on Mac/Linux
+
+== How to build ==
+=== Windows ===
+On windows, you have several options available:
+# Install Cygwin and either MinGW64 or Clang
+# Install MSys and MinGW64
+# Install Clang, binutils and GNU make
+
+==== Cygwin option ===
+# Download "setup-x86_64.exe" from [[https://www.cygwin.com/]].
+# Install by following the instructions at [[https://cygwin.com/install.html]]
+# Install one of the following additional packages:
+## mingw64-x86_64-gcc-g++
+## clang
+# This should install a GNU compatible make and several other required packages.
+
+=== MSys option ===
+# Download "mingw-get-setup.exe" from [[http://www.mingw.org/wiki/Getting_Started]] and follow the directions
+*** Does this support 64-bit?
