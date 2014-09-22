@@ -40,6 +40,7 @@ On windows, you have several options available:
 # Install one of the following additional packages:
 ## mingw64-x86_64-gcc-g++
 ## clang
+*** Code coverage doesn't seem to work on CygWin.
 # This should install a GNU compatible make and several other required packages.
 
 ==== MSys option ====
@@ -50,4 +51,4 @@ On windows, you have several options available:
 # Download clang from [[http://llvm.org/releases/download.html]]
 # Download binutils for Windows from [[http://gnuwin32.sourceforge.net/packages/binutils.htm]]
 # Download a GNU compatible make from [[http://gnuwin32.sourceforge.net/packages/make.htm]]
-** Code coverage doesn't seem to work on CygWin.
+
