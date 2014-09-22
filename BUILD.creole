@@ -22,6 +22,7 @@ Required libraries
 
 Required software
 * CMake 2.8 or newer
+** Should we use a different core build system? [[http://www.scons.org/wiki/SconsVsOtherBuildTools]]
 * GNU compatible make
 ** Comes with CygWin
 ** Likely installed on Mac/Linux
