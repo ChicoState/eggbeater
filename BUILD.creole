@@ -35,6 +35,7 @@ On windows, you have several options available:
 # Install Cygwin and either MinGW64 or Clang
 # Install MSys and MinGW64
 # Install Clang, binutils and GNU make
+** Binutils on Windows doesn't seem to include a linker (ld)
 
 ==== Cygwin option ===
 # Download "setup-x86_64.exe" from [[https://www.cygwin.com/]].
