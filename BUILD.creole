@@ -12,9 +12,11 @@
 == Build dependencies ==
 
 Compiler support
-* GCC 4.8 or newer (or MinGW on Windows)
+* GCC 4.8 or newer
 * MinGW 4.8 or newer
+** Standalone doesn't seem to support 64-bit on Windows
 * Clang 3.4 or newer
+** Doesn't seem to play nice w/ CygWin
 
 Required libraries
 * [[http://www.cryptopp.com/|Crypto++]]
