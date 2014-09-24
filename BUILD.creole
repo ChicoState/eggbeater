@@ -26,13 +26,13 @@ Required software
 * CMake 2.8 or newer
 ** Should we use a different core build system? [[http://www.scons.org/wiki/SconsVsOtherBuildTools]]
 * GNU compatible make
-** Comes with CygWin
+** Available on CygWin
 ** Likely installed on Mac/Linux
 
 == How to build ==
 === Windows ===
 On windows, you have several options available:
-# Install Cygwin and either MinGW64 or Clang
+# Install Cygwin and GCC
 # Install MSys and MinGW64
 # Install Clang, binutils and GNU make
 ** Binutils on Windows doesn't seem to include a linker (ld)
@@ -40,10 +40,10 @@ On windows, you have several options available:
 ==== Cygwin option ===
 # Download "setup-x86_64.exe" from [[https://www.cygwin.com/]].
 # Install by following the instructions at [[https://cygwin.com/install.html]]
-# Install one of the following additional packages:
-## mingw64-x86_64-gcc-g++
-## clang
-*** Code coverage doesn't seem to work on CygWin.
+# Install the following packages:
+## gcc-g++
+## binutils
+## make
 # This should install a GNU compatible make and several other required packages.
 
 ==== MSys option ====
