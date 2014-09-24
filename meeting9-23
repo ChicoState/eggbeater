@@ -2,7 +2,7 @@ GUI libraries:
 QT -design interface
    -compiles c++
    -need to test build difficulty
-   
+
 wxWidgets:
    -hard to build
    -code generator running in simulation environment
@@ -15,6 +15,9 @@ FingerPrint:
    -Download
    -256x256 template: 506bytes
    3.3v dc
+
+STM32F429 discovery board:
+   5V is present on pin B13 when connected to USB OTG micro A/B connector
    
 Encryption:
   AES
