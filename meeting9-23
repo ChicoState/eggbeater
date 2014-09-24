@@ -30,7 +30,7 @@ Todo:
    -function that gets data from usb
    -function that encrypts some file (256 bits of encryption) using a fixed key for testing
    -function to convert [phase1 password]=phase1key on Arm board
-   -function to parse usb data
+   -function to parse usb data  http://playground.arduino.cc/Interfacing/CPPWindows
 this iteration:
 YI,SW   -Encrypt file form CLI
            AES 256 fixed key
