@@ -1,0 +1,99 @@
+GUI libraries:
+QT -design interface
+   -compiles c++
+   -need to test build difficulty
+   
+wxWidgets:
+   -hard to build
+   -code generator running in simulation environment
+   -double click for file selector to include code
+  
+Sparkfun:
+   -Some things will need to be built to translate the UART to talk with the board
+   
+FingerPrint:
+   -Download
+   -256x256 template: 498bytes
+   3.3v dc
+   
+Encryption:
+  AES
+   -have it compiling
+   -crypto++ library
+   -works on cygwin
+Makefile generator:
+   -CMake
+Cygwin:
+    -GCC
+    
+Todo:
+   -function that gets data from usb
+   -function that encrypts some file (256 bits of encryption) using a fixed key for testing
+   -function to convert [phase1 password]=phase1key on Arm board
+   -function to parse usb data
+this iteration:
+YI,SW   -Encrypt file form CLI
+           AES 256 fixed key
+  *  Iced      -Authentication
+  *  1wk         Error checking
+AB,RB   -Implement delta, gamma, tau
+TA,SA   -parse USB data    
+SA,SM,RB- Stm->pc communitcation
+                  serial comm device
+SM,YI   -GUI hello world                
+
+       
+STM<-------------USB-------------->PC
+                           <---RTS
+      CTS----->
+        or
+      Silence(error)
+                          <--Newfile
+phase1PW-> User enter
+           password
+phase1key->GeneratePhase1Key 
+
+phase2PW-> GenerateFPtempl
+           Encrypt to 256
+phase2key->run gamma
+          send phase2key---->
+                              Run tau
+                              write to disk
+  
+  
+  
+ _ header
+|
+|
+|
+|
+|_> Fingerprint Template<--Phase 1key
+|
+|_>cipher text          <--Phase2key gamma
+
+
+Functions:
+delta[phase1 password]=phase 1 key (LCD PIN input)        <--generated on arm
+gamma[phase2 passcode]=phase2key  (plain FP template)   <--generated on arm
+tau[phase2key, plain text]=cipher text  (<--generated on pc
+
+Serial cmd block:
+
+majic # (SOF) 
+RTS cmd
+Sequence total
+     (EOF)
+     
+Command block:     
+|M#|cmd|Seq|EOF
+
+Data block:
+|M#|data|whichSeq|#bytes
+|data bytes             |
+       |
+       |
+       |
+       |
+       V
+|CRC 32                 |
+|EOF|
