@@ -2,7 +2,13 @@
 GTEST_DIR     = deps/gtest
 CRYPTOPP_DIR  = deps/cryptopp
 
-CXXFLAGS += -O0 -std=gnu++11 "-I$(GTEST_DIR)" "-I$(GTEST_DIR)/include" "-I$(CRYPTOPP_DIR)" "-Iinclude" "-Ideps"
+CXXFLAGS += -O0                      \
+            -std=gnu++11             \
+						"-I$(GTEST_DIR)"         \
+						"-I$(GTEST_DIR)/include" \
+						"-I$(CRYPTOPP_DIR)"      \
+						"-Iinclude"              \
+						"-Ideps"
 LDFLAGS  += "-Llib"
 
 all: lib/libcryptopp.a lib/gtest.a testsuite
@@ -34,4 +40,7 @@ tests/Crypto_tests.elf: tests/Crypto_tests.o src/Crypto.o lib/libcryptopp.a lib/
 
 .PHONY: testsuite
 clean:
-	rm -rf lib $(shell find src -type f -name "*.o") $(shell find tests -type f -name "*.o") $(shell find tests -type f -name "*.elf")
+	rm -rf lib                                \
+	$(shell find src -type f -name "*.o")     \
+	$(shell find tests -type f -name "*.o")   \
+	$(shell find tests -type f -name "*.elf")
