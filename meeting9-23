@@ -8,7 +8,7 @@ wxWidgets:
    -code generator running in simulation environment
    -double click for file selector to include code
   
-Sparkfun:
+Sparkfun: https://github.com/sparkfun/Fingerprint_Scanner-TTL
    -Some things will need to be built to translate the UART to talk with the board
    
 FingerPrint:
