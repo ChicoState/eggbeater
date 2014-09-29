@@ -1,6 +1,5 @@
-/deps/cryptopp
-/deps/gtest
-/lib
+*/deps/*
+lib
 *.o
 *.exe
 *.elf

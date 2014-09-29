@@ -1,6 +1,6 @@
 
-GTEST_DIR     = deps/gtest
-CRYPTOPP_DIR  = deps/cryptopp
+GTEST_DIR     = deps/gtest-1.7.0
+CRYPTOPP_DIR  = deps/cryptopp562
 
 CXXFLAGS += -O0                      \
             -std=gnu++11             \
