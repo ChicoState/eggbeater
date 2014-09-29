@@ -1,0 +1,6 @@
+wxWidgets:
+  -this is the what bitwise uses for it's GUI
+  -it is well documented and free.
+  -seems to be regularly updated and has been around for 20+ years with a new version released in 2013
+  -https://www.wxwidgets.org/
+

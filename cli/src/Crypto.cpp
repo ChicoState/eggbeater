@@ -1,7 +1,8 @@
 #include <EggBeater/Crypto.h>
-#include <cryptopp/sha3.h>
-#include <cryptopp/aes.h>
-#include <cryptopp/modes.h>
+/* Crypto++ includes */
+#include <sha3.h>
+#include <aes.h>
+#include <modes.h>
 
 #ifndef EB_DEBUG
 #define EB_DEBUG 0
