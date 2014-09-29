@@ -1,5 +1,5 @@
 */deps/*
-lib
+*/lib/*
 *.o
 *.exe
 *.elf
