@@ -1,0 +1,365 @@
+# depslib dependency file v1.0
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_adc.c
+	"stm32f4xx_hal.h"
+
+1392930538 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\inc\stm32f4xx_hal.h
+	"stm32f4xx_hal_conf.h"
+
+1412038037 c:\stuff\csci 430\eggbeater\embedded\inc\stm32f4xx_hal_conf.h
+	"stm32f4xx.h"
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_cortex.h"
+	"stm32f4xx_hal_pcd.h"
+	"stm32f4xx_hal_gpio.h"
+	"stm32f4xx_hal_rcc.h"
+	"stm32f4xx_hal_flash_ex.h"
+
+1392930532 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\device\st\stm32f4xx\include\stm32f429xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1392930513 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\include\core_cm4.h
+	<stdint.h>
+	<core_cmInstr.h>
+	<core_cmFunc.h>
+	<core_cm4_simd.h>
+
+1392930513 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\include\core_cminstr.h
+	<cmsis_iar.h>
+	<cmsis_ccs.h>
+
+1392930513 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\include\core_cmfunc.h
+	<cmsis_iar.h>
+	<cmsis_ccs.h>
+
+1392930513 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\include\core_cm4_simd.h
+	<cmsis_iar.h>
+	<cmsis_ccs.h>
+
+1392930532 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\device\st\stm32f4xx\include\system_stm32f4xx.h
+
+1392930538 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\inc\stm32f4xx_hal_def.h
+	"stm32f4xx.h"
+
+1412033259 c:\stuff\csci 430\eggbeater\embedded\inc\stm32f4xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+	"stm32f4xx_conf.h"
+
+1412033259 c:\stuff\csci 430\eggbeater\embedded\inc\system_stm32f4xx.h
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_adc_ex.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_can.c
+	"stm32f4xx_hal.h"
+
+1392930532 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\device\st\stm32f4xx\include\stm32f4xx.h
+	"stm32f405xx.h"
+	"stm32f415xx.h"
+	"stm32f407xx.h"
+	"stm32f417xx.h"
+	"stm32f427xx.h"
+	"stm32f437xx.h"
+	"stm32f429xx.h"
+	"stm32f439xx.h"
+	"stm32f401xc.h"
+	"stm32f401xe.h"
+
+1392930532 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\device\st\stm32f4xx\include\stm32f405xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1392930532 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\device\st\stm32f4xx\include\stm32f415xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1392930532 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\device\st\stm32f4xx\include\stm32f407xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1392930532 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\device\st\stm32f4xx\include\stm32f417xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1392930532 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\device\st\stm32f4xx\include\stm32f427xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1392930532 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\device\st\stm32f4xx\include\stm32f437xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1392930532 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\device\st\stm32f4xx\include\stm32f439xx.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1392930532 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\device\st\stm32f4xx\include\stm32f401xc.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1392930532 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\device\st\stm32f4xx\include\stm32f401xe.h
+	"core_cm4.h"
+	"system_stm32f4xx.h"
+	<stdint.h>
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_cortex.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_crc.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_cryp.c
+	"stm32f4xx_hal.h"
+
+1392930538 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\inc\stm32f4xx_hal_cortex.h
+	"stm32f4xx_hal_def.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_cryp_ex.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_dac.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_dac_ex.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_dcmi.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_dma.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_dma2d.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_dma_ex.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_eth.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_flash.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_flash_ex.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_gpio.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_hash.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_hash_ex.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_hcd.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_i2c.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_i2c_ex.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_i2s.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_i2s_ex.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_irda.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_iwdg.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_ltdc.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_msp_template.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_nand.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_nor.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_pccard.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_pcd.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_pwr.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_pwr_ex.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_rcc.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_rcc_ex.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_rng.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_rtc.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_rtc_ex.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_sai.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_sd.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_sdram.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_smartcard.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_spi.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_sram.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_tim.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_tim_ex.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_uart.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_usart.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_wwdg.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_ll_fmc.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_ll_fsmc.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_ll_sdmmc.c
+	"stm32f4xx_hal.h"
+
+1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_ll_usb.c
+	"stm32f4xx_hal.h"
+
+1392930550 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\middlewares\st\stm32_usb_device_library\class\cdc\src\usbd_cdc.c
+	"USBD_CDC.h"
+	"usbd_desc.h"
+	"usbd_ctlreq.h"
+
+1392930550 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\middlewares\st\stm32_usb_device_library\class\cdc\inc\usbd_cdc.h
+	"usbd_ioreq.h"
+
+1392930551 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\middlewares\st\stm32_usb_device_library\core\inc\usbd_ioreq.h
+	"usbd_def.h"
+	"usbd_core.h"
+
+1392930551 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\middlewares\st\stm32_usb_device_library\core\inc\usbd_def.h
+	"usbd_conf.h"
+
+1393423548 c:\stuff\csci 430\eggbeater\embedded\inc\usbd_conf.h
+	"stm32f4xx_hal.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1392930551 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\middlewares\st\stm32_usb_device_library\core\inc\usbd_core.h
+	"usbd_conf.h"
+	"usbd_def.h"
+	"usbd_ioreq.h"
+	"usbd_ctlreq.h"
+
+1392930551 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\middlewares\st\stm32_usb_device_library\core\inc\usbd_ctlreq.h
+	"usbd_def.h"
+
+1393423548 c:\stuff\csci 430\eggbeater\embedded\inc\usbd_desc.h
+	"usbd_def.h"
+
+1392930551 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\middlewares\st\stm32_usb_device_library\core\src\usbd_core.c
+	"usbd_core.h"
+
+1392930551 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\middlewares\st\stm32_usb_device_library\core\src\usbd_ctlreq.c
+	"usbd_ctlreq.h"
+	"usbd_ioreq.h"
+
+1392930551 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\middlewares\st\stm32_usb_device_library\core\src\usbd_ioreq.c
+	"usbd_ioreq.h"
+
+1412038333 source:c:\stuff\csci 430\eggbeater\embedded\src\main.c
+	"stm32f4xx.h"
+	<usbd_core.h>
+	<usbd_cdc.h>
+	<usbd_cdc_if_template.h>
+	<usbd_desc.h>
+	<stm32f4xx_hal_conf.h>
+
+1412033259 source:c:\stuff\csci 430\eggbeater\embedded\src\startup_stm32f429x.s
+
+1412034671 source:c:\stuff\csci 430\eggbeater\embedded\src\usbd_desc.c
+	"usbd_core.h"
+	"usbd_desc.h"
+	"usbd_conf.h"
+
+1392930531 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\cmsis\device\st\stm32f4xx\source\templates\system_stm32f4xx.c
+	"stm32f4xx_hal.h"
+
+1392930538 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\inc\stm32f4xx_hal_pcd.h
+	"stm32f4xx_ll_usb.h"
+
+1392930538 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\inc\stm32f4xx_ll_usb.h
+	"stm32f4xx_hal_def.h"
+
+1392930538 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\inc\stm32f4xx_hal_gpio.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_gpio_ex.h"
+
+1392930538 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\inc\stm32f4xx_hal_gpio_ex.h
+	"stm32f4xx_hal_def.h"
+
+1392930538 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\inc\stm32f4xx_hal_rcc.h
+	"stm32f4xx_hal_def.h"
+	"stm32f4xx_hal_rcc_ex.h"
+
+1392930537 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\inc\stm32f4xx_hal_rcc_ex.h
+	"stm32f4xx_hal_def.h"
+
+1393423548 source:c:\stuff\csci 430\eggbeater\embedded\src\usbd_conf.c
+	"stm32f4xx_hal.h"
+	"usbd_core.h"
+
+1392930538 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\inc\stm32f4xx_hal_flash_ex.h
+	"stm32f4xx_hal_def.h"
+
+1392930550 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\middlewares\st\stm32_usb_device_library\class\cdc\inc\usbd_cdc_if_template.h
+	"usbd_cdc.h"
+

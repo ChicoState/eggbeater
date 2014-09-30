@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<EmBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2408" topLine="33" />
+		</Cursor>
+	</File>
+	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7370" topLine="18" />
+		</Cursor>
+	</File>
+	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_spi.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="17255" topLine="450" />
+		</Cursor>
+	</File>
+	<File name="inc\stm32f4xx_hal_conf.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="217" topLine="0" />
+		</Cursor>
+	</File>
+</EmBlocks_layout_file>
