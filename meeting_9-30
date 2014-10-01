@@ -1,0 +1,17 @@
+Implementation of delta, gamma, tau:
+  Encrypiton mode
+    Any w/ feedback
+    256-bit SHA3
+  need to add encryption modes
+
+Parse USB:
+  need to find a library that will work on windows, OS, linux, etc.
+
+STM->PC communication:
+  running, data goes too board but the operating system on the board doesn't switch to transmit.
+  
+GUI: 
+  pictures drawn in meeting for design of interface
+  
+Authentication:  Iced for another week.
+
