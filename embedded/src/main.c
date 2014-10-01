@@ -206,8 +206,8 @@ void USB_Write_Task(void* arg)
 
     while (hcdc->TxState != 0);
 
-    BSP_LCD_ClearStringLine(1);
-    BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"Found packet, ready to send");
+    BSP_LCD_ClearStringLine(3);
+    BSP_LCD_DisplayStringAtLine(3, (uint8_t*)"Found packet, ready to send");
 
     BSP_LED_Toggle(LED3);
 
@@ -217,8 +217,8 @@ void USB_Write_Task(void* arg)
     USBD_CDC_SetTxBuffer(&USBD_Device, buffer, packet.Length);
     USBD_CDC_TransmitPacket(&USBD_Device);
 
-    BSP_LCD_ClearStringLine(1);
-    BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"Found packet, sent");
+    BSP_LCD_ClearStringLine(4);
+    BSP_LCD_DisplayStringAtLine(4, (uint8_t*)"Found packet, sent");
 
     free(packet.Data);
   }

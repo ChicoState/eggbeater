@@ -13,12 +13,12 @@
 	</File>
 	<File name="deps\STM32Cube_FW_F4_V1.1.0\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Inc\usbd_cdc.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="4327" topLine="123" />
+			<Cursor1 position="3982" topLine="103" />
 		</Cursor>
 	</File>
 	<File name="deps\STM32Cube_FW_F4_V1.1.0\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Src\usbd_cdc.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="23287" topLine="635" />
+			<Cursor1 position="27075" topLine="819" />
 		</Cursor>
 	</File>
 	<File name="deps\STM32Cube_FW_F4_V1.1.0\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_def.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -33,7 +33,12 @@
 	</File>
 	<File name="deps\STM32Cube_FW_F4_V1.1.0\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_core.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="7362" topLine="287" />
+			<Cursor1 position="5999" topLine="246" />
+		</Cursor>
+	</File>
+	<File name="deps\STM32Cube_FW_F4_V1.1.0\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ctlreq.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3316" topLine="114" />
 		</Cursor>
 	</File>
 	<File name="inc\usbd_conf.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -46,24 +51,24 @@
 			<Cursor1 position="1754" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\main.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\main.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3296" topLine="140" />
+			<Cursor1 position="5085" topLine="189" />
 		</Cursor>
 	</File>
-	<File name="src\startup_stm32f429x.S" open="1" top="1" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\startup_stm32f429x.S" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="7697" topLine="168" />
+			<Cursor1 position="7697" topLine="121" />
 		</Cursor>
 	</File>
 	<File name="src\usb_interface.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2251" topLine="52" />
+			<Cursor1 position="1097" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\usbd_conf.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="7431" topLine="198" />
+			<Cursor1 position="7139" topLine="198" />
 		</Cursor>
 	</File>
 	<File name="src\usbd_desc.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">

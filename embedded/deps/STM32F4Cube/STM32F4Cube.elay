@@ -3,7 +3,7 @@
 	<ActiveTarget name="Debug" />
 	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\BSP\Components\ili9341\ili9341.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="7350" topLine="253" />
+			<Cursor1 position="8550" topLine="307" />
 		</Cursor>
 	</File>
 	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\BSP\STM32F429I-Discovery\stm32f429i_discovery.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -23,7 +23,7 @@
 	</File>
 	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\BSP\STM32F429I-Discovery\stm32f429i_discovery_lcd.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="8744" topLine="206" />
+			<Cursor1 position="6534" topLine="179" />
 		</Cursor>
 	</File>
 	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\BSP\STM32F429I-Discovery\stm32f429i_discovery_sdram.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -48,7 +48,7 @@
 	</File>
 	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pcd.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="10558" topLine="287" />
+			<Cursor1 position="11103" topLine="277" />
 		</Cursor>
 	</File>
 	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_spi.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
