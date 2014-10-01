@@ -8,17 +8,19 @@ CXXFLAGS += -O0                      \
 						"-I$(GTEST_DIR)/include" \
 						"-I$(CRYPTOPP_DIR)"      \
 						"-Iinclude"              \
-						"-Ideps"
-LDFLAGS  += "-Llib"
+						"-Ideps" -ffunction-sections -fdata-sections
+LDFLAGS  += "-Llib" -Wl,-gc-sections
+
+TESTS			= tests/Crypto_tests.elf   \
+						tests/Crypto_CipherMode_tests.elf
 
 all: lib/libcryptopp.a lib/gtest.a testsuite
 
-src/Crypto.o: src/Crypto.cpp
+%.o: %.cpp
 	$(CXX) -c -o $@ $+ $(CXXFLAGS)
 
 lib/.d:
 	test -d lib || mkdir lib
-	#mkdir lib
 	touch lib/.d
 
 lib/libcryptopp.a: lib/.d
@@ -30,12 +32,12 @@ lib/gtest.a: lib/.d
 	cp "$(GTEST_DIR)/make/gtest.a" lib/gtest.a
 
 .PHONY: testsuite
-testsuite: tests/Crypto_tests.elf
+testsuite: $(TESTS)
 
-tests/Crypto_tests.o: tests/Crypto_tests.cpp
-	$(CXX) -c -o $@ $+ $(CXXFLAGS)
+#tests/Crypto_tests.o: tests/Crypto_tests.cpp
+#	$(CXX) -c -o $@ $+ $(CXXFLAGS)
 
-tests/Crypto_tests.elf: tests/Crypto_tests.o src/Crypto.o lib/libcryptopp.a lib/gtest.a
+%.elf: %.o src/Crypto.o lib/libcryptopp.a lib/gtest.a
 	$(CXX) -o $@ $+ $(LDFLAGS)
 
 .PHONY: testsuite

@@ -8,6 +8,13 @@ namespace EggBeater
 {
   typedef std::vector<uint8_t> ByteArray;
   
+  enum class CipherMode : uint32_t
+  {
+    CFB,
+    OFB,
+    GCM
+  };
+  
   /*
     phase 1 password = password input from LCD on STM32F429
     phase 1 key      = cryptographic hash of phase 1 password (256-bit in length)
@@ -22,7 +29,7 @@ namespace EggBeater
   
   ByteArray delta(const ByteArray& phase1Password);
   ByteArray gamma(const ByteArray& phase2Passcode);
-  ByteArray tau(const ByteArray& phase2Key, const ByteArray& plainText);
+  ByteArray tau(const ByteArray& phase2Key, const ByteArray& plainText, CipherMode = CipherMode::GCM, const ByteArray& = {0});
 }
 
 #endif // _EGGBEATER_CRYPTO_H_
