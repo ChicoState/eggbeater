@@ -15,3 +15,7 @@ GUI:
   
 Authentication:  Iced for another week.
 
+Command Line Interface:
+  --comd -arg
+    getopt
+    getopt_long
