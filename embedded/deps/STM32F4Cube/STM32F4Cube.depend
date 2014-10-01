@@ -425,7 +425,7 @@
 1393363372 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\bsp\stm32f429i-discovery\stm32f429i_discovery_sdram.h
 	"stm32f429i_discovery.h"
 
-1392930580 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\utilities\fonts\fonts.h
+1412118144 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\utilities\fonts\fonts.h
 	<stdint.h>
 
 1392930586 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\bsp\components\ili9341\ili9341.h
@@ -434,19 +434,19 @@
 1392930581 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\bsp\components\common\lcd.h
 	<stdint.h>
 
-1392930580 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\utilities\fonts\font24.c
+1412118144 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\utilities\fonts\font24.c
 	"fonts.h"
 
-1392930580 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\utilities\fonts\font20.c
+1412118144 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\utilities\fonts\font20.c
 	"fonts.h"
 
-1392930580 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\utilities\fonts\font16.c
+1412118144 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\utilities\fonts\font16.c
 	"fonts.h"
 
-1392930580 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\utilities\fonts\font12.c
+1412118144 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\utilities\fonts\font12.c
 	"fonts.h"
 
-1392930580 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\utilities\fonts\font8.c
+1412118144 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\utilities\fonts\font8.c
 	"fonts.h"
 
 1393363372 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\bsp\stm32f429i-discovery\stm32f429i_discovery_sdram.c
@@ -627,4 +627,7 @@
 
 1392930536 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\stm32f4xx_hal_driver\src\stm32f4xx_ll_usb.c
 	"stm32f4xx_hal.h"
+
+1392930586 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\bsp\components\ili9341\ili9341.c
+	"ili9341.h"
 

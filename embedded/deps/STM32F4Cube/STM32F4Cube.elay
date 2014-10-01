@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <EmBlocks_layout_file>
 	<ActiveTarget name="Debug" />
+	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\BSP\Components\ili9341\ili9341.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7350" topLine="253" />
+		</Cursor>
+	</File>
+	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\BSP\STM32F429I-Discovery\stm32f429i_discovery.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="28599" topLine="846" />
+		</Cursor>
+	</File>
+	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\BSP\STM32F429I-Discovery\stm32f429i_discovery.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2469" topLine="39" />
+		</Cursor>
+	</File>
+	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\BSP\STM32F429I-Discovery\stm32f429i_discovery_lcd.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="36335" topLine="1135" />
+		</Cursor>
+	</File>
+	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\BSP\STM32F429I-Discovery\stm32f429i_discovery_lcd.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="8744" topLine="206" />
+		</Cursor>
+	</File>
+	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\BSP\STM32F429I-Discovery\stm32f429i_discovery_sdram.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2486" topLine="32" />
+		</Cursor>
+	</File>
 	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2408" topLine="33" />
@@ -11,9 +41,24 @@
 			<Cursor1 position="7370" topLine="18" />
 		</Cursor>
 	</File>
+	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="8102" topLine="200" />
+		</Cursor>
+	</File>
+	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pcd.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="10558" topLine="287" />
+		</Cursor>
+	</File>
 	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_spi.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="17255" topLine="450" />
+			<Cursor1 position="16825" topLine="435" />
+		</Cursor>
+	</File>
+	<File name="..\STM32Cube_FW_F4_V1.1.0\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_usb.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="28164" topLine="872" />
 		</Cursor>
 	</File>
 	<File name="inc\stm32f4xx_hal_conf.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
