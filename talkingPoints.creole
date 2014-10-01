@@ -1,0 +1,16 @@
+===Burn down chart===
+#Stuck in research phase
+
+===Demo===
+#Hardware
+#Block diagram
+
+===Blockers===
+#wxWidgets
+
+===Changes===
+#Trying to work in pairs or teams on sections
+
+===Why project is awesome===
+#Useful for those wanting better security for their files
+#Useful for people who want encryption using an easy interface
