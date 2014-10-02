@@ -35,7 +35,7 @@ Todo:
    -function to convert [phase1 password]=phase1key on Arm board
    -function to parse usb data  http://playground.arduino.cc/Interfacing/CPPWindows
                               http://www.embeddedsystemonline.com/home/embedded-system/arm7-labs/lab1
-                              http://stackoverflow.com/questions/24770641/arduino-and-linux-serial-connection-library-from-windows-port
+                              http://playground.arduino.cc/Interfacing/CPPWindows
 this iteration:
 YI,SW   -Encrypt file form CLI
            AES 256 fixed key
