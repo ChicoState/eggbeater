@@ -27,7 +27,7 @@ USBD_CDC_LineCodingTypeDef linecoding =
 
 typedef struct
 {
-  uint8_t   Buffer[CDC_DATA_HS_OUT_PACKET_SIZE];
+  uint8_t   Buffer[CDC_DATA_FS_MAX_PACKET_SIZE];
   uint32_t  Length;
 } USB_RxBuffer;
 

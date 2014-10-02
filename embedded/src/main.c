@@ -39,6 +39,9 @@
 #define LCD_FRAME_BUFFER_LAYER0 ( LCD_FRAME_BUFFER )
 #define LCD_FRAME_BUFFER_LAYER1 ( LCD_FRAME_BUFFER + BUFFER_OFFSET )
 
+// Because min is crazy
+#define egb_min(a, b) ( ( ( a ) < ( b ) ) ? ( a ) : ( b ) )
+
 USBD_HandleTypeDef USBD_Device;
 
 void InitClocks(void);
@@ -170,6 +173,7 @@ void USB_Write_Task(void* arg)
 {
   USB_Packet packet;
   uint8_t buffer[512];
+  uint32_t offset, len;
   USBD_CDC_HandleTypeDef   *hcdc;
 
   UNUSED_ARG(arg);
@@ -179,16 +183,7 @@ void USB_Write_Task(void* arg)
   USBD_Start(&USBD_Device);
 
   InitLCD();
-  /*
-  BSP_LCD_Init();
 
-  BSP_LCD_DisplayOff();
-  BSP_LCD_DisplayOn();
-
-  BSP_LCD_SetBackColor(LCD_COLOR_WHITE);
-  BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
-  BSP_LCD_Clear(LCD_COLOR_WHITE);
-  */
   BSP_LCD_ClearStringLine(0);
   BSP_LCD_DisplayStringAtLine(0, (uint8_t*)"USB Write task ready");
 
@@ -196,29 +191,29 @@ void USB_Write_Task(void* arg)
 
   while (1)
   {
-    BSP_LCD_ClearStringLine(1);
-    BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"Waiting on packet to send");
-
     while (xQueueReceive(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
 
-    BSP_LCD_ClearStringLine(2);
-    BSP_LCD_DisplayStringAtLine(2, (uint8_t*)"Found packet, waiting to send");
-
-    while (hcdc->TxState != 0);
-
-    BSP_LCD_ClearStringLine(3);
-    BSP_LCD_DisplayStringAtLine(3, (uint8_t*)"Found packet, ready to send");
+    while (hcdc->TxState != 0) // I should turn this into an RTOS event variable
+      vTaskDelay(1); // Wait 1 ms for the transmitter to finish
 
     BSP_LED_Toggle(LED3);
 
-    // Don't send long stuff yet
-    memcpy(buffer, packet.Data, packet.Length);
+    offset = 0;
 
-    USBD_CDC_SetTxBuffer(&USBD_Device, buffer, packet.Length);
-    USBD_CDC_TransmitPacket(&USBD_Device);
+    while (offset < packet.Length)
+    {
+      len = egb_min(CDC_DATA_FS_MAX_PACKET_SIZE, packet.Length - offset);
+      memcpy(buffer, &(packet.Data[offset]), len);
+      offset += len;
 
-    BSP_LCD_ClearStringLine(4);
-    BSP_LCD_DisplayStringAtLine(4, (uint8_t*)"Found packet, sent");
+      USBD_CDC_SetTxBuffer(&USBD_Device, buffer, len);
+      USBD_CDC_TransmitPacket(&USBD_Device);
+
+      while (hcdc->TxState != 0);
+    }
+
+    BSP_LCD_ClearStringLine(1);
+    BSP_LCD_DisplayStringAtLine(1, packet.Data);
 
     free(packet.Data);
   }
