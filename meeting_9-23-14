@@ -36,6 +36,7 @@ Todo:
    -function to parse usb data  http://playground.arduino.cc/Interfacing/CPPWindows
                               http://www.embeddedsystemonline.com/home/embedded-system/arm7-labs/lab1
                               http://playground.arduino.cc/Interfacing/CPPWindows
+                              http://sourceforge.net/projects/libserial/
 this iteration:
 YI,SW   -Encrypt file form CLI
            AES 256 fixed key
