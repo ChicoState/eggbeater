@@ -4,6 +4,11 @@ Serial::Serial(const char *portName)
 {
     //We're not yet connected
     this->connected = false;
+    
+    
+wchar_t wcPort[64];
+size_t convertedChars = 0;
+mbstowcs_s(&convertedChars, wcPort, strlen(portName), portName, _TRUNCATE);
 
     //Try to connect to the given port throuh CreateFile
     this->hSerial = CreateFile(portName,
