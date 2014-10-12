@@ -29,7 +29,7 @@ namespace EggBeater
   
   ByteArray delta(const ByteArray& phase1Password);
   ByteArray gamma(const ByteArray& phase2Passcode);
-  ByteArray tau(const ByteArray& phase2Key, const ByteArray& plainText, CipherMode = CipherMode::GCM, const ByteArray& = {0});
+  ByteArray tau(const ByteArray& phase2Key, const ByteArray& plainText, CipherMode = CipherMode::CFB, const ByteArray& = {0});
 }
 
 #endif // _EGGBEATER_CRYPTO_H_
