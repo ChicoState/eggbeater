@@ -2,7 +2,8 @@
 #define _EGGBEATER_SERIAL_H_
 
 #include <stdint.h>
-#include <vector.h>
+#include <vector>
+#include <string>
 
 #include "Common.h"
 

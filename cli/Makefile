@@ -40,7 +40,7 @@ testsuite: $(TESTS)
 %.elf: %.o src/Crypto.o lib/libcryptopp.a lib/gtest.a
 	$(CXX) -o $@ $+ $(LDFLAGS)
 
-.PHONY: testsuite
+.PHONY: clean
 clean:
 	rm -rf lib                                \
 	$(shell find src -type f -name "*.o")     \
