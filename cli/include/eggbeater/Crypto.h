@@ -4,9 +4,11 @@
 #include <vector>
 #include <stdint.h>
 
+#include "Common.h"
+
 namespace EggBeater
 {
-  typedef std::vector<uint8_t> ByteArray;
+  //typedef std::vector<uint8_t> ByteArray;
   
   enum class CipherMode : uint32_t
   {
