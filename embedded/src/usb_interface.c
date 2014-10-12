@@ -38,6 +38,11 @@ void OTG_HS_IRQHandler(void)
   HAL_PCD_IRQHandler(&hpcd);
 }
 
+void OTG_FS_IRQHandler(void)
+{
+  HAL_PCD_IRQHandler(&hpcd);
+}
+
 int8_t USB_Interface_Init(void)
 {
   // Set the Rx buffer

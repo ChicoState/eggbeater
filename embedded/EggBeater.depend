@@ -316,8 +316,8 @@
 1412288850 source:c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\middlewares\st\stm32_usb_device_library\core\src\usbd_ioreq.c
 	"usbd_ioreq.h"
 
-1412290420 source:c:\stuff\csci 430\eggbeater\embedded\src\main.c
-	"stm32f4xx.h"
+1412624215 source:c:\stuff\csci 430\eggbeater\embedded\src\main.c
+	<stm32f4xx.h>
 	<FreeRTOS.h>
 	<queue.h>
 	<task.h>

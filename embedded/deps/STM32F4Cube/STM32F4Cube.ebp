@@ -62,7 +62,7 @@
 		</Compiler>
 		<Linker>
 			<Add option="-eb_start_files" />
-			<Add option="-eb_lib=s" />
+			<Add option="-eb_lib=n" />
 		</Linker>
 		<Unit filename="..\STM32Cube_FW_F4_V1.1.0\Drivers\BSP\Components\ili9341\ili9341.c">
 			<Option compilerVar="CC" />

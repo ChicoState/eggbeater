@@ -11,7 +11,7 @@
    ID:                 $Id:  $
 
 **********************************************************************/
-#include "stm32f4xx.h"
+#include <stm32f4xx.h>
 
 #include <FreeRTOS.h>
 #include <queue.h>
@@ -240,10 +240,15 @@ void Echo_Task(void* arg)
 void USB_OnReceivePacket(uint8_t* buffer, uint32_t length)
 {
   USB_Packet packet;
-  packet.Data   = malloc(length * sizeof(uint8_t));
+
+  packet.Data   = malloc((length + 1) * sizeof(uint8_t));
   memcpy(packet.Data, buffer, length * sizeof(uint8_t));
+
+  packet.Data[length] = 0;
   packet.Length = length;
+
   OTG_ShouldYield = 0;
+
   xQueueSendToBackFromISR(usbWriteData.ReceiveQueue, &packet, &OTG_ShouldYield);
 }
 
