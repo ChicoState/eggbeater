@@ -1,6 +1,7 @@
 #include <stdint.h>
 
 #include "usb_interface.h"
+#include <FreeRTOS.h>
 
 int8_t USB_Interface_Init(void);
 int8_t USB_Interface_Close(void);
@@ -9,6 +10,7 @@ int8_t USB_Interface_Read(uint8_t* buffer, uint32_t *length);
 
 extern USBD_HandleTypeDef USBD_Device;
 extern PCD_HandleTypeDef  hpcd;
+extern uint32_t OTG_ShouldYield;
 
 USBD_CDC_ItfTypeDef USB_Interface = {
   .Init = USB_Interface_Init,
@@ -36,11 +38,15 @@ USB_RxBuffer ReceiveBuffer = {{0}, 0};
 void OTG_HS_IRQHandler(void)
 {
   HAL_PCD_IRQHandler(&hpcd);
+
+  portYIELD_FROM_ISR(OTG_ShouldYield);
 }
 
 void OTG_FS_IRQHandler(void)
 {
   HAL_PCD_IRQHandler(&hpcd);
+
+  portYIELD_FROM_ISR(OTG_ShouldYield);
 }
 
 int8_t USB_Interface_Init(void)

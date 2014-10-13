@@ -22,19 +22,22 @@
 #include <usbd_desc.h>
 
 #include "usb_interface.h"
+#include "keypad.h"
 
 //#include <stm32f4xx_hal_conf.h>
 
 #include <stm32f429i_discovery.h>
 #include <stm32f429i_discovery_lcd.h>
+#include <stm32f429i_discovery_ts.h>
 
 #ifndef UNUSED_ARG
   #define UNUSED_ARG(x) ( (void) ( x ) )
 #endif // UNUSED_ARG
 
 #define TASK_STACK_DEPTH  1024
-#define USB_TASK_PRIO     2
+#define USB_TASK_PRIO     4
 #define ECHO_TASK_PRIO    3
+#define KP_TASK_PRIO      2
 
 #define LCD_FRAME_BUFFER_LAYER0 ( LCD_FRAME_BUFFER )
 #define LCD_FRAME_BUFFER_LAYER1 ( LCD_FRAME_BUFFER + BUFFER_OFFSET )
@@ -51,10 +54,11 @@ void InitLCD(void);
 // FreeRTOS task functions
 void USB_Write_Task(void*);
 void Echo_Task(void*);
+void Keypad_Task(void*);
 
 void xPortSysTickHandler(void);
 
-long OTG_ShouldYield = 0;
+BaseType_t OTG_ShouldYield = 0;
 
 typedef struct USB_Packet
 {
@@ -92,6 +96,13 @@ int main(void)
               TASK_STACK_DEPTH,
               NULL,
               ECHO_TASK_PRIO,
+              NULL);
+
+  xTaskCreate(&Keypad_Task,
+              "Echo Task",
+              TASK_STACK_DEPTH,
+              NULL,
+              KP_TASK_PRIO,
               NULL);
 
   usbWriteData.TransmitQueue  = xQueueCreate(16, sizeof(USB_Packet));
@@ -167,6 +178,7 @@ void InitLCD()
 
   BSP_LCD_SetFont(&Font16);
 
+  BSP_TS_Init(BSP_LCD_GetXSize(), BSP_LCD_GetYSize());
 }
 
 void USB_Write_Task(void* arg)
@@ -182,12 +194,18 @@ void USB_Write_Task(void* arg)
 
   USBD_Start(&USBD_Device);
 
-  InitLCD();
+  //InitLCD();
 
-  BSP_LCD_ClearStringLine(0);
-  BSP_LCD_DisplayStringAtLine(0, (uint8_t*)"USB Write task ready");
+  //BSP_LCD_ClearStringLine(0);
+  //BSP_LCD_DisplayStringAtLine(0, (uint8_t*)"USB Write task ready");
 
-  hcdc = (USBD_CDC_HandleTypeDef*)USBD_Device.pClassData;
+  //hcdc = (USBD_CDC_HandleTypeDef*)USBD_Device.pClassData;
+
+  while ((hcdc = (USBD_CDC_HandleTypeDef*)USBD_Device.pClassData) == 0)
+  {
+    __DMB();
+    vTaskDelay(100);
+  }
 
   while (1)
   {
@@ -209,11 +227,12 @@ void USB_Write_Task(void* arg)
       USBD_CDC_SetTxBuffer(&USBD_Device, buffer, len);
       USBD_CDC_TransmitPacket(&USBD_Device);
 
-      while (hcdc->TxState != 0);
+      while (hcdc->TxState != 0)
+        vTaskDelay(1);
     }
 
-    BSP_LCD_ClearStringLine(1);
-    BSP_LCD_DisplayStringAtLine(1, packet.Data);
+    //BSP_LCD_ClearStringLine(1);
+    //BSP_LCD_DisplayStringAtLine(1, packet.Data);
 
     free(packet.Data);
   }
@@ -234,6 +253,29 @@ void Echo_Task(void* arg)
     BSP_LED_Toggle(LED4);
 
     while (xQueueSendToBack(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
+  }
+}
+
+void Keypad_Task(void* arg)
+{
+  TickType_t lastWake = 0;
+  keypad_t kp;
+
+  UNUSED_ARG(arg);
+
+  InitLCD();
+
+  keypad_init(&kp, &Font16, 20, 230);
+
+  while (1)
+  {
+    //BSP_LED_Toggle(LED3);
+    keypad_draw(&kp);
+    keypad_checktouch(&kp);
+
+    BSP_LCD_DisplayStringAtLine(3, (uint8_t*)kp.buffer);
+
+    vTaskDelayUntil(&lastWake, 5);
   }
 }
 

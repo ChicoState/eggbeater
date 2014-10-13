@@ -10,6 +10,7 @@
 			<Target title="Debug">
 				<Option output="bin\Debug\EggBeater.elf" />
 				<Option object_output="obj\Debug\" />
+				<Option additional_output="deps\FreeRTOS\bin\Debug\libFreeRTOS.a;deps\STM32F4Cube\bin\Debug\libSTM32F4Cube.a;" />
 				<Option type="0" />
 				<Option compiler="armgcc_eb" />
 				<Option projectDeviceOptionsRelation="0" />
@@ -32,6 +33,7 @@
 			<Target title="Release">
 				<Option output="bin\Release\EggBeater.elf" />
 				<Option object_output="obj\Release\" />
+				<Option additional_output="deps\FreeRTOS\bin\Release\libFreeRTOS.a;deps\STM32F4Cube\bin\Release\libSTM32F4Cube.a;" />
 				<Option type="0" />
 				<Option create_hex="1" />
 				<Option compiler="armgcc_eb" />
@@ -180,11 +182,14 @@
 		<Unit filename="deps\STM32Cube_FW_F4_V1.1.0\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ioreq.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="inc\stm32f4xx_hal_conf.h" />
+		<Unit filename="inc\keypad.h" />
 		<Unit filename="inc\usb_interface.h" />
 		<Unit filename="inc\usbd_conf.h" />
 		<Unit filename="inc\usbd_desc.h" />
 		<Unit filename="readme.txt" />
+		<Unit filename="src\keypad.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src\main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -201,15 +206,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="stm32f429zi_flash.ld" />
-		<Unit filename="stm32f429zi_sram.ld" />
 		<Extensions>
 			<code_completion />
 			<debugger>
-				<target_debugging_settings target="Release" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="" ip_port="" path="" executable="" description="" dont_start_server="false" backoff_time="" options="0" reg_filter="0" active_family="STMicroelectronics">
-						<family_options family_id="STMicroelectronics" />
-					</debug_interface>
-				</target_debugging_settings>
 				<target_debugging_settings target="Debug" active_interface="ST-link">
 					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="2" reg_filter="0" active_family="STMicroelectronics">
 						<family_options family_id="STMicroelectronics">
@@ -225,6 +224,11 @@
 							<option opt_id="ID_DEV_ADDR" opt_value="" />
 							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
 						</family_options>
+					</debug_interface>
+				</target_debugging_settings>
+				<target_debugging_settings target="Release" active_interface="ST-link">
+					<debug_interface interface_id="ST-link" ip_address="" ip_port="" path="" executable="" description="" dont_start_server="false" backoff_time="" options="0" reg_filter="0" active_family="STMicroelectronics">
+						<family_options family_id="STMicroelectronics" />
 					</debug_interface>
 				</target_debugging_settings>
 			</debugger>

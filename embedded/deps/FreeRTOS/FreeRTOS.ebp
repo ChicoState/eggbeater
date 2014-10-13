@@ -101,6 +101,7 @@
 		<Unit filename="FreeRTOS\Source\timers.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="inc\FreeRTOSConfig.h" />
 		<Unit filename="stm32f401cb_flash.ld" />
 		<Extensions>
 			<code_completion />
