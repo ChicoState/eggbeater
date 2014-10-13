@@ -52,8 +52,9 @@ On windows, you have several options available:
 == How to build ==
 # Clone the repo from [[https://github.com/CSUChicoSoftwareEngineering/eggbeater|GitHub]]
 # Make a folder names "deps" in the cli folder.
-## Install crypto++ to cli/deps
-## Install Google Test to cli/deps
+# Install crypto++ to cli/deps
+## Uncomment line 19 of config.h in the crypto++ library.
+# Install Google Test to cli/deps
 # Modify cli/Makefile so that GTEST_DIR and CRYPTOPP_DIR point to your Google Test and crypto++ directories, respectively.
 # Open your build terminal
 ## Navigate to the cli folder
