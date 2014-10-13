@@ -14,9 +14,6 @@
 Compiler support
 * GCC 4.8 or newer
 * MinGW 4.8 or newer
-** Standalone doesn't seem to support 64-bit on Windows
-* Clang 3.4 or newer
-** Doesn't seem to play nice w/ CygWin
 
 Required libraries
 * [[http://www.cryptopp.com/|Crypto++]]
@@ -29,7 +26,7 @@ Required software
 ** Available on CygWin
 ** Likely installed on Mac/Linux
 
-== How to build ==
+== Setup build environment ==
 === Windows ===
 On windows, you have several options available:
 # Install Cygwin and GCC
@@ -46,12 +43,18 @@ On windows, you have several options available:
 ## make
 # This should install a GNU compatible make and several other required packages.
 
-==== MSys option ====
-# Download "mingw-get-setup.exe" from [[http://www.mingw.org/wiki/Getting_Started]] and follow the directions
-** Does this support 64-bit?
+=== Mac OS X & linux ===
+# Install gcc and g++
+# Install binutils
+# Install make
+* These packages may already be installed. Check your package manager.
 
-==== Clang option ====
-# Download clang from [[http://llvm.org/releases/download.html]]
-# Download binutils for Windows from [[http://gnuwin32.sourceforge.net/packages/binutils.htm]]
-# Download a GNU compatible make from [[http://gnuwin32.sourceforge.net/packages/make.htm]]
-
+== How to build ==
+# Clone the repo from [[https://github.com/CSUChicoSoftwareEngineering/eggbeater|GitHub]]
+# Make a folder names "deps" in the cli folder.
+## Install crypto++ to cli/deps
+## Install Google Test to cli/deps
+# Modify cli/Makefile so that GTEST_DIR and CRYPTOPP_DIR point to your Google Test and crypto++ directories, respectively.
+# Open your build terminal
+## Navigate to the cli folder
+# Run make
