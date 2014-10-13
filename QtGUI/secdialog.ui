@@ -330,7 +330,7 @@
    </property>
    <property name="text">
     <string>Time untill lockout:</string>
-   </propert
+   </property>
   </widget>
   <widget class="QLabel" name="pending_inputs">
    <property name="geometry">
