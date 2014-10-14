@@ -69,8 +69,17 @@ namespace EggBeater
         break;
       
       case CipherMode::OFB:
+        cipherFunction = [&iv, &phase2Key, &plainText, &cipherText]()
+        {
+          OFB_Mode<AES>::Encryption enc;
+          
+          enc.SetKeyWithIV(phase2Key.data(), phase2Key.size(), iv.data());
+          
+          cipherText.resize(plainText.size());
+          
+          enc.ProcessData(cipherText.data(), plainText.data(), plainText.size());
+        };
         break;
-      
       default:
       case CipherMode::GCM:
         cipherFunction = [&iv, &cipher, &plainText, &cipherText]()
