@@ -1,4 +1,4 @@
-#include "Keypad.h"
+#include "keypad.h"
 
 #include <string.h>
 
@@ -156,4 +156,27 @@ char kp_getTouchValue(keypad_t* kp, TS_StateTypeDef* ts)
   }
 
   return 0;
+}
+
+void Keypad_Task(void* arg)
+{
+  TickType_t lastWake = 0;
+  keypad_t kp;
+
+  UNUSED_ARG(arg);
+
+  InitLCD();
+
+  keypad_init(&kp, &Font16, 20, 230);
+
+  while (1)
+  {
+    //BSP_LED_Toggle(LED3);
+    keypad_draw(&kp);
+    keypad_checktouch(&kp);
+
+    BSP_LCD_DisplayStringAtLine(3, (uint8_t*)kp.buffer);
+
+    vTaskDelayUntil(&lastWake, 5);
+  }
 }

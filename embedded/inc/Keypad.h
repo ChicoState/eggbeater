@@ -2,10 +2,10 @@
 #define _EGGBEATER_KEYPAD_H_
 
 #include <stdint.h>
-
 #include <stm32f4xx.h>
-
 #include <stm32f429i_discovery_lcd.h>
+
+#include "common.h"
 
 #define KEYPAD_MAX_LEN 16
 
@@ -26,5 +26,7 @@ int keypad_init(keypad_t*,  sFONT*, uint32_t, uint32_t);
 int keypad_draw(keypad_t*);
 
 int keypad_checktouch(keypad_t*);
+
+void Keypad_Task(void*);
 
 #endif // _EGGBEATER_KEYPAD_H_

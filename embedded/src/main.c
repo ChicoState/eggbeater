@@ -1,49 +1,18 @@
-/*
-**
-**                           Main.c
-**
-**
-**********************************************************************/
-/*
-   Last committed:     $Revision: 00 $
-   Last changed by:    $Author: $
-   Last changed date:  $Date:  $
-   ID:                 $Id:  $
-
-**********************************************************************/
 #include <stm32f4xx.h>
-
-#include <FreeRTOS.h>
-#include <queue.h>
-#include <task.h>
-
-#include <usbd_core.h>
-#include <usbd_cdc.h>
-#include <usbd_desc.h>
-
-#include "usb_interface.h"
-#include "keypad.h"
-
-//#include <stm32f4xx_hal_conf.h>
 
 #include <stm32f429i_discovery.h>
 #include <stm32f429i_discovery_lcd.h>
 #include <stm32f429i_discovery_ts.h>
 
-#ifndef UNUSED_ARG
-  #define UNUSED_ARG(x) ( (void) ( x ) )
-#endif // UNUSED_ARG
+#include "common.h"
+
+#include "usb_interface.h"
+#include "keypad.h"
 
 #define TASK_STACK_DEPTH  1024
 #define USB_TASK_PRIO     4
 #define ECHO_TASK_PRIO    3
 #define KP_TASK_PRIO      2
-
-#define LCD_FRAME_BUFFER_LAYER0 ( LCD_FRAME_BUFFER )
-#define LCD_FRAME_BUFFER_LAYER1 ( LCD_FRAME_BUFFER + BUFFER_OFFSET )
-
-// Because min is crazy
-#define egb_min(a, b) ( ( ( a ) < ( b ) ) ? ( a ) : ( b ) )
 
 USBD_HandleTypeDef USBD_Device;
 
@@ -59,20 +28,6 @@ void Keypad_Task(void*);
 void xPortSysTickHandler(void);
 
 BaseType_t OTG_ShouldYield = 0;
-
-typedef struct USB_Packet
-{
-  uint8_t* Data;
-  uint32_t Length;
-} USB_Packet;
-
-typedef struct USB_Write_Data
-{
-  QueueHandle_t TransmitQueue;
-  QueueHandle_t ReceiveQueue;
-} USB_Write_Data;
-
-USB_Write_Data usbWriteData;
 
 int main(void)
 {
@@ -140,16 +95,6 @@ void InitClocks(void)
   HAL_RCC_ClockConfig(&clk, FLASH_LATENCY_5);
 }
 
-void InitUSB(void)
-{
-  USBD_Init(&USBD_Device, &VCP_Desc, 0);
-  USBD_RegisterClass(&USBD_Device, &USBD_CDC);
-  USBD_CDC_RegisterInterface(&USBD_Device,
-                             &USB_Interface);
-
-  HAL_NVIC_EnableIRQ(OTG_HS_IRQn);
-}
-
 void InitLCD()
 {
   /* Initialize the LCD */
@@ -181,63 +126,6 @@ void InitLCD()
   BSP_TS_Init(BSP_LCD_GetXSize(), BSP_LCD_GetYSize());
 }
 
-void USB_Write_Task(void* arg)
-{
-  USB_Packet packet;
-  uint8_t buffer[512];
-  uint32_t offset, len;
-  USBD_CDC_HandleTypeDef   *hcdc;
-
-  UNUSED_ARG(arg);
-
-  BSP_LED_On(LED3);
-
-  USBD_Start(&USBD_Device);
-
-  //InitLCD();
-
-  //BSP_LCD_ClearStringLine(0);
-  //BSP_LCD_DisplayStringAtLine(0, (uint8_t*)"USB Write task ready");
-
-  //hcdc = (USBD_CDC_HandleTypeDef*)USBD_Device.pClassData;
-
-  while ((hcdc = (USBD_CDC_HandleTypeDef*)USBD_Device.pClassData) == 0)
-  {
-    __DMB();
-    vTaskDelay(100);
-  }
-
-  while (1)
-  {
-    while (xQueueReceive(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
-
-    while (hcdc->TxState != 0) // I should turn this into an RTOS event variable
-      vTaskDelay(1); // Wait 1 ms for the transmitter to finish
-
-    BSP_LED_Toggle(LED3);
-
-    offset = 0;
-
-    while (offset < packet.Length)
-    {
-      len = egb_min(CDC_DATA_FS_MAX_PACKET_SIZE, packet.Length - offset);
-      memcpy(buffer, &(packet.Data[offset]), len);
-      offset += len;
-
-      USBD_CDC_SetTxBuffer(&USBD_Device, buffer, len);
-      USBD_CDC_TransmitPacket(&USBD_Device);
-
-      while (hcdc->TxState != 0)
-        vTaskDelay(1);
-    }
-
-    //BSP_LCD_ClearStringLine(1);
-    //BSP_LCD_DisplayStringAtLine(1, packet.Data);
-
-    free(packet.Data);
-  }
-}
-
 void Echo_Task(void* arg)
 {
   USB_Packet packet;
@@ -253,29 +141,6 @@ void Echo_Task(void* arg)
     BSP_LED_Toggle(LED4);
 
     while (xQueueSendToBack(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
-  }
-}
-
-void Keypad_Task(void* arg)
-{
-  TickType_t lastWake = 0;
-  keypad_t kp;
-
-  UNUSED_ARG(arg);
-
-  InitLCD();
-
-  keypad_init(&kp, &Font16, 20, 230);
-
-  while (1)
-  {
-    //BSP_LED_Toggle(LED3);
-    keypad_draw(&kp);
-    keypad_checktouch(&kp);
-
-    BSP_LCD_DisplayStringAtLine(3, (uint8_t*)kp.buffer);
-
-    vTaskDelayUntil(&lastWake, 5);
   }
 }
 

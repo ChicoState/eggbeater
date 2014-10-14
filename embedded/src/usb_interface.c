@@ -1,7 +1,8 @@
 #include <stdint.h>
 
 #include "usb_interface.h"
-#include <FreeRTOS.h>
+
+#include <stm32f429i_discovery.h>
 
 int8_t USB_Interface_Init(void);
 int8_t USB_Interface_Close(void);
@@ -130,3 +131,74 @@ int8_t USB_Interface_Read(uint8_t* buffer, uint32_t* length)
   return 0;
 }
 
+__attribute__((weak)) void USB_OnReceivePacket(uint8_t* buffer, uint32_t length)
+{
+  // No-op, weak symbol
+}
+
+void InitUSB(void)
+{
+  USBD_Init(&USBD_Device, &VCP_Desc, 0);
+  USBD_RegisterClass(&USBD_Device, &USBD_CDC);
+  USBD_CDC_RegisterInterface(&USBD_Device,
+                             &USB_Interface);
+
+  HAL_NVIC_EnableIRQ(OTG_HS_IRQn);
+}
+
+void USB_Write_Task(void* arg)
+{
+  USB_Packet packet;
+  uint8_t buffer[512];
+  uint32_t offset, len;
+  USBD_CDC_HandleTypeDef   *hcdc;
+
+  UNUSED_ARG(arg);
+
+  BSP_LED_On(LED3);
+
+  USBD_Start(&USBD_Device);
+
+  //InitLCD();
+
+  //BSP_LCD_ClearStringLine(0);
+  //BSP_LCD_DisplayStringAtLine(0, (uint8_t*)"USB Write task ready");
+
+  //hcdc = (USBD_CDC_HandleTypeDef*)USBD_Device.pClassData;
+
+  while ((hcdc = (USBD_CDC_HandleTypeDef*)USBD_Device.pClassData) == 0)
+  {
+    __DMB();
+    vTaskDelay(100);
+  }
+
+  while (1)
+  {
+    while (xQueueReceive(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
+
+    while (hcdc->TxState != 0) // I should turn this into an RTOS event variable
+      vTaskDelay(1); // Wait 1 ms for the transmitter to finish
+
+    BSP_LED_Toggle(LED3);
+
+    offset = 0;
+
+    while (offset < packet.Length)
+    {
+      len = egb_min(CDC_DATA_FS_MAX_PACKET_SIZE, packet.Length - offset);
+      memcpy(buffer, &(packet.Data[offset]), len);
+      offset += len;
+
+      USBD_CDC_SetTxBuffer(&USBD_Device, buffer, len);
+      USBD_CDC_TransmitPacket(&USBD_Device);
+
+      while (hcdc->TxState != 0)
+        vTaskDelay(1);
+    }
+
+    //BSP_LCD_ClearStringLine(1);
+    //BSP_LCD_DisplayStringAtLine(1, packet.Data);
+
+    free(packet.Data);
+  }
+}

@@ -1,15 +1,42 @@
 #ifndef _EGGBEATER_EMBED_USB_INTERFACE_H_
 #define _EGGBEATER_EMBED_USB_INTERFACE_H_
 
-#include "usbd_cdc.h"
+#include <usbd_core.h>
+#include <usbd_cdc.h>
+#include <usbd_desc.h>
 
-extern USBD_CDC_ItfTypeDef USB_Interface;
+#include "common.h"
 
+extern USBD_CDC_ItfTypeDef  USB_Interface;
+extern USBD_HandleTypeDef   USBD_Device;
+
+typedef struct USB_Packet
+{
+  uint8_t* Data;
+  uint32_t Length;
+} USB_Packet;
+
+typedef struct USB_Write_Data
+{
+  QueueHandle_t TransmitQueue;
+  QueueHandle_t ReceiveQueue;
+} USB_Write_Data;
+
+USB_Write_Data usbWriteData;
+
+
+void InitUSB(void);
+
+/*
 uint8_t USB_Init(USBD_HandleTypeDef);
 uint8_t USB_Write(USBD_HandleTypeDef*, uint8_t* buffer, uint32_t length);
 uint8_t USB_Read(USBD_HandleTypeDef*, uint8_t* buffer, uint32_t* length);
+*/
 
 // User callbacks
 void USB_OnReceivePacket(uint8_t* buffer, uint32_t length);
+
+// RTOS task entry point
+void USB_Write_Task(void*);
 
 #endif //  _EGGBEATER_EMBED_USB_INTERFACE_H_
