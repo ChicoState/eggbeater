@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 
 #include <EggBeater/Crypto.h>
+#include <iostream>
 //#include <deps/cryptopp/sha3.h>
 
 using namespace EggBeater;
@@ -168,7 +169,7 @@ TEST_F(NoOpFixture, AES_256_OFB_3)
                       0xf3, 0x9d, 0x1c, 0x5b, 0xba, 0x97, 0xc4, 0x08});
   ByteArray actual;
   
-  EXPECT_NO_THROW(actual = tau(key, plain, CipherMode::CFB, iv));
+  EXPECT_NO_THROW(actual = tau(key, plain, CipherMode::OFB, iv));
   
   EXPECT_EQ(expected, actual);
 }
@@ -190,6 +191,19 @@ TEST_F(NoOpFixture, AES_256_OFB_4)
   
   EXPECT_EQ(expected, actual);
 }
+/*
+  Test vectors from: http://www.inconteam.com/software-development/41-encryption/55-aes-test-vectors#aes-cfb-256
+  
+  AES OFB 256-bit encryption mode
+
+  Encryption key: 603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4
+
+  Initialization vector						  Test vector						  	        Cipher text 
+  000102030405060708090A0B0C0D0E0F	6bc1bee22e409f96e93d7e117393172a	dc7e84bfda79164b7ecd8486985d3860
+  B7BF3A5DF43989DD97F0FA97EBCE2F4A	ae2d8a571e03ac9c9eb76fac45af8e51	4febdc6740d20b3ac88f6ad82a4fb08d
+  E1C656305ED1A7A6563805746FE03EDC	30c81c46a35ce411e5fbc1191a0a52ef	71ab47a086e86eedf39d1c5bba97c408
+  41635BE625B48AFC1666DD42A09D96E7	f69f2445df4f9b17ad2b417be66c3710	0126141d67f37be8538f5a8be740e484
+*/
 int main(int argc, char** argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
