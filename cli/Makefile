@@ -24,11 +24,11 @@ lib/.d:
 	touch lib/.d
 
 lib/libcryptopp.a: lib/.d
-	make "-C$(CRYPTOPP_DIR)" libcryptopp.a
+	$(MAKE) "-C$(CRYPTOPP_DIR)" libcryptopp.a
 	cp "$(CRYPTOPP_DIR)/libcryptopp.a" lib/libcryptopp.a
 	
 lib/gtest.a: lib/.d
-	make "-C$(GTEST_DIR)/make" gtest.a
+	$(MAKE) "-C$(GTEST_DIR)/make" gtest.a
 	cp "$(GTEST_DIR)/make/gtest.a" lib/gtest.a
 
 .PHONY: testsuite
