@@ -7,10 +7,10 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QProgressDialog>
 
-namespace Ui 
-{
-  class SecDialog;
+namespace Ui {
+class SecDialog;
 }
 
 class SecDialog : public QDialog
@@ -24,13 +24,18 @@ public:
     QTimer *countDown;
     int startMillionseconds;
 
+    QString folderName;
+    QString fileName;
+
 protected slots:
-    void timeOut();
+    void clock_time();
 
 private slots:
     void on_refresh_button_clicked();
     void on_choose_input_files_clicked();
     void on_choose_output_files_clicked();
+
+    void on_encrypt_clicked();
 
 private:
     Ui::SecDialog *ui;
