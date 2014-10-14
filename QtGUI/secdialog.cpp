@@ -34,6 +34,12 @@ void SecDialog::timeOut()
         QString time_text = time.toString("hh : mm : ss");
         ui->Digital_clock->setText(time_text);
     }
+    else
+    {
+        QMessageBox::critical(this, tr("The title"), tr("Timeout!!"));
+        this->close();
+
+    }
 }
 
 void SecDialog::on_refresh_button_clicked()
@@ -51,20 +57,53 @@ void SecDialog::on_refresh_button_clicked()
 
 void SecDialog::on_choose_input_files_clicked()
 {
-    QString fileName = QFileDialog::getExistingDirectory(
+    fileName = QFileDialog::getOpenFileName(
                 this,
-                tr("Choose Folder You Want to Encrypt"),
-                QStandardPaths::writableLocation(QStandardPaths::HomeLocation),
-                    QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog
+                tr("Choose a File You Want to Encrypt"),
+                "C://",
+                "All files(*.*);;"
                 );
+    if(!fileName.isEmpty())
+        ui->fileName->setText(QFileInfo(fileName).fileName());
 }
 
 void SecDialog::on_choose_output_files_clicked()
 {
-    QString fileName = QFileDialog::getExistingDirectory(
+    folderName = QFileDialog::getExistingDirectory(
                 this,
                 tr("Choose Destination Folder"),
                 QStandardPaths::writableLocation(QStandardPaths::HomeLocation),
                     QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog
                 );
+                getOpenFileName(
+                this,
+                tr("Choose a File You Want to Encrypt"),
+                "C://",
+                "All files(*.*);;"
+                );
+    if(!fileName.isEmpty())
+        ui->fileName->setText(QFileInfo(fileName).fileName());
+}
+
+void SecDialog::on_encrypt_clicked()
+{
+    QFile file1(fileName);
+    QFile file2("Encrypted.txt");
+
+    if(file1.open(QFile::ReadOnly) || !file2.open(QFile::WriteOnly))
+        return;
+
+   /* QProgressDialog *dlg = new QProgressDialog(this);
+    qint64 len = src.bytesAvailable();
+    dlg->setRange(0,len);
+    dlg->show();
+
+    char ch;
+    while(!src.atEnd())
+    {
+      src.getChar(&ch);
+      dst.putChar(ch);
+      dlg->setValue(dlg->value()+1);
+      qApp->processEvents();
+    }*/
 }
