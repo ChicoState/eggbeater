@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<EmBlocks_project_file>
+	<EmBlocksVersion release="2.20" revision="1" />
+	<FileVersion major="1" minor="0" />
+	<Project>
+		<Option title="FreeRTOS" />
+		<Option pch_mode="2" />
+		<Option compiler="armgcc_eb" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\libFreeRTOS.a" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="armgcc_eb" />
+				<Option projectDeviceOptionsRelation="0" />
+				<Compiler>
+					<Add option="-g3" />
+					<Add option="-O0" />
+					<Add option="-Wall" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--gdwarf-2" />
+				</Assembler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\libFreeRTOS.a" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="armgcc_eb" />
+				<Option projectDeviceOptionsRelation="0" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Assembler>
+					<Add option="-Wa,--no-warn" />
+				</Assembler>
+			</Target>
+		</Build>
+		<Device>
+			<Add option="$device=cortex-m4" />
+			<Add option="$fpu=fpv4-sp-d16" />
+			<Add option="$lscript=./stm32f401cb_flash.ld" />
+			<Add option="$stack=0x0100" />
+			<Add option="$heap=0x0000" />
+		</Device>
+		<Compiler>
+			<Add option="-mfloat-abi=softfp" />
+			<Add option="-fdata-sections" />
+			<Add option="-ffunction-sections" />
+			<Add option="-Os" />
+			<Add option="-DARM_MATH_CM4" />
+			<Add option="-D__FPU_USED" />
+			<Add option="-DSTM32F429xx" />
+			<Add option="-DSTM32F4XX" />
+			<Add option="-fno-strict-aliasing" />
+			<Add option="-mthumb" />
+			<Add directory=".\inc" />
+			<Add directory=".\src" />
+			<Add directory="FreeRTOS\Source\include" />
+			<Add directory="FreeRTOS\Source\portable\GCC\ARM_CM4F" />
+		</Compiler>
+		<Linker>
+			<Add option="-eb_start_files" />
+			<Add option="-eb_lib=n" />
+		</Linker>
+		<Unit filename="FreeRTOS\Source\croutine.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="FreeRTOS\Source\event_groups.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="FreeRTOS\Source\include\FreeRTOS.h" />
+		<Unit filename="FreeRTOS\Source\include\StackMacros.h" />
+		<Unit filename="FreeRTOS\Source\include\croutine.h" />
+		<Unit filename="FreeRTOS\Source\include\event_groups.h" />
+		<Unit filename="FreeRTOS\Source\include\list.h" />
+		<Unit filename="FreeRTOS\Source\include\mpu_wrappers.h" />
+		<Unit filename="FreeRTOS\Source\include\portable.h" />
+		<Unit filename="FreeRTOS\Source\include\projdefs.h" />
+		<Unit filename="FreeRTOS\Source\include\queue.h" />
+		<Unit filename="FreeRTOS\Source\include\semphr.h" />
+		<Unit filename="FreeRTOS\Source\include\task.h" />
+		<Unit filename="FreeRTOS\Source\include\timers.h" />
+		<Unit filename="FreeRTOS\Source\list.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="FreeRTOS\Source\portable\GCC\ARM_CM4F\port.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="FreeRTOS\Source\portable\GCC\ARM_CM4F\portmacro.h" />
+		<Unit filename="FreeRTOS\Source\portable\MemMang\heap_4.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="FreeRTOS\Source\queue.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="FreeRTOS\Source\readme.txt" />
+		<Unit filename="FreeRTOS\Source\tasks.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="FreeRTOS\Source\timers.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="inc\FreeRTOSConfig.h" />
+		<Unit filename="stm32f401cb_flash.ld" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</EmBlocks_project_file>

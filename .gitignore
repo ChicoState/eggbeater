@@ -1,5 +1,8 @@
-*/deps/*
+*/bin/*
 */lib/*
+*/obj/*
+cli/deps/*
 *.o
+*.d
 *.exe
 *.elf
