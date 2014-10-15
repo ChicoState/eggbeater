@@ -1,0 +1,40 @@
+Notes:
+Someone add datasheet for F429 to gitHub
+
+
+Embedded:
+  -- Serial -Running
+  -- #Pad -done
+    -add backspace to keypad. // Sterling, Robert
+  -- Parse USB Packet  // Sam A, Sam W
+      Magic# aka start sequence (8 bit)
+	  Command (8 bit)
+	  number of data bytes (16 bits)
+	  data ( up to 2^16-1 bits)
+	  ...
+	  ...
+	  ...
+	  EOF (8 bit)
+
+CLI:
+  -- Cipher modes
+    - *CFB done, OFB done, GCM Started // * is default mode
+  -- Serial Port //Sterling
+    - Windows Files are labled "COM#" linux are "dev/ttyACM#" "dev/ttyUSB#" or if(serial device exists) "/serial/"
+  -- Parse USB Packet // Sam A, Sam W
+    - Common code with embedded side.. code level how do they interact. 
+      Validate a packet, extract command, extract data. Construct a packet.	  
+  -- Device discovery
+    - windows //Andrew
+    - linux //Robert
+  --CLI args //Sam A, Sam W, Andrew
+    -file encryption
+
+GUI: // Yuki, Taha
+  -- Mockup in QT -Done
+    Features:
+    - File Selection
+	  - Pending Files
+	  - select a folder //Taha
+	  - Query CLI
+	
