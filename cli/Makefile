@@ -4,15 +4,22 @@ CRYPTOPP_DIR  = deps/cryptopp562
 
 CXXFLAGS += -O0                      \
             -std=gnu++11             \
-						"-I$(GTEST_DIR)"         \
-						"-I$(GTEST_DIR)/include" \
-						"-I$(CRYPTOPP_DIR)"      \
-						"-Iinclude"              \
-						"-Ideps" -ffunction-sections -fdata-sections
+            "-I$(GTEST_DIR)"         \
+            "-I$(GTEST_DIR)/include" \
+            "-I$(CRYPTOPP_DIR)"      \
+            "-Iinclude"              \
+            "-Ideps"                 \
+            -ffunction-sections      \
+            -fdata-sections
 LDFLAGS  += "-Llib" -Wl,-gc-sections
 
-TESTS			= tests/Crypto_tests.elf   \
-						tests/Crypto_CipherMode_tests.elf
+SOURCES   = src/Crypto.o                      \
+            src/Discovery.o
+TESTS     = tests/Crypto_tests.elf            \
+            tests/Crypto_CipherMode_tests.elf \
+            tests/Discovery_test_present.elf  \
+            tests/Discovery_test_absent.elf   \
+            tests/Discovery_tests.elf
 
 all: lib/libcryptopp.a lib/gtest.a testsuite
 
@@ -37,7 +44,7 @@ testsuite: $(TESTS)
 #tests/Crypto_tests.o: tests/Crypto_tests.cpp
 #	$(CXX) -c -o $@ $+ $(CXXFLAGS)
 
-%.elf: %.o src/Crypto.o lib/libcryptopp.a lib/gtest.a
+%.elf: %.o $(SOURCES) lib/libcryptopp.a lib/gtest.a
 	$(CXX) -o $@ $+ $(LDFLAGS)
 
 .PHONY: clean
