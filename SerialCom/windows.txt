@@ -1,0 +1,35 @@
+Device information in the registry:
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\USB\VID_%d&PID_%d\<instance id>\Device Parameters
+  PortName: COM# name of the serial port.
+  
+
+If more than one sub-key at above path, then more than one device has been connected on the computer
+
+Connected USB serial devices:
+  HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\usbser
+    Count: Number of connected devices
+    [%d]: Sub-path in HKLM\SYSTEM\CurrentControlSet\Enum to the device information block. Counting starts at 0.
+
+vector<string> discover_device(uint16_t VID, uint16_t PID)
+{
+  vector<string> ports
+  reg = registry_open(HKEY_LOCALMACHINE)
+  entry = registry_query(reg, "SYSTEM/CurrentControlSet/Services/usbser")
+  numPorts = registry_get(reg, entry, "Count")
+  
+  for (int i = 0; i < numPorts; i++)
+  {
+    devicePath = registry_get(reg, entry, to_string(i))
+    deviceEntry = registry_query(reg, "SYSTEM/CurrentControlSet/Enum", devicePath)
+    hwID = registry_get(reg, deviceEntry, "HardwareID")
+    
+    for (id in hwID)
+      if (id == sprintf("USB\PID_%d&VID=%d", pid, vid)
+      {
+        portName = registry_get(reg, deviceEntry, "Device Parameters", "PortName")
+        ports.append(portName)
+      }
+  }
+  
+  return ports
+}
