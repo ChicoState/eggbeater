@@ -1,6 +1,7 @@
 #include <EggBeater/Crypto.h>
 /* Crypto++ includes */
 #include <sha3.h>
+#include <gcm.h>
 #include <aes.h>
 #include <modes.h>
 
@@ -82,16 +83,15 @@ namespace EggBeater
         break;
       default:
       case CipherMode::GCM:
-        cipherFunction = [&iv, &cipher, &plainText, &cipherText]()
-        {
-          // The GCM code runs differently
-          //GCM_Mode_ExternalCipher::Encryption enc(cipher, iv.data());
+        cipherFunction = [&iv, &phase2Key, &plainText, &cipherText]()
+        {       
+          GCM<AES>::Encryption enc;
           
-          //CFB_Mode_ExternalCipher::Encryption enc(cipher, iv.data());
+          enc.SetKeyWithIV(phase2Key.data(), phase2Key.size(), iv.data(), iv.size());
           
-          //cipherText.resize(plainText.size());
+          cipherText.resize(plainText.size());
           
-          //enc.ProcessData(cipherText.data(), plainText.data(), plainText.size());
+          enc.ProcessData(cipherText.data(), plainText.data(), plainText.size());
         };
         break;
     }
