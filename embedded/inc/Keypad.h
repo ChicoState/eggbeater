@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stm32f4xx.h>
 #include <stm32f429i_discovery_lcd.h>
+#include <stm32f429i_discovery_ts.h>
 
 #include "common.h"
 
@@ -21,11 +22,28 @@ typedef struct keypad_t
                     haveTouch;
 } keypad_t;
 
+typedef struct backspace_t
+{
+  uint32_t  xPos,
+            yPos,
+            height,
+            width,
+            borderWidth,
+            borderColor,
+            fillColor;
+} backspace_t;
+
 int keypad_init(keypad_t*,  sFONT*, uint32_t, uint32_t);
 
 int keypad_draw(keypad_t*);
 
-int keypad_checktouch(keypad_t*);
+int keypad_checktouch(keypad_t*, TS_StateTypeDef*);
+
+int backspace_init(backspace_t*, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
+
+int backspace_draw(backspace_t*);
+
+int backspace_checktouch(backspace_t*, TS_StateTypeDef*);
 
 void Keypad_Task(void*);
 

@@ -66,9 +66,9 @@
 			<Cursor1 position="3316" topLine="114" />
 		</Cursor>
 	</File>
-	<File name="inc\keypad.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="inc\Keypad.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="282" topLine="1" />
+			<Cursor1 position="1038" topLine="21" />
 		</Cursor>
 	</File>
 	<File name="inc\usb_interface.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -86,22 +86,33 @@
 			<Cursor1 position="1754" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\keypad.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Keypad.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1610" topLine="66" />
-		</Cursor>
-	</File>
-	<File name="src\main.c" open="1" top="1" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="5537" topLine="224" />
+			<Cursor1 position="6200" topLine="65" />
 		</Cursor>
 		<Folding>
-			<Collapse line="143" />
-			<Collapse line="297" />
-			<Collapse line="304" />
+			<Collapse line="16" />
+			<Collapse line="41" />
+			<Collapse line="70" />
+			<Collapse line="122" />
+			<Collapse line="162" />
+			<Collapse line="196" />
 		</Folding>
 	</File>
-	<File name="src\startup_stm32f429x.S" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\main.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="436" topLine="21" />
+		</Cursor>
+		<Folding>
+			<Collapse line="71" />
+			<Collapse line="98" />
+			<Collapse line="129" />
+			<Collapse line="147" />
+			<Collapse line="162" />
+			<Collapse line="169" />
+		</Folding>
+	</File>
+	<File name="src\startup_stm32f429x.S" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="9419" topLine="221" />
 		</Cursor>
