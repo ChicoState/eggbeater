@@ -21,7 +21,7 @@ TESTS     = tests/Crypto_tests.elf            \
             tests/Discovery_test_absent.elf   \
             tests/Discovery_tests.elf
 
-all: lib/libcryptopp.a lib/gtest.a testsuite
+all: lib/libcryptopp.a lib/gtest.a testsuite $(SOURCES)
 
 %.o: %.cpp
 	$(CXX) -c -o $@ $+ $(CXXFLAGS)

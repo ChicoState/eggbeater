@@ -7,7 +7,6 @@
 
 #include <iostream>
 
-//! @todo Figure out which symbols are defined on Windows
 #if defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__)
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -83,7 +82,7 @@ namespace EggBeater
         buffer.resize(bufferSize);
         bufferSize = buffer.size();
       }
-      else
+      else if (retValue != ERROR_SUCCESS)
       {
         char msgBuffer[129];
         
@@ -130,16 +129,17 @@ namespace EggBeater
         bufferSize = buffer.size();
       }
       // Some other error
-      else
+      else if (retValue != ERROR_SUCCESS)
       {
         char msgBuffer[129];
         
         snprintf(msgBuffer,
                  sizeof(msgBuffer),
-                 "Could not get value at %s\\%s: %d",
+                 "Could not get value at %s\\%s: %d/%d",
                  subKey,
                  valueName,
-                 GetLastError());
+                 GetLastError(),
+                 retValue);
         
         throw Exception(msgBuffer);
       }
@@ -257,13 +257,30 @@ namespace EggBeater
       path = reg_read_string(serialEntries,
                              NULL,
                              buffer,
-                             36);
+                             30);
+      
+      // Trim NULL terminators
+      while (path[path.length()-1] == 0)
+        path.resize(path.length() - 1);
       
       if (path != "")
       {
         hwIDs = reg_read_multi_sz(deviceEntry,
                                   path.c_str(),
                                   "HardwareID");
+        
+        // Strip the extra NULL terminator
+        //path.resize(path.length() - 2);
+        
+        path = path.append("\\Device Parameters");
+        
+        //for (auto c : path)
+        //{
+        //  std::cout << (int)c << std::endl;
+        //}
+        
+        //std::cout << path << std::endl;
+        //std::cout << path.c_str() << std::endl;
         
         // C++11 for each loop
         for (auto hwID : hwIDs)
@@ -272,7 +289,7 @@ namespace EggBeater
           {
             portName = reg_read_string(deviceEntry,
                                        path.c_str(),
-                                       "PathName");
+                                       "PortName");
             if (portName != "")
               ports.push_back(portName);
           }
