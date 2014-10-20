@@ -1,4 +1,3 @@
-
 GTEST_DIR     = deps/gtest-1.7.0
 CRYPTOPP_DIR  = deps/cryptopp562
 
@@ -11,10 +10,12 @@ CXXFLAGS += -O0                      \
             "-Ideps"                 \
             -ffunction-sections      \
             -fdata-sections
+
 LDFLAGS  += "-Llib" -Wl,-gc-sections
 
 SOURCES   = src/Crypto.o                      \
             src/Discovery.o
+
 TESTS     = tests/Crypto_tests.elf            \
             tests/Crypto_CipherMode_tests.elf \
             tests/Discovery_test_present.elf  \
@@ -26,9 +27,13 @@ all: lib/libcryptopp.a lib/gtest.a testsuite $(SOURCES)
 %.o: %.cpp
 	$(CXX) -c -o $@ $+ $(CXXFLAGS)
 
-lib/.d:
-	test -d lib || mkdir lib
-	touch lib/.d
+#lib/.d:
+#	test -d lib || mkdir lib
+#	touch lib/.d
+
+%/.d:
+	test -d $(dir $@) || mkdir $(dir $@)
+	touch $(dir $@)/.d
 
 lib/libcryptopp.a: lib/.d
 	$(MAKE) "-C$(CRYPTOPP_DIR)" libcryptopp.a
@@ -40,9 +45,6 @@ lib/gtest.a: lib/.d
 
 .PHONY: testsuite
 testsuite: $(TESTS)
-
-#tests/Crypto_tests.o: tests/Crypto_tests.cpp
-#	$(CXX) -c -o $@ $+ $(CXXFLAGS)
 
 %.elf: %.o $(SOURCES) lib/libcryptopp.a lib/gtest.a
 	$(CXX) -o $@ $+ $(LDFLAGS)
