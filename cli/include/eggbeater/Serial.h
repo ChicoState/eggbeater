@@ -14,8 +14,9 @@ namespace EggBeater
   {
     Bad = -1,
     NoOp = 0,
-	Read = 1,
-	Write =2,
+    read = 1,
+    Authenticate=2, //pc->stm
+    thumbGood=3, //stm->pc 
     Echo
   };
   
@@ -34,12 +35,12 @@ namespace EggBeater
     //! Create an empty packet
     Packet();
     //! Create a packet from the specified command type and data array.
-    Packet(CommandType, const ByteArray&);
+    Packet(CommandType cmd, const ByteArray&);
     //! Create a packet from the specified byte stream
     explicit Packet(const ByteArray&);
     
     //! Create a packet from the specified command type and data array.
-    void CreatePacket(CommandType, const ByteArray& data);
+    void CreatePacket(CommandType cmd, const ByteArray& data);
     //! Create a packet from the specified byte stream
     void createPacket(const ByteArray&);
     
