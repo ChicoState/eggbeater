@@ -50,7 +50,16 @@ TEST_F(NoOpFixture, discover_device_absent)
   
   StringList devs;
   
-  EXPECT_NO_THROW(devs = discover_devices(vid, pid));
+  EXPECT_NO_THROW(
+  try
+  {
+    devs = discover_devices(vid, pid);
+  }
+  catch (Exception e)
+  {
+    std::cout << e.msg() << std::endl;
+    throw e;
+  });
   
   EXPECT_EQ(devs.size(), 0);
 }

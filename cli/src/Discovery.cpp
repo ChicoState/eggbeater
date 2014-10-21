@@ -47,6 +47,75 @@ namespace EggBeater
     return strings;
   }
   
+  HKEY reg_open(HKEY regKey, const char* subKey, DWORD opt, REGSAM access)
+  {
+    HKEY key;
+    LONG retValue = RegOpenKeyEx(regKey,
+                                 subKey,
+                                 opt,
+                                 access,
+                                 &key);
+                                
+    if (retValue != ERROR_SUCCESS)
+    {
+      if (retValue == ERROR_FILE_NOT_FOUND || retValue == ERROR_PATH_NOT_FOUND)
+      {
+        return NULL;
+      }
+      else
+      {
+        char msgBuffer[129];
+        
+        snprintf(msgBuffer,
+                 sizeof(msgBuffer),
+                 "reg_open: Could not open key at %s: %d",
+                 subKey,
+                 GetLastError());
+        
+        throw Exception(msgBuffer);
+      }
+    }
+    else
+    {
+      return key;
+    }
+  }
+  
+  bool reg_exist(HKEY regKey, const char* subKey, const char* valueName)
+  {
+    LONG retValue = RegGetValueA(regKey,
+                                 subKey,
+                                 valueName,
+                                 RRF_RT_ANY,
+                                 NULL,
+                                 NULL,
+                                 NULL);
+    if (retValue != ERROR_SUCCESS)
+    {
+      if (retValue == ERROR_FILE_NOT_FOUND || retValue == ERROR_PATH_NOT_FOUND)
+      {
+        return false;
+      }
+      else
+      {
+        char msgBuffer[129];
+        
+        snprintf(msgBuffer,
+                 sizeof(msgBuffer),
+                 "reg_exist: Could not query value at %s\\%s: %d",
+                 subKey,
+                 valueName,
+                 GetLastError());
+        
+        throw Exception(msgBuffer);
+      }
+    }
+    else
+    {
+      return true;
+    }
+  }
+  
   /*
     Conditions:
       2
@@ -66,6 +135,11 @@ namespace EggBeater
     
     buffer.resize(16);
     bufferSize = buffer.size();
+    
+    if (!reg_exist(regKey, subKey, valueName))
+    {
+      return StringList();
+    }
     
     do
     {
@@ -112,6 +186,11 @@ namespace EggBeater
     
     buffer.resize(initialSize);
     bufferSize = buffer.size();
+    
+    if (!reg_exist(regKey, subKey, valueName))
+    {
+      return String();
+    }
     
     do
     {
@@ -186,24 +265,37 @@ namespace EggBeater
     String portName, path;
     char  buffer[16] = {0};
     
+    serialEntries = reg_open(HKEY_LOCAL_MACHINE,
+                             SERIAL_LOOKUP_PATH,
+                             0,
+                             KEY_READ & ~KEY_NOTIFY);
+    
+    /*
     retValue = RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                              SERIAL_LOOKUP_PATH,
                              0,
                              KEY_READ & ~KEY_NOTIFY,
                              &serialEntries);
+    */
     
+    if (!serialEntries)
+      return ports;
+    
+    /*
     if (retValue != ERROR_SUCCESS)
     {
+      if (
       char msgBuffer[129];
       
       snprintf(msgBuffer,
                sizeof(msgBuffer),
-               "Could not get value at HKEY_LOCAL_MACHINE\\%s: %d",
+               "Could not open key at HKEY_LOCAL_MACHINE\\%s: %d",
                SERIAL_LOOKUP_PATH,
                GetLastError());
       
       throw Exception(msgBuffer);
     }
+    */
     
     retValue = RegGetValueA(serialEntries,
                             NULL,
@@ -213,7 +305,12 @@ namespace EggBeater
                             (PVOID)&countData,
                             &dataSize);
     
-    if (retValue != ERROR_SUCCESS)
+    if (retValue == ERROR_FILE_NOT_FOUND || retValue == ERROR_PATH_NOT_FOUND)
+    {
+      // Expected failure
+      return ports;
+    }
+    else if (retValue != ERROR_SUCCESS)
     {
       char msgBuffer[129];
       
@@ -229,6 +326,18 @@ namespace EggBeater
       throw Exception(msgBuffer);
     }
     
+    deviceEntry = reg_open(HKEY_LOCAL_MACHINE,
+                           DEVICE_LOOKUP_PATH,
+                           0,
+                           KEY_READ & ~KEY_NOTIFY);
+    
+    if (!deviceEntry)
+    {
+      RegCloseKey(serialEntries);
+      return ports;
+    }
+    
+    /*
     retValue = RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                              DEVICE_LOOKUP_PATH,
                              0,
@@ -249,6 +358,7 @@ namespace EggBeater
       
       throw Exception(msgBuffer);
     }
+    */
     
     for (uint32_t i = 0; i < countData; i++)
     {
