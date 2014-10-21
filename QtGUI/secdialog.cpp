@@ -7,11 +7,11 @@ SecDialog::SecDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    startMillionseconds = (1000 * 60 *10)+1000;
+    startMillionseconds = (1000 * 60 * 10)+1000;
     countDown = new QTimer(this);   //Construct the timer
     countDown->setInterval(1000);   //One second interval
     countDown->setSingleShot(false);    //Multipul shot. This means that the signal timeout will be signed each second
-    connect(countDown, SIGNAL(timeout()), this, SLOT(timeOut()));  //Connect the timeout signal to my slot timeOut
+    connect(countDown, SIGNAL(timeout()), this, SLOT(clock_time()));  //Connect the timeout signal to my slot timeOut
     countDown->start(); //Start the timer
 }
 
@@ -20,7 +20,7 @@ SecDialog::~SecDialog()
     delete ui;
 }
 
-void SecDialog::timeOut()
+void SecDialog::clock_time()
 {
     int min=0;
     int sec=0;
@@ -41,7 +41,6 @@ void SecDialog::timeOut()
 
     }
 }
-
 void SecDialog::on_refresh_button_clicked()
 {
     int min = 0;
@@ -57,43 +56,112 @@ void SecDialog::on_refresh_button_clicked()
 
 void SecDialog::on_choose_input_files_clicked()
 {
-    fileName = QFileDialog::getOpenFileName(
-                this,
-                tr("Choose a File You Want to Encrypt"),
-                "C://",
-                "All files(*.*);;"
-                );
-    if(!fileName.isEmpty())
-        ui->fileName->setText(QFileInfo(fileName).fileName());
+    file_dlg = new FileDialog();
+    int count = 0;
+
+    if(file_dlg->exec())
+    {
+        fileNames = file_dlg->selectedFiles();
+
+        if(!fileNames.isEmpty())
+        {
+            ui->fileName->setText("check");
+            for(int i=0; i<fileNames.size(); i++)
+            {
+                QString fn = fileNames.at(i);
+                QString temp = ui->fileName->text();
+
+                if(temp=="File Name" || temp=="check")
+                {
+                    ui->fileName->setText(QFileInfo(fn).fileName());
+                    count++;
+                }
+
+                else
+                {
+                    count++;
+                    if((i%2)==1)
+                    {
+                        temp.append(", " + QFileInfo(fn).fileName());
+                        ui->fileName->setText(temp);
+                    }
+
+                    else
+                    {
+                        temp.append("\n" + QFileInfo(fn).fileName());
+                        ui->fileName->setText(temp);
+                    }
+                }
+
+            }
+        }
+    }
+    else
+    {
+        fileNames = QStringList();
+        ui->fileName->setText("File Name");
+        return;
+    }
 }
 
-void SecDialog::on_choose_output_files_clicked()
+void SecDialog::on_choose_output_folder_clicked()
 {
     folderName = QFileDialog::getExistingDirectory(
                 this,
-                tr("Choose Destination Folder"),
-                QStandardPaths::writableLocation(QStandardPaths::HomeLocation),
-                    QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog
+                tr("Open Directry"),
+                "C/:",
+                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
                 );
-                getOpenFileName(
-                this,
-                tr("Choose a File You Want to Encrypt"),
-                "C://",
-                "All files(*.*);;"
-                );
-    if(!fileName.isEmpty())
-        ui->fileName->setText(QFileInfo(fileName).fileName());
+
+    if(!folderName.isEmpty())
+        ui->folderName->setText(QFileInfo(folderName).fileName());
+    else
+        ui->folderName->setText("Folder Name");
 }
 
 void SecDialog::on_encrypt_clicked()
 {
-    QFile file1(fileName);
-    QFile file2("Encrypted.txt");
-
-    if(file1.open(QFile::ReadOnly) || !file2.open(QFile::WriteOnly))
+    if(!fileNames.isEmpty() && folderName.isEmpty())
+    {
+        QMessageBox::warning(this, tr("The title"), tr("Slect Destination Folder."));
         return;
+    }
 
-   /* QProgressDialog *dlg = new QProgressDialog(this);
+    else if(fileNames.isEmpty() && !folderName.isEmpty())
+    {
+        QMessageBox::warning(this, tr("The title"), tr("Slect File(s) or Folder(S)."));
+        return;
+    }
+
+    else if(fileNames.isEmpty() && folderName.isEmpty())
+    {
+        QMessageBox::warning(this, tr("The title"), tr("Slect File(s) or Folder(s)\nand Destination Folder."));
+        return;
+    }
+
+    else
+    {
+        for(int i=0; i<fileNames.size(); i++)
+        {
+            QFile file(fileNames.at(i));
+            if(!file.open(QFile::ReadOnly|QFile::Text))
+            {
+                QMessageBox::warning(this, tr("Application"),
+                                     tr("Cannot read file %1:\n%2")
+                                     .arg(fileNames.at(i))
+                                     .arg(file.errorString())
+                                     );
+            }
+            
+            else
+            {
+                
+            }
+        }
+    }
+
+/*
+    QProgressDialog *dlg = new QProgressDialog(this);
     qint64 len = src.bytesAvailable();
     dlg->setRange(0,len);
     dlg->show();
@@ -106,4 +174,30 @@ void SecDialog::on_encrypt_clicked()
       dlg->setValue(dlg->value()+1);
       qApp->processEvents();
     }*/
+}
+
+void SecDialog::on_decrypt_clicked()
+{
+    if(!fileNames.isEmpty() && !folderName.isEmpty())
+    {
+
+    }
+
+    else if(!fileNames.isEmpty() && folderName.isEmpty())
+    {
+        QMessageBox::warning(this, tr("The title"), tr("Slect Destination Folder."));
+        return;
+    }
+
+    else if(fileNames.isEmpty() && !folderName.isEmpty())
+    {
+        QMessageBox::warning(this, tr("The title"), tr("Slect File(s) or Folder(S)."));
+        return;
+    }
+
+    else
+    {
+        QMessageBox::warning(this, tr("The title"), tr("Slect File(s) or Folder(s)\nand Destination Folder."));
+        return;
+    }
 }
