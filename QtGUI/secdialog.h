@@ -1,13 +1,12 @@
 #ifndef SECDIALOG_H
 #define SECDIALOG_H
 
-#include <QDialog>
 #include <QTime>
 #include <QTimer>
-#include <QMessageBox>
-#include <QFileDialog>
 #include <QStandardPaths>
 #include <QProgressDialog>
+#include <QMessageBox>
+#include "filedialog.h"
 
 namespace Ui {
 class SecDialog;
@@ -24,8 +23,8 @@ public:
     QTimer *countDown;
     int startMillionseconds;
 
+    QStringList fileNames;
     QString folderName;
-    QString fileName;
 
 protected slots:
     void clock_time();
@@ -33,12 +32,15 @@ protected slots:
 private slots:
     void on_refresh_button_clicked();
     void on_choose_input_files_clicked();
-    void on_choose_output_files_clicked();
+    void on_choose_output_folder_clicked();
 
     void on_encrypt_clicked();
 
+    void on_decrypt_clicked();
+
 private:
     Ui::SecDialog *ui;
+    FileDialog *file_dlg;
 };
 
 #endif // SECDIALOG_H
