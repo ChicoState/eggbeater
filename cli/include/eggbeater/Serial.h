@@ -40,7 +40,7 @@ namespace EggBeater
     explicit Packet(const ByteArray&);
     
     //! Create a packet from the specified command type and data array.
-    void CreatePacket(CommandType cmd, const ByteArray& data);
+    void CreatePacket(CommandType cmd, const ByteArray&);
     //! Create a packet from the specified byte stream
     void createPacket(const ByteArray&);
     
