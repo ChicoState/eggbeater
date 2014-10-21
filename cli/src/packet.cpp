@@ -16,19 +16,23 @@ Packet::Packet()
   packetHd.lenLow = NULL;
 }
 
-Packet::Packet(CommandType, const ByteArray& data)
+Packet::Packet(CommandType cmd, const ByteArray& data)
 {
   int i=0;
   int numHigh=0;
   int numLow=0;
   PacketHeader packetHd;
   packetHd.magicNum = '10001000';
-  if(CommandType = 1)  //read: need to figure what read bits are and what actually cmd will be
-    packetHd.cmd = '10101010';
-  if(CommandType = 2) //write: need to figure what read bits are and what actually cmd will be
-    packetHd.cmd = '01010101';
-  if(CommandType = 0) //NoOp
-    packetHd.cmd = '11001100';
+  if(cmd = -1) //NoOp
+    packetHd.cmd = '10000000';
+  if(cmd = 0) //NoOp
+    packetHd.cmd = '00000000';
+  if(cmd = 1)  //read
+    packetHd.cmd = '00000001';
+  if(cmd = 2) //Authenticate
+    packetHd.cmd = '00000010';
+  if(cmd = 3) //thumbGood:
+    packetHd.cmd = '00000011';
   else
 	throw std::runtime_error("CreatePacket: invalid packet command type");
 
@@ -44,9 +48,9 @@ Packet::Packet(CommandType, const ByteArray& data)
   packetHd.lenLow = numLow; 
 }
 
-void Packet::CreatePacket(CommandType, const ByteArray& data)
+void Packet::CreatePacket(CommandType cmd, const ByteArray& data)
 {
-  Packet(CommandType, data);
+  Packet(CommandType cmd, data);
 }
 
 ValueType Packet::getRawPacket()
