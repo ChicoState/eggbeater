@@ -1,0 +1,5 @@
+Hey guys, I have started working on the packet functions and have posted them here. I haven't been able to test or compile them using the makefile because i am missing some of the includes.
+However, I could use some help. Never got a chance to meet with Sam W on this so I will try to schedule with him.
+
+What are all the commandtypes that we will need?
+-I have some in the packet.cpp
