@@ -16,7 +16,7 @@ Packet::Packet()
   packetHd.lenLow = NULL;
 }
 
-Packet::Packet(CommandType cmd, const ByteArray& data)
+Packet::Packet(CommandType cmd, const ByteArray&)
 {
   int i=0;
   int numHigh=0;
@@ -24,7 +24,7 @@ Packet::Packet(CommandType cmd, const ByteArray& data)
   PacketHeader packetHd;
   packetHd.magicNum = '10001000';
   if(cmd = -1) //NoOp
-    packetHd.cmd = '10000000';
+    packetHd.cmd = '10000001';
   if(cmd = 0) //NoOp
     packetHd.cmd = '00000000';
   if(cmd = 1)  //read
@@ -36,24 +36,34 @@ Packet::Packet(CommandType cmd, const ByteArray& data)
   else
 	throw std::runtime_error("CreatePacket: invalid packet command type");
 
-  while(data[i]!=NULL)
+  while(ValueType[i]!=NULL)
   {
-    if(data[i]=='0')
-	  numLow++;
-	if(data[i]=='1')
-	  numHigh++;
-	i++;
+    if(ValueType[i]=='0')
+      numLow++;
+    if(ValueType[i]=='1')
+      numHigh++;
+    i++;
   }
-  packetHd.lenHigh = bitset<;
+  packetHd.lenHigh = ;  //need to figure out how to count high and low values
   packetHd.lenLow = numLow; 
 }
 
-void Packet::CreatePacket(CommandType cmd, const ByteArray& data)
+void Packet::CreatePacket(CommandType cmd, const ByteArray&)
 {
-  Packet(CommandType cmd, data);
+  Packet(cmd, ValueType);
+}
+
+void Packet::CreatePacket(const ByteArray&)
+{
+  Packet();
 }
 
 ValueType Packet::getRawPacket()
+{
+  return ByteArray&;
+}
+
+ValueType Packet::getRawPacketHeader()
 {
 }
 
@@ -65,3 +75,7 @@ bool Packet::isValid()
    return false;
 }
 
+CommandType getCommandType() const
+{
+  return packet.cmd;
+}
