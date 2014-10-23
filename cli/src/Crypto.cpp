@@ -1,4 +1,4 @@
-#include <EggBeater/Crypto.h>
+#include <eggbeater/Crypto.h>
 /* Crypto++ includes */
 #include <sha3.h>
 #include <gcm.h>

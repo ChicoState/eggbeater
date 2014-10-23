@@ -14,13 +14,15 @@ CXXFLAGS += -O0                      \
 LDFLAGS  += "-Llib" -Wl,-gc-sections
 
 SOURCES   = src/Crypto.o                      \
-            src/Discovery.o
+            src/Discovery.o                   \
+            src/packet.o
 
 TESTS     = tests/Crypto_tests.elf            \
             tests/Crypto_CipherMode_tests.elf \
             tests/Discovery_test_present.elf  \
             tests/Discovery_test_absent.elf   \
-            tests/Discovery_tests.elf
+            tests/Discovery_tests.elf         \
+            tests/Packet_tests.elf
 
 all: lib/libcryptopp.a lib/gtest.a testsuite $(SOURCES)
 

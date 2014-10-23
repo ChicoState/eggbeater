@@ -1,12 +1,10 @@
-#ifndef _EGGBEATER_SERIAL_H_
-#define _EGGBEATER_SERIAL_H_
+#ifndef _EGGBEATER_COMMON_H_
+#define _EGGBEATER_COMMON_H_
 
 #include <stdint.h>
 #include <vector>
 #include <string>
 #include <stdexcept>
-
-#include "Common.h"
 
 namespace EggBeater
 {
@@ -26,4 +24,4 @@ namespace EggBeater
   };
 }
 
-#endif // _EGGBEATER_SERIAL_H_
+#endif // _EGGBEATER_COMMON_H_

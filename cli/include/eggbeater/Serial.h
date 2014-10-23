@@ -2,22 +2,24 @@
 #define _EGGBEATER_SERIAL_H_
 
 #include <stdint.h>
-#include <vector.h>
+#include <vector>
 #include <memory>
 
-#include "Common.h"
+#include <eggbeater/Common.h>
 
 namespace EggBeater
 {
   //! @todo Add to as needed
-  enum class CommandType : uint8_t
+  enum class CommandType : int8_t
   {
     Bad = -1,
     NoOp = 0,
-    read = 1,
-    Authenticate=2, //pc->stm
-    thumbGood=3, //stm->pc 
-    Echo
+    Read = 1,
+    Echo = 3,
+    StartSession = 4,
+    RefreshSession = 5,
+    CloseSession = 6,
+    GenerateKey = 7
   };
   
   struct PacketHeader
@@ -26,6 +28,7 @@ namespace EggBeater
     CommandType cmd;
     uint8_t     lenHigh;
     uint8_t     lenLow;
+    uint8_t     data;
   };
   
   class Packet
@@ -35,12 +38,12 @@ namespace EggBeater
     //! Create an empty packet
     Packet();
     //! Create a packet from the specified command type and data array.
-    Packet(CommandType cmd, const ByteArray&);
+    Packet(CommandType, const ByteArray&);
     //! Create a packet from the specified byte stream
     explicit Packet(const ByteArray&);
     
     //! Create a packet from the specified command type and data array.
-    void CreatePacket(CommandType cmd, const ByteArray&);
+    void createPacket(CommandType, const ByteArray&);
     //! Create a packet from the specified byte stream
     void createPacket(const ByteArray&);
     

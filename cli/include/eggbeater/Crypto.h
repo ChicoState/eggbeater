@@ -4,7 +4,7 @@
 #include <vector>
 #include <stdint.h>
 
-#include "Common.h"
+#include <eggbeater/Common.h>
 
 namespace EggBeater
 {
