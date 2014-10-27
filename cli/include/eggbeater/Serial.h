@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <vector>
 #include <memory>
+#include <iostream>
+#include <fstream>
 
 #include <eggbeater/Common.h>
 
@@ -33,8 +35,8 @@ namespace EggBeater
   
   class Packet
   {
-    typedef std::shared_ptr<ByteArray> ValueType;
   public:
+    typedef std::shared_ptr<ByteArray> ValueType;
     //! Create an empty packet
     Packet();
     //! Create a packet from the specified command type and data array.
@@ -105,7 +107,7 @@ namespace EggBeater
     //! Read a packet from the serial port
     bool receivePacket(Packet&);
   private:
-    FILE* commPort;
+    std::fstream commPort;
   };
 }
 
