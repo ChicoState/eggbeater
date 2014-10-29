@@ -6,6 +6,7 @@ USB attached encrypted storage and management software
 [[https://www.pivotaltracker.com/s/projects/1162420|Pivotal Tracker]]
 
 [[http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/PF259090|STM32F429 Discovery board]]
+[[http://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html|getopt_long example]]
 
 == Purpose ==
 This project aims to create a seamless interface between a computer and an encrypted storage medium.
