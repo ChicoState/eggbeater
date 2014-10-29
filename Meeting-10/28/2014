@@ -1,0 +1,9 @@
+Embed:
+Packets:
+CLI:
+  Discover - Linux
+  Long arguments:
+    getopt_long 
+      --session-id <>
+GUI:
+  Invoker CLI stub
