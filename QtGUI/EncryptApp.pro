@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     secdialog.cpp \
-    filedialog.cpp
+    filedialog.cpp \
+    InvokeCLI.cpp
 
 HEADERS  += mainwindow.h \
     secdialog.h \
-    filedialog.h
+    filedialog.h \
+    InvokeCLI.h
 
 FORMS    += mainwindow.ui \
     secdialog.ui
