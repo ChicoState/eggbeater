@@ -7,6 +7,10 @@
 #include <QProgressDialog>
 #include <QMessageBox>
 #include "filedialog.h"
+#include "InvokeCLI.h"
+namespace EggBeater {
+class InvokeCLI;
+}
 
 namespace Ui {
 class SecDialog;
@@ -25,6 +29,7 @@ public:
 
     QStringList fileNames;
     QString folderName;
+    EggBeater::InvokeCLI* invoke;
 
 protected slots:
     void clock_time();
@@ -33,9 +38,7 @@ private slots:
     void on_refresh_button_clicked();
     void on_choose_input_files_clicked();
     void on_choose_output_folder_clicked();
-
     void on_encrypt_clicked();
-
     void on_decrypt_clicked();
 
 private:
