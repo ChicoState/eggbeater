@@ -5,41 +5,62 @@ namespace EggBeater
   InvokeCLI::InvokeCLI() : sessionID(0)
   {
   }
-  
+
   InvokeCLI::~InvokeCLI()
   {
   }
-  
+
   bool InvokeCLI::sessionIsOpen() const
   {
-    return false;
+    //if()
+    //{
+    //    return true;
+    //}
+    return true;
   }
-  
+
   void InvokeCLI::startSession()
   {
+    //process = new QProcess(this);
+    QString program = "Minecraft.exe";
+    process->start(program);
+    //sessionID = ;
   }
-  
+
   void InvokeCLI::refreshSession()
   {
+
   }
-  
+
   void InvokeCLI::closeSession()
   {
+    process->close();
   }
-  
+
   bool InvokeCLI::discoverDevice()
   {
-    return false;
+    //if()
+     //   return true;
+
+    return true;
   }
-  
-  void InvokeCLI::encryptFiles(const StringList& files, String cipherMode)
+
+  void InvokeCLI::encryptFiles(const QStringList& files, String cipherMode)
   {
     /*
       eggbeater-cli --cipher-mode <$cipherMode> --encrypt --session-id <$this->sessionID> <$files ...>
     */
+    for(int i=0; i<files.size(); i++)
+    {
+        //Encrypt all files user selected
+    }
   }
-  
-  void InvokeCLI::decryptFiles(const StringList& files, String cipherMode)
+
+  void InvokeCLI::decryptFiles(const QStringList& files, String cipherMode)
   {
-  }  
+    for(int i=0; i<files.size(); i++)
+    {
+        //decypt all files user selected
+    }
+  }
 }
