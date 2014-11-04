@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <sstream>
 
 #include <iostream>
 
@@ -18,7 +19,15 @@
 
 #define SERIAL_LOOKUP_PATH  "SYSTEM\\CurrentControlSet\\Services\\usbser\\Enum"
 #define DEVICE_LOOKUP_PATH  "SYSTEM\\CurrentControlSet\\Enum"
-
+#define SHELLSCRIPT "\
+    #/bin/bash \n\
+    echo "cd /dev/serial/by-id" \n\
+    echo "lsusb -d 0483:5740 > serialinfo.txt" \n\
+    " 
+#define PORTSCRIPT "\
+    #/bin/bash \n\
+    echo "ls /dev/serial/by-id" > portinfo.txt \n\
+    "
 namespace EggBeater
 {
   /*
@@ -291,13 +300,60 @@ namespace EggBeater
 
 namespace EggBeater
 {
-  // Any needed helper function should be defined here
-  
-  
-  
   StringList discover_devices(uint16_t vid, uint16_t pid)
   {
     StringList ports;
+    
+    
+    system(SHELLSCRIPT);
+    
+    string filename = "serialinfo.txt";
+    std::ifstream input(filename.c_str());  
+    std::string temp;
+    
+    if(input.is_open())
+    {
+      while(getline(input, temp))
+      {
+        int index = temp.find(": ID ") + 5;
+        temp = temp.substr(index);
+        
+        stringstream ss(temp); 
+        string firstNumString;
+        string secondNumString;
+        getline(ss, firstNumString, ':');
+        ss >> secondNumString;
+        
+        if(vid == firstNumString && pid == secondNumString)
+        {
+          system(PORTSCRIPT);
+          string filename2 = "portinfo.txt";
+          std::ifstream input2(filename2.c_str());
+          string portpath;
+          if(input2.is_open())
+          {
+            getline(input2, portpath);
+            ports.push_back(portpath);
+            input2.close();
+          }
+          else
+          {
+            std::cout << "Unable to open file" << std::endl << std::endl;
+          }     
+        } 
+      }
+      input.close();
+    }
+    else
+    {
+      std::cout << "Unable to open file" << std::endl << std::endl;
+    }
+    
+    
+    
+    //Take in the command line stuff and process it
+    //Check to see if PID and VID match
+    //Throw exceptions if no device is on the serial bus 
     
 /*******************************************************************************
               Linux and Mac OS X discovery code goes here.
