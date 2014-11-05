@@ -2,6 +2,40 @@
 
 #include <stdio.h>
 
+#if defined(__linux__) && !defined(__CYGWIN__)
+#include <string.h>
+#include <termios.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+namespace EggBeater
+{
+  void set_serial_raw(const String& portPath)
+  {
+    struct termios termIOS;
+    int fd = open(portPath.c_str(), O_RDWR | O_NONBLOCK);
+    
+    if (fd < 0)
+      return;
+    
+    memset(&termIOS, 0, sizeof(struct termios));
+    
+    tcgetattr(fd, &termIOS);
+    
+    cfmakeraw(&termIOS);
+    
+    cfsetspeed(&termIOS, B38400);
+    
+    tcflush(fd, TCIFLUSH);
+    
+    tcsetattr(fd, TCSANOW, &termIOS);
+    
+    close(fd);
+  }
+}
+#endif
+
 namespace EggBeater
 {
   SerialCommunication::SerialCommunication() : commPort()
@@ -31,6 +65,10 @@ namespace EggBeater
     {
       this->close();
     }
+    
+    #if defined(__linux__) && !defined(__CYGWIN__)
+    set_serial_raw(portName);
+    #endif
     
     this->commPort.open(portName.c_str(), std::ios::in | std::ios::out | std::ios::binary);
     
