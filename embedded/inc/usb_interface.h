@@ -24,14 +24,8 @@ typedef struct USB_Write_Data
 
 USB_Write_Data usbWriteData;
 
-
 void InitUSB(void);
-
-/*
-uint8_t USB_Init(USBD_HandleTypeDef);
-uint8_t USB_Write(USBD_HandleTypeDef*, uint8_t* buffer, uint32_t length);
-uint8_t USB_Read(USBD_HandleTypeDef*, uint8_t* buffer, uint32_t* length);
-*/
+void USB_ReadyToReceive(void);
 
 // User callbacks
 void USB_OnReceivePacket(uint8_t* buffer, uint32_t length);

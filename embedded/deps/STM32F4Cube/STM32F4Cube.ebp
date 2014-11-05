@@ -52,6 +52,7 @@
 			<Add option="-D__FPU_USED" />
 			<Add option="-DSTM32F429xx" />
 			<Add option="-DSTM32F4xx" />
+			<Add option="-DHSE_VALUE=8000000" />
 			<Add option="-fno-strict-aliasing" />
 			<Add option="-mthumb" />
 			<Add directory="..\STM32Cube_FW_F4_V1.1.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include" />

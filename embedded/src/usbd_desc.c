@@ -36,9 +36,9 @@
 #define USBD_PID                      0x5740
 #define USBD_LANGID_STRING            0x409
 #define USBD_MANUFACTURER_STRING      "CSU Chico Software Engineering"
-#define USBD_PRODUCT_HS_STRING        "STM32 Virtual ComPort in HS Mode"
+#define USBD_PRODUCT_HS_STRING        "CSU Chico EggBeater"
 #define USBD_SERIALNUMBER_HS_STRING   "00000000001A"
-#define USBD_PRODUCT_FS_STRING        "STM32 Virtual ComPort in FS Mode"
+#define USBD_PRODUCT_FS_STRING        "CSU Chico EggBeater"
 #define USBD_SERIALNUMBER_FS_STRING   "00000000001B"
 #define USBD_CONFIGURATION_HS_STRING  "VCP Config"
 #define USBD_INTERFACE_HS_STRING      "VCP Interface"

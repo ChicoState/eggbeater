@@ -9,9 +9,10 @@ int8_t USB_Interface_Close(void);
 int8_t USB_Interface_Control(uint8_t cmd, uint8_t* buffer, uint16_t length);
 int8_t USB_Interface_Read(uint8_t* buffer, uint32_t *length);
 
-extern USBD_HandleTypeDef USBD_Device;
+USBD_HandleTypeDef USBD_Device;
+uint32_t OTG_ShouldYield = 0;
+
 extern PCD_HandleTypeDef  hpcd;
-extern uint32_t OTG_ShouldYield;
 
 USBD_CDC_ItfTypeDef USB_Interface = {
   .Init = USB_Interface_Init,
@@ -146,6 +147,11 @@ void InitUSB(void)
   HAL_NVIC_EnableIRQ(OTG_HS_IRQn);
 }
 
+void USB_ReadyToReceive(void)
+{
+  USBD_CDC_ReceivePacket(&USBD_Device);
+}
+
 void USB_Write_Task(void* arg)
 {
   USB_Packet packet;
@@ -155,7 +161,7 @@ void USB_Write_Task(void* arg)
 
   UNUSED_ARG(arg);
 
-  BSP_LED_On(LED3);
+  //BSP_LED_On(LED3);
 
   USBD_Start(&USBD_Device);
 
@@ -179,7 +185,7 @@ void USB_Write_Task(void* arg)
     while (hcdc->TxState != 0) // I should turn this into an RTOS event variable
       vTaskDelay(1); // Wait 1 ms for the transmitter to finish
 
-    BSP_LED_Toggle(LED3);
+    //BSP_LED_Toggle(LED3);
 
     offset = 0;
 

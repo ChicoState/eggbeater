@@ -8,8 +8,10 @@
 
 #include "usb_interface.h"
 #include "keypad.h"
+#include "fingerprint_reader.h"
 
-#define TASK_STACK_DEPTH  1024
+#define TASK_STACK_DEPTH  512
+#define FP_TASK_PRIO      5
 #define USB_TASK_PRIO     4
 #define ECHO_TASK_PRIO    3
 #define KP_TASK_PRIO      2
@@ -21,13 +23,14 @@ void InitUSB(void);
 void InitLCD(void);
 
 // FreeRTOS task functions
-void USB_Write_Task(void*);
+//void USB_Write_Task(void*);
 void Echo_Task(void*);
-void Keypad_Task(void*);
+//void Keypad_Task(void*);
+//void Fingerprint_Task(void*);
 
 void xPortSysTickHandler(void);
 
-BaseType_t OTG_ShouldYield = 0;
+extern BaseType_t OTG_ShouldYield;
 
 int main(void)
 {
@@ -36,9 +39,10 @@ int main(void)
 
   InitUSB();
 
-  BSP_LED_Init(LED3);
-  BSP_LED_Init(LED4);
+  //BSP_LED_Init(LED3);
+  //BSP_LED_Init(LED4);
 
+  //*
   xTaskCreate(&USB_Write_Task,
               "USB Write Task",
               TASK_STACK_DEPTH,
@@ -52,13 +56,22 @@ int main(void)
               NULL,
               ECHO_TASK_PRIO,
               NULL);
+  // */
 
   xTaskCreate(&Keypad_Task,
-              "Echo Task",
+              "Keypad Task",
               TASK_STACK_DEPTH,
               NULL,
               KP_TASK_PRIO,
               NULL);
+
+  //*
+  xTaskCreate(&Fingerprint_Task,
+              "FP Task",
+              TASK_STACK_DEPTH,
+              NULL,
+              FP_TASK_PRIO,
+              NULL); // */
 
   usbWriteData.TransmitQueue  = xQueueCreate(16, sizeof(USB_Packet));
   usbWriteData.ReceiveQueue   = xQueueCreate(16, sizeof(USB_Packet));
@@ -92,6 +105,7 @@ void InitClocks(void)
   clk.AHBCLKDivider = RCC_SYSCLK_DIV1;
   clk.APB1CLKDivider = RCC_HCLK_DIV4;
   clk.APB2CLKDivider = RCC_HCLK_DIV2;
+
   HAL_RCC_ClockConfig(&clk, FLASH_LATENCY_5);
 }
 
@@ -131,14 +145,16 @@ void Echo_Task(void* arg)
   USB_Packet packet;
   UNUSED_ARG(arg);
 
-  BSP_LED_On(LED4);
+  //BSP_LED_On(LED4);
 
   while (1)
   {
-    while (xQueueReceive(usbWriteData.ReceiveQueue, &packet, 5) != pdTRUE)
-      USBD_CDC_ReceivePacket(&USBD_Device);
+    while (xQueueReceive(usbWriteData.ReceiveQueue, &packet, 50) != pdTRUE)
+      USB_ReadyToReceive();
 
-    BSP_LED_Toggle(LED4);
+      //USBD_CDC_ReceivePacket(&USBD_Device);
+
+    //BSP_LED_Toggle(LED4);
 
     while (xQueueSendToBack(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
   }

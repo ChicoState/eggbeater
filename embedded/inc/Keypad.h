@@ -39,12 +39,14 @@ int keypad_draw(keypad_t*);
 
 int keypad_checktouch(keypad_t*, TS_StateTypeDef*);
 
+
 int backspace_init(backspace_t*, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
 
 int backspace_draw(backspace_t*);
 
 int backspace_checktouch(backspace_t*, TS_StateTypeDef*);
 
+// FreeRTOS task entry point
 void Keypad_Task(void*);
 
 #endif // _EGGBEATER_KEYPAD_H_

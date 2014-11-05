@@ -3,6 +3,7 @@
 
   #include "stm32f4xx.h"
 
+  #include "stm32f4xx_hal_def.h"
   #include "stm32f4xx_hal.h"
   #include "stm32f4xx_hal_dma.h"
   #include "stm32f4xx_hal_dma_ex.h"
