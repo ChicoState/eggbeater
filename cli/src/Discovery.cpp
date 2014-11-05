@@ -8,6 +8,16 @@
 
 #include <iostream>
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
+#if DEBUG > 0
+  #define D_RUN(...) { __VA_ARGS__; }
+#else
+  #define D_RUN(...)
+#endif
+
 //! @todo Figure out which symbols are defined on Windows
 #if defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__)
 
@@ -19,15 +29,7 @@
 
 #define SERIAL_LOOKUP_PATH  "SYSTEM\\CurrentControlSet\\Services\\usbser\\Enum"
 #define DEVICE_LOOKUP_PATH  "SYSTEM\\CurrentControlSet\\Enum"
-#define SHELLSCRIPT "\
-    #/bin/bash \n\
-    echo "cd /dev/serial/by-id" \n\
-    echo "lsusb -d 0483:5740 > serialinfo.txt" \n\
-    " 
-#define PORTSCRIPT "\
-    #/bin/bash \n\
-    echo "ls /dev/serial/by-id" > portinfo.txt \n\
-    "
+
 namespace EggBeater
 {
   /*
@@ -298,42 +300,109 @@ namespace EggBeater
 
 #else
 
+#include <fstream>
+#include <iomanip>
+
+#define SHELLSCRIPT "lsusb -d %0.4x:$0.4x > serialinfo.txt"
+//#/bin/bash \n\ 
+//                     echo \"cd /dev/serial/by-id\" \n\ 
+//                     echo \"lsusb -d 0483:5740 > serialinfo.txt\" \n"
+#define PORTSCRIPT "ls /dev/serial/by-id > portinfo.txt"
+
 namespace EggBeater
 {
+  uint32_t string_get_number(const std::string& str)
+  {
+    uint32_t i;
+    std::stringstream ss(str);
+    
+    ss << std::hex;
+    ss >> i;
+    
+    return i;
+  }
+  
+  std::string get_ls_script(uint16_t vid, uint16_t pid)
+  {
+    std::stringstream ss;
+    
+    ss << "lsusb -d" << std::hex;
+    
+    ss.width(4);
+    ss.fill('0');
+    ss << vid;
+    
+    ss << ":";
+    
+    ss.width(4);
+    ss.fill('0');
+    ss << pid;
+    
+    ss << " > serialinfo.txt";
+    
+    //<< std::setw(4) << std::fill('0')
+    //ss << vid << std::set ":" << pid << " > serialinfo.txt";
+    
+    return ss.str();
+  }
+
   StringList discover_devices(uint16_t vid, uint16_t pid)
   {
+    uint32_t str_vid, str_pid;
     StringList ports;
     
+    std::string shell_script = get_ls_script(vid, pid);
     
-    system(SHELLSCRIPT);
+    D_RUN(std::cout << "system(" << shell_script << ")" << std::endl);
     
-    string filename = "serialinfo.txt";
+    system(shell_script.c_str());
+    
+    std::string filename = "serialinfo.txt";
     std::ifstream input(filename.c_str());  
     std::string temp;
     
     if(input.is_open())
     {
+      D_RUN(std::cout << filename << " is open" << std::endl);
+      
       while(getline(input, temp))
       {
+        D_RUN(std::cout << "read line: " << temp << std::endl);
+        
         int index = temp.find(": ID ") + 5;
         temp = temp.substr(index);
         
-        stringstream ss(temp); 
-        string firstNumString;
-        string secondNumString;
-        getline(ss, firstNumString, ':');
+        std::stringstream ss(temp); 
+        std::string firstNumString;
+        std::string secondNumString;
+        std::getline(ss, firstNumString, ':');
         ss >> secondNumString;
         
-        if(vid == firstNumString && pid == secondNumString)
+        str_vid = string_get_number(firstNumString);
+        str_pid = string_get_number(secondNumString);
+        
+        D_RUN(std::cout << "found vid=" << std::hex << str_vid << std::endl);
+        D_RUN(std::cout << "found pid=" << std::hex << str_pid << std::endl);
+        
+        if(vid == str_vid && pid == str_pid)
         {
+          D_RUN(std::cout << "system(" << PORTSCRIPT << ")" << std::endl);
+          
           system(PORTSCRIPT);
-          string filename2 = "portinfo.txt";
+          
+          std::string filename2 = "portinfo.txt";
           std::ifstream input2(filename2.c_str());
-          string portpath;
+          std::string portpath;
+          
           if(input2.is_open())
           {
-            getline(input2, portpath);
-            ports.push_back(portpath);
+            D_RUN(std::cout << filename2 << " is open" << std::endl);
+            
+            std::getline(input2, portpath);
+            std::string full_path = "/dev/serial/by-id/";
+            full_path.append(portpath);
+            
+            ports.push_back(full_path);
             input2.close();
           }
           else
@@ -363,5 +432,5 @@ namespace EggBeater
   }
 }
 
-  #error Not yet implemented
+  //#error Not yet implemented
 #endif

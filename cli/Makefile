@@ -11,7 +11,7 @@ CXXFLAGS += -O0                      \
             "-Ideps"                 \
             -ffunction-sections      \
             -fdata-sections
-LDFLAGS  += "-Llib" -Wl,-gc-sections
+LDFLAGS  += "-Llib" -Wl,-gc-sections -lpthread
 
 SOURCES   = src/Crypto.o                      \
             src/Discovery.o
