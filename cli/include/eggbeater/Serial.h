@@ -49,7 +49,7 @@ namespace EggBeater
     //! Create a packet from the specified byte stream
     void createPacket(const ByteArray&);
     
-    // ~Packet(); // As needed
+    ~Packet(); // As needed
     
     /**
       Get the packet as a series of bytes.

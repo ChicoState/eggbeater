@@ -43,6 +43,7 @@ public:
   }
 };
 
+#if defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__)
 TEST_F(NoOpFixture, split_multi_sz_test)
 {
   char data[] = "STRING1\0STRING2\0STRING3\0";
@@ -66,6 +67,7 @@ TEST_F(NoOpFixture, check_hardware_id_test)
   EXPECT_FALSE(check_hardware_id("", 0, 0));
   EXPECT_FALSE(check_hardware_id("", vid, pid));
 }
+#endif
 
 int main(int argc, char** argv)
 {

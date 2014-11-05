@@ -152,10 +152,32 @@ void SecDialog::on_encrypt_clicked()
                                      .arg(file.errorString())
                                      );
             }
-            
+
             else
             {
-                
+                bool discover = invoke->discoverDevice();
+                bool checkSession = invoke->sessionIsOpen();
+                if(discover==false && checkSession==false)
+                {
+                    QMessageBox::warning(this, tr("The title"), tr("Session is not opened\nand\nDevice is not connected!"));
+                    return;
+                }
+                else if(discover==true && checkSession==false)
+                {
+                    QMessageBox::warning(this, tr("The title"), tr("Session is not opened!"));
+                    return;
+                }
+                else if(discover==false && checkSession==true)
+                {
+                    QMessageBox::warning(this, tr("The title"), tr("Device is not connected!"));
+                    return;
+                }
+                else
+                {
+                    invoke->startSession();
+                    invoke->encryptFiles(fileNames, "CFB");
+                    invoke->closeSession();
+                }
             }
         }
     }
@@ -178,9 +200,10 @@ void SecDialog::on_encrypt_clicked()
 
 void SecDialog::on_decrypt_clicked()
 {
-    if(!fileNames.isEmpty() && !folderName.isEmpty())
+    if(fileNames.isEmpty() && folderName.isEmpty())
     {
-
+        QMessageBox::warning(this, tr("The title"), tr("Slect File(s) or Folder(s)\nand Destination Folder."));
+        return;
     }
 
     else if(!fileNames.isEmpty() && folderName.isEmpty())
@@ -197,7 +220,44 @@ void SecDialog::on_decrypt_clicked()
 
     else
     {
-        QMessageBox::warning(this, tr("The title"), tr("Slect File(s) or Folder(s)\nand Destination Folder."));
-        return;
+        for(int i=0; i<fileNames.size(); i++)
+        {
+            QFile file(fileNames.at(i));
+            if(!file.open(QFile::ReadOnly|QFile::Text))
+            {
+                QMessageBox::warning(this, tr("Application"),
+                                     tr("Cannot read file %1:\n%2")
+                                     .arg(fileNames.at(i))
+                                     .arg(file.errorString())
+                                     );
+            }
+
+            else
+            {
+                bool discover = invoke->discoverDevice();
+                bool checkSession = invoke->sessionIsOpen();
+                if(discover==false && checkSession==false)
+                {
+                    QMessageBox::warning(this, tr("The title"), tr("Session is not opened\nand\nDevice is not connected!"));
+                    return;
+                }
+                else if(discover==true && checkSession==false)
+                {
+                    QMessageBox::warning(this, tr("The title"), tr("Session is not opened!"));
+                    return;
+                }
+                else if(discover==false && checkSession==true)
+                {
+                    QMessageBox::warning(this, tr("The title"), tr("Device is not connected!"));
+                    return;
+                }
+                else
+                {
+                    invoke->startSession();
+                    invoke->decryptFiles(fileNames, "CFB");
+                    invoke->closeSession();
+                }
+            }
+        }
     }
 }

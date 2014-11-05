@@ -4,9 +4,21 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <sstream>
 
 #include <iostream>
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
+#if DEBUG > 0
+  #define D_RUN(...) { __VA_ARGS__; }
+#else
+  #define D_RUN(...)
+#endif
+
+//! @todo Figure out which symbols are defined on Windows
 #if defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__)
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -224,6 +236,10 @@ namespace EggBeater
       }
     } while (retValue != ERROR_SUCCESS);
     
+    buffer.resize(bufferSize);
+    
+    D_RUN(printf("read value at %s\\%s: %s\n", subKey, valueName, buffer.c_str()));
+    
     return buffer;
   }
   
@@ -251,6 +267,26 @@ namespace EggBeater
     
     return ref == hwIDlower;
   }
+  
+  #ifdef __CYGWIN__
+    String cygwin_get_serial_device(String port)
+    {
+      char c = 0;
+      
+      if (port.length() > 3)
+        c = port[3] - 1;
+      else
+        return "";
+      
+      D_RUN(printf("cygwin_get_serial_device: %c\n", c));
+      
+      std::stringstream ss;
+      
+      ss << "/dev/ttyS" << c;
+      
+      return ss.str();
+    }
+  #endif
   
   StringList discover_devices(uint16_t vid, uint16_t pid)
   {
@@ -399,9 +435,20 @@ namespace EggBeater
           {
             portName = reg_read_string(deviceEntry,
                                        path.c_str(),
-                                       "PortName");
+                                       "PortName",
+                                       4);
+            
+            D_RUN(std::cout << "found comm device: " << portName << std::endl);
+    
+            D_RUN(std::flush(std::cout));
+            
             if (portName != "")
+            {
+              #ifdef __CYGWIN__
+              portName = cygwin_get_serial_device(portName);
+              #endif
               ports.push_back(portName);
+            }
           }
         }
       }
@@ -416,15 +463,127 @@ namespace EggBeater
 
 #else
 
+#include <fstream>
+#include <iomanip>
+
+#define SHELLSCRIPT "lsusb -d %0.4x:$0.4x > serialinfo.txt"
+//#/bin/bash \n\ 
+//                     echo \"cd /dev/serial/by-id\" \n\ 
+//                     echo \"lsusb -d 0483:5740 > serialinfo.txt\" \n"
+#define PORTSCRIPT "ls /dev/serial/by-id > portinfo.txt"
+
 namespace EggBeater
 {
-  // Any needed helper function should be defined here
+  uint32_t string_get_number(const std::string& str)
+  {
+    uint32_t i;
+    std::stringstream ss(str);
   
+    ss << std::hex;
+    ss >> i;
   
+    return i;
+  }
   
+  std::string get_ls_script(uint16_t vid, uint16_t pid)
+  {
+    std::stringstream ss;
+    
+    ss << "lsusb -d" << std::hex;
+    
+    ss.width(4);
+    ss.fill('0');
+    ss << vid;
+    
+    ss << ":";
+    
+    ss.width(4);
+    ss.fill('0');
+    ss << pid;
+    
+    ss << " > serialinfo.txt";
+    
+    //<< std::setw(4) << std::fill('0')
+    //ss << vid << std::set ":" << pid << " > serialinfo.txt";
+    
+    return ss.str();
+  }
+
   StringList discover_devices(uint16_t vid, uint16_t pid)
   {
+    uint32_t str_vid, str_pid;
     StringList ports;
+    
+    std::string shell_script = get_ls_script(vid, pid);
+    
+    D_RUN(std::cout << "system(" << shell_script << ")" << std::endl);
+    
+    system(shell_script.c_str());
+    
+    std::string filename = "serialinfo.txt";
+    std::ifstream input(filename.c_str());  
+    std::string temp;
+    
+    if(input.is_open())
+    {
+      D_RUN(std::cout << filename << " is open" << std::endl);
+      
+      while(getline(input, temp))
+      {
+        D_RUN(std::cout << "read line: " << temp << std::endl);
+        
+        int index = temp.find(": ID ") + 5;
+        temp = temp.substr(index);
+        
+        std::stringstream ss(temp); 
+        std::string firstNumString;
+        std::string secondNumString;
+        std::getline(ss, firstNumString, ':');
+        ss >> secondNumString;
+        
+        str_vid = string_get_number(firstNumString);
+        str_pid = string_get_number(secondNumString);
+        
+        D_RUN(std::cout << "found vid=" << std::hex << str_vid << std::endl);
+        D_RUN(std::cout << "found pid=" << std::hex << str_pid << std::endl);
+        
+        if(vid == str_vid && pid == str_pid)
+        {
+          D_RUN(std::cout << "system(" << PORTSCRIPT << ")" << std::endl);
+          
+          system(PORTSCRIPT);
+          
+          std::string filename2 = "portinfo.txt";
+          std::ifstream input2(filename2.c_str());
+          std::string portpath;
+          
+          if(input2.is_open())
+          {
+            D_RUN(std::cout << filename2 << " is open" << std::endl);
+            
+            std::getline(input2, portpath);
+            std::string full_path = "/dev/serial/by-id/";
+            full_path.append(portpath);
+            
+            ports.push_back(full_path);
+            input2.close();
+          }
+          else
+          {
+            std::cout << "Unable to open file" << std::endl << std::endl;
+          }     
+        } 
+      }
+      input.close();
+    }
+    else
+    {
+      std::cout << "Unable to open file" << std::endl << std::endl;
+    }
+    
+    //Take in the command line stuff and process it
+    //Check to see if PID and VID match
+    //Throw exceptions if no device is on the serial bus 
     
 /*******************************************************************************
               Linux and Mac OS X discovery code goes here.
@@ -434,5 +593,5 @@ namespace EggBeater
   }
 }
 
-  #error Not yet implemented
+  //#error Not yet implemented
 #endif

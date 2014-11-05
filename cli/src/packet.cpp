@@ -35,9 +35,13 @@ namespace EggBeater
     createPacket(packet);
   }
 
+  Packet::~Packet()
+  {
+  }
+  
   void Packet::createPacket(CommandType cmd, const ByteArray& inputData)
   {
-    data->resize(sizeof(PacketHeader) + 1 + inputData.size());
+    data->resize(sizeof(PacketHeader) + inputData.size());
     
     PacketHeader* header = (PacketHeader*)data->data();
     header->magicNum = EGGBEATER_SOF_BYTE;
@@ -60,7 +64,8 @@ namespace EggBeater
       
       memcpy(&(header->data), inputData.data(), inputData.size());
       
-      (*data)[data->size()-1] = EGGBEATER_EOF_BYTE;
+      data->back() = EGGBEATER_EOF_BYTE;
+      //(*data)[data->size()-1] = EGGBEATER_EOF_BYTE;
     }
   }
   
@@ -148,7 +153,9 @@ namespace EggBeater
 
   const uint8_t* Packet::getPacketData() const
   {
-    const PacketHeader* const header = (const PacketHeader* const)data->data();
+    const PacketHeader* header;
+
+    header = (const PacketHeader* const)data->data();
     
     const uint8_t* packetData = &(header->data);
   
