@@ -16,12 +16,14 @@ namespace EggBeater
   {
     Bad = -1,
     NoOp = 0,
-    Read = 1,
-    Echo = 3,
-    StartSession = 4,
-    RefreshSession = 5,
-    CloseSession = 6,
-    GenerateKey = 7
+    Echo = 1,
+    
+    OpenSession = 4,
+    NewSession = 5,
+    RefreshSession = 6,
+    CloseSession = 7,
+    
+    GetFileKey = 9
   };
   
   struct PacketHeader
