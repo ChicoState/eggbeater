@@ -9,7 +9,7 @@ uint32_t  fp_session_open();
 uint32_t  fp_session_new();
 
 void      fp_session_refresh(uint32_t id);
-void      fp_session_clos(uint32_t id);
+void      fp_session_close(uint32_t id);
 
 void      fp_generate_file_key(uint32_t id);
 
