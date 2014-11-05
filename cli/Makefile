@@ -2,6 +2,7 @@ GTEST_DIR     = deps/gtest-1.7.0
 CRYPTOPP_DIR  = deps/cryptopp562
 
 CXXFLAGS += -O0                      \
+            -g                       \
             -std=gnu++11             \
             "-I$(GTEST_DIR)"         \
             "-I$(GTEST_DIR)/include" \
@@ -23,6 +24,7 @@ TESTS     = tests/Crypto_tests.elf            \
             tests/Discovery_test_absent.elf   \
             tests/Discovery_tests.elf         \
             tests/SerialComm_tests.elf         \
+            tests/SerialComm_test_port.elf         \
             tests/Packet_tests.elf
 
 all: lib/libcryptopp.a lib/gtest.a testsuite $(SOURCES)

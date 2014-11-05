@@ -236,6 +236,10 @@ namespace EggBeater
       }
     } while (retValue != ERROR_SUCCESS);
     
+    buffer.resize(bufferSize);
+    
+    D_RUN(printf("read value at %s\\%s: %s\n", subKey, valueName, buffer.c_str()));
+    
     return buffer;
   }
   
@@ -263,6 +267,26 @@ namespace EggBeater
     
     return ref == hwIDlower;
   }
+  
+  #ifdef __CYGWIN__
+    String cygwin_get_serial_device(String port)
+    {
+      char c = 0;
+      
+      if (port.length() > 3)
+        c = port[3] - 1;
+      else
+        return "";
+      
+      D_RUN(printf("cygwin_get_serial_device: %c\n", c));
+      
+      std::stringstream ss;
+      
+      ss << "/dev/ttyS" << c;
+      
+      return ss.str();
+    }
+  #endif
   
   StringList discover_devices(uint16_t vid, uint16_t pid)
   {
@@ -411,9 +435,20 @@ namespace EggBeater
           {
             portName = reg_read_string(deviceEntry,
                                        path.c_str(),
-                                       "PortName");
+                                       "PortName",
+                                       4);
+            
+            D_RUN(std::cout << "found comm device: " << portName << std::endl);
+    
+            D_RUN(std::flush(std::cout));
+            
             if (portName != "")
+            {
+              #ifdef __CYGWIN__
+              portName = cygwin_get_serial_device(portName);
+              #endif
               ports.push_back(portName);
+            }
           }
         }
       }
@@ -545,8 +580,6 @@ namespace EggBeater
     {
       std::cout << "Unable to open file" << std::endl << std::endl;
     }
-    
-    
     
     //Take in the command line stuff and process it
     //Check to see if PID and VID match
