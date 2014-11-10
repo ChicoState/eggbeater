@@ -191,7 +191,7 @@ void SecDialog::on_encrypt_clicked()
     //testing code for updating the progress bar
     //need to break into functions and integrate into "InvokeCLI"
 
-        QString temp = "TempComm.cpp"; //"C:\Users\sam\AppData\Local\TempComm.cpp"; //System::GetTempPath();
+        QString temp = QDir::tempPath()+"TempComm.cpp"; //"C:\Users\sam\AppData\Local\TempComm.cpp"; //System::GetTempPath();
         qint64 min=0;
         qint64 max=100;
         qint64 i=0;
