@@ -157,7 +157,31 @@ void SecDialog::on_encrypt_clicked()
             
             else
             {
-
+                   /**************Start of startsession updade*******************
+                    * getOpt.exe -a encrypt -f file1 -f file2 -f file3 -s 0056 -f file4 -o option1 -o option2
+                    *
+                    * Start Session-- It works, but needs to invokeCLI
+                    */
+                    QProcess* proc = new QProcess(this);
+                    QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOpt/getOpt.exe";
+                    QStringList attributes;
+                    attributes << "-a" << "encrypt";
+                    for(int i=0; i<fileNames.size(); i++)
+                        attributes << "-f" << fileNames.at(i);
+                    attributes << "--session-id" << "0056";
+                    attributes << "-f" << folderName;
+                    attributes << "-o" << "option1";
+                    attributes  << "-o" << "option2";
+                    proc->setProcessChannelMode(QProcess::MergedChannels);
+                    proc->start(program, attributes);
+                    if(!proc->waitForFinished())
+                        qDebug() << "Fail: "<< proc->errorString();
+                    else
+                    {
+                        qDebug() << "Success: " << proc->readAll();
+                        qDebug("Done!\n");
+                    }
+                    /*********** End of startSession update--Yuki****************/
             }
         }
     }
@@ -283,9 +307,10 @@ void SecDialog::on_encrypt_clicked()
 
 void SecDialog::on_decrypt_clicked()
 {
-    if(!fileNames.isEmpty() && !folderName.isEmpty())
+    if(fileNames.isEmpty() && folderName.isEmpty())
     {
-
+        QMessageBox::warning(this, tr("The title"), tr("Slect File(s) or Folder(s)\nand Destination Folder."));
+        return;
     }
 
     else if(!fileNames.isEmpty() && folderName.isEmpty())
@@ -302,7 +327,66 @@ void SecDialog::on_decrypt_clicked()
 
     else
     {
-        QMessageBox::warning(this, tr("The title"), tr("Slect File(s) or Folder(s)\nand Destination Folder."));
-        return;
+        for(int i=0; i<fileNames.size(); i++)
+        {
+            QFile file(fileNames.at(i));
+            if(!file.open(QFile::ReadOnly|QFile::Text))
+            {
+                QMessageBox::warning(this, tr("Application"),
+                                     tr("Cannot read file %1:\n%2")
+                                     .arg(fileNames.at(i))
+                                     .arg(file.errorString())
+                                     );
+            }
+
+            else
+            {
+                bool discover = invoke->discoverDevice();
+                bool checkSession = invoke->sessionIsOpen();
+                if(discover==false && checkSession==false)
+                {
+                    QMessageBox::warning(this, tr("The title"), tr("Session is not opened\nand\nDevice is not connected!"));
+                    return;
+                }
+                else if(discover==true && checkSession==false)
+                {
+                    QMessageBox::warning(this, tr("The title"), tr("Session is not opened!"));
+                    return;
+                }
+                else if(discover==false && checkSession==true)
+                {
+                    QMessageBox::warning(this, tr("The title"), tr("Device is not connected!"));
+                    return;
+                }
+                else
+                {
+                    /**************Start of startsession updade*******************
+                     * getOpt.exe --decrypt -f file1 -f file2 -f file3 --session-id 70056 -f file4 -o option1 --cipher-mode ofb
+                     *
+                     * Start Session-- It works, but needs to invokeCLI
+                     */
+                    QProcess* proc = new QProcess(this);
+                    QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptv2/getOpt.exe";
+                    QStringList attributes;
+                    attributes << "--decrypt";
+                    for(int i=0; i<fileNames.size(); i++)
+                        attributes << "-f" << fileNames.at(i);
+                    attributes << "--session-id" << "70056";
+                    attributes << "-f" << folderName;
+                    attributes << "-o" << "option1";
+                    attributes  << "--cipher-mode" << "ofb";
+                    proc->setProcessChannelMode(QProcess::MergedChannels);
+                    proc->start(program, attributes);
+                    if(!proc->waitForFinished())
+                        qDebug() << "Fail: "<< proc->errorString();
+                    else
+                    {
+                        qDebug() << "Success: " << proc->readAll();
+                        qDebug("Done!\n");
+                    }
+                    /*********** End of startSession update--Yuki****************/
+                }
+            }
+        }
     }
 }
