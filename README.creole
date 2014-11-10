@@ -9,6 +9,8 @@ USB attached encrypted storage and management software
 
 [[http://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html|getopt_long example]]
 
+[[http://qt-project.org/doc/qt-5/qprocess.html#startDetached|QT start process reference]]
+
 == Purpose ==
 This project aims to create a seamless interface between a computer and an encrypted storage medium.
 Ideally, the encrypted storage medium would appear exactly as a normal storage device.
