@@ -22,8 +22,7 @@ namespace EggBeater
   void InvokeCLI::startSession()
   {
     //process = new QProcess(this);
-    QString program = "Minecraft.exe";
-    process->start(program);
+    //process->start(program);
     //sessionID = ;
   }
 
