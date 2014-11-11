@@ -5,7 +5,7 @@
 
 namespace EggBeater
 {
-  typedef std::vector<String> StringList;
+  //typedef std::vector<String> StringList;
   
   /**
     Use OS facilities to discover any attached fingerprint dongles.

@@ -12,9 +12,10 @@ namespace EggBeater
   
   enum class CipherMode : uint32_t
   {
-    CFB,
-    OFB,
-    GCM
+    None  = 0,
+    CFB   = 1,
+    OFB   = 2,
+    GCM   = 3
   };
   
   /*

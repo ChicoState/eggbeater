@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <vector>
+#include <list>
 #include <string>
 #include <stdexcept>
 
@@ -10,6 +11,7 @@ namespace EggBeater
 {
   typedef std::vector<uint8_t> ByteArray;
   typedef std::string String;
+  typedef std::list<String> StringList;
   
   //! @todo Add common types, etc as needed
   
