@@ -312,6 +312,101 @@ TEST_F(NoOpFixture, Options_encrypt_cipher_mode_gcm)
   }
 }
 
+TEST_F(NoOpFixture, Options_encrypt_3_files)
+{
+  try
+  {
+    Options opt;
+    int argc = 9;
+    const char* argv[] = {
+      "eggbeater",
+      "--encrypt",
+      "--session-id",
+      "4",
+      "--cipher-mode",
+      "gcm",
+      "A",
+      "g",
+      "e"
+    };
+    StringList str({"A", "g", "e"});
+    
+    EXPECT_TRUE(opt.parseOptions(argc, argv));
+    
+    //EXPECT_FALSE(opt.haveErrors());
+    EXPECT_EQ(opt.getAction(), CLI_Action::Encrypt);
+    EXPECT_TRUE(opt.hasSessionID());
+    EXPECT_EQ(opt.getSessionID(), "4");
+    EXPECT_TRUE(opt.hasCipherMode());
+    EXPECT_EQ(opt.getCipherMode(), CipherMode::GCM);
+    
+    EXPECT_EQ(opt.getFileList(), str);
+  }
+  catch (...)
+  {
+    ASSERT_TRUE(false);
+  }
+}
+
+TEST_F(NoOpFixture, Options_decrypt_bad_cipher_mode)
+{
+  try
+  {
+    Options opt;
+    int argc = 6;
+    const char* argv[] = {
+      "eggbeater",
+      "--decrypt",
+      "--session-id",
+      "4",
+      "--cipher-mode",
+      "abc"
+    };
+    
+    EXPECT_FALSE(opt.parseOptions(argc, argv));
+    
+    //EXPECT_FALSE(opt.haveErrors());
+    EXPECT_EQ(opt.getAction(), CLI_Action::Decrypt);
+    EXPECT_TRUE(opt.hasSessionID());
+    EXPECT_EQ(opt.getSessionID(), "4");
+    EXPECT_FALSE(opt.hasCipherMode());
+  }
+  catch (...)
+  {
+    ASSERT_TRUE(false);
+  }
+}
+
+TEST_F(NoOpFixture, Options_decrypt_cipher_mode_cfb)
+{
+  try
+  {
+    Options opt;
+    int argc = 6;
+    const char* argv[] = {
+      "eggbeater",
+      "--decrypt",
+      "--session-id",
+      "4",
+      "--cipher-mode",
+      "cfb"
+    };
+    
+    EXPECT_TRUE(opt.parseOptions(argc, argv));
+    
+    //EXPECT_FALSE(opt.haveErrors());
+    EXPECT_EQ(opt.getAction(), CLI_Action::Decrypt);
+    EXPECT_TRUE(opt.hasSessionID());
+    EXPECT_EQ(opt.getSessionID(), "4");
+    EXPECT_TRUE(opt.hasCipherMode());
+    EXPECT_EQ(opt.getCipherMode(), CipherMode::CFB);
+  }
+  catch (...)
+  {
+    ASSERT_TRUE(false);
+  }
+}
+
 int main(int argc, char** argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
