@@ -94,6 +94,7 @@ namespace EggBeater
     lut["--decrypt"] = &ParseDecrypt;
     lut["--session-id"] = &ParseSessionID;
     lut["--cipher-mode"] = &ParseCipherMode;
+    lut["--discover-device"] = &ParseDiscoverDevice;
     
     for (int i = 1; i < argc; i++)
     {
@@ -186,6 +187,20 @@ namespace EggBeater
     }
     
     _this->cliAction = CLI_Action::Decrypt;
+    return 0;
+  }
+  
+  int Options::ParseDiscoverDevice(Options* _this, int i, int argc, const char** argv)
+  {
+    D_RUN(std::cout << "ParseDecrypt" << std::endl);
+    
+    if (_this->cliAction != CLI_Action::None)
+    {
+      D_RUN(std::cout << "CLI action already set" << std::endl);
+      return -1;
+    }
+    
+    _this->cliAction = CLI_Action::DiscoverDevice;
     return 0;
   }
   

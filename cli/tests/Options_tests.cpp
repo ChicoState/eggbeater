@@ -407,6 +407,30 @@ TEST_F(NoOpFixture, Options_decrypt_cipher_mode_cfb)
   }
 }
 
+TEST_F(NoOpFixture, Options_discover_device)
+{
+  try
+  {
+    Options opt;
+    int argc = 2;
+    const char* argv[] = {
+      "eggbeater",
+      "--discover-device"
+    };
+    
+    EXPECT_TRUE(opt.parseOptions(argc, argv));
+    
+    //EXPECT_FALSE(opt.haveErrors());
+    EXPECT_EQ(opt.getAction(), CLI_Action::DiscoverDevice);
+    EXPECT_FALSE(opt.hasSessionID());
+    EXPECT_FALSE(opt.hasCipherMode());
+  }
+  catch (...)
+  {
+    ASSERT_TRUE(false);
+  }
+}
+
 int main(int argc, char** argv)
 {
   ::testing::InitGoogleTest(&argc, argv);

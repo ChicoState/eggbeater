@@ -7,16 +7,6 @@
 
 namespace EggBeater
 {
-  enum class CLI_Command : uint8_t
-  {
-    None            = 0,
-    StartSession    = 1,
-    RefreshSession  = 2,
-    CloseSession    = 3,
-    Encrypt         = 4,
-    Decrypt         = 5
-  };
-  
   enum class CLI_Action : uint8_t
   {
     None            = 0,
@@ -24,7 +14,8 @@ namespace EggBeater
     RefreshSession  = 2,
     CloseSession    = 3,
     Encrypt         = 4,
-    Decrypt         = 5
+    Decrypt         = 5,
+    DiscoverDevice  = 6
   };
   
   enum class ErrorClass : uint8_t
@@ -48,7 +39,7 @@ namespace EggBeater
   
   struct Error_t
   {
-    std::string Message;
+    String      Message;
     ErrorClass  Class;
   };
   
@@ -80,6 +71,9 @@ namespace EggBeater
     const ErrorList& getErrors() const;
     
     Status_t getCurrentStatus() const;
+    
+    void addError(ErrorClass, String);
+    
   private:
     static bool ParseCLIOptions(Options*, int, const char**);
     static int  ParseStartSession(Options*, int, int, const char**);
@@ -90,6 +84,7 @@ namespace EggBeater
     static int  ParseSessionID(Options*, int, int, const char**);
     static int  ParseCipherMode(Options*, int, int, const char**);
     static int  ParseFileEntry(Options*, int, int, const char**);
+    static int  ParseDiscoverDevice(Options*, int, int, const char**);
   
     String      sessionID;
     CLI_Action  cliAction;
