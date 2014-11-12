@@ -11,6 +11,8 @@
   #define D_RUN(...)
 #endif
 
+//! @todo Change the D_RUN calls into .addError calls
+
 namespace EggBeater
 {
   bool CipherMode_IsValid(CipherMode cm)
@@ -87,6 +89,7 @@ namespace EggBeater
   bool Options::ParseCLIOptions(Options* _this, int argc, const char** argv)
   {
     std::map<String, std::function<int(Options*, int, int, const char**)> > lut;
+    
     lut["--start-session"] = &ParseStartSession;
     lut["--refresh-session"] = &ParseRefreshSession;
     lut["--close-session"] = &ParseCloseSession;
@@ -263,5 +266,4 @@ namespace EggBeater
     
     return 0;
   }
-  
 }

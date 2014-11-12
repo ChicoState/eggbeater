@@ -53,25 +53,29 @@ namespace EggBeater
     
     //! Parse the command line arguments for the action, options and files
     bool parseOptions(int argc, const char** argv);
+    //! Get the list of specified files/folders
+    const StringList& getFileList() const;
+    //! Get the specified action
+    CLI_Action getAction() const;
+    //! Check if a session ID was specified
+    bool hasSessionID() const;
+    //! Get the specified session ID
+    String getSessionID() const;
+    //! Check if a cipher mode was specified
+    bool hasCipherMode() const;
+    //! Get the specified cipher mode
+    CipherMode getCipherMode() const;
+    
+    //! @todo This should go in the control class
     //! Check if any errors have occurred.
     bool haveErrors() const;
     //! Check if any fatal errors have occurred.
     bool haveFatalError() const;
-    
-    const StringList& getFileList() const;
-    
-    CLI_Action getAction() const;
-    
-    bool hasSessionID() const;
-    String getSessionID() const;
-    
-    bool hasCipherMode() const;
-    CipherMode getCipherMode() const;
-    
+    //! Get the list of errors
     const ErrorList& getErrors() const;
-    
+    //! Get the current status
     Status_t getCurrentStatus() const;
-    
+    //! Add an error to the error list
     void addError(ErrorClass, String);
     
   private:
@@ -93,8 +97,6 @@ namespace EggBeater
     ErrorList   errorList;
     StringList  fileList;
   };
-  
-  //! @todo Integrate Sterling's getopt code
 }
 
 #endif // _EGGBEATER_OPTIONS_H_
