@@ -9,3 +9,6 @@ main.o:main.cpp
 comIO.o:comIO.cpp
 	g++ -c -g comIO.cpp
 	
+.PHONY:
+clean:
+	rm -f comIO *.o

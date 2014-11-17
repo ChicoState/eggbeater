@@ -1,0 +1,49 @@
+=== Brain Storm Document ===
+
+== Objectives ==
+
+# Create an easy to use file encryption program.
+# Utilize hardware either for the encryption engine or for key generation.
+# Have a clean seamless user interface.
+
+== Design ==
+
+#Code will be C++.
+#Specific encryption technique needs to be decided.
+#specific hardware needs to be chosen. 
+
+Robert: One idea Sterling and I have been bouncing around is seperating any graphical portion from the actual core work. Much in the same was that Linux GUI tools "simply" call command line tools with the appropriate options.
+
+
+== Ideas ==
+
+Could use thumb print reader for authentication. ( https://www.sparkfun.com/products/11792 )
+Could use micro-controller to encrypt data onto external storage from a pc.
+Could have system email or take a picture via webcam if many failed password attempts.
+Could have system shred file if too many failed pswrd attempts.
+Could have password change daily based on formula with the date or related data.
+Could use an RFID unit as a key.
+Could support multiple users
+
+== Encryption ==
+SamW:I know someone said that they had some background with encryption allready, so he may have a
+better say in this than me. I was looking into PGP encryption which could serve as a way to secure 
+things. Some quick examples below. 
+http://www.deepdotweb.com/2013/11/11/pgp-tutorial-for-newbs-gpg4win/
+https://xato.net/cryptography/pgp-10-minutes-or-less/#.U_9Z9GBdVQI
+
+Robert: PGP may be cost prohibitive (http://buy.symantec.com/estore/clp/category-encryption) Although, there are claims that PGP is considered "military grade." An FOSS alternative is GNU PGP (GPG/GnuPGP), but I'm having a hard time finding security claims (http://www.openpgp.org/).
+
+SamW: If you check out the first link i shows how it works a little bit. i am almost certian we will not need the Norton software. Just the file listed in there
+and maybe Kleopatra.
+
+Robert: Both links tell the user to install GPG4Win, the GnuPGP/OpenPGP implementation for use on Windows.
+Also, GnuPG doesn't seem to support embedded ARM processors (Cortex M/R series). It does support the general purpose chips though (Cortex A series).
+
+Sterling: I have been messing around with "Microsoft Visual Studio Express" because it supports GUI's (for windows) and an encryption library Crypto++ (http://www.cryptopp.com/).
+So far both have been a bit of a head ache, but the crypt++ library seems to be a great resource. After some reading, I recommend we go with either AES or Twofish for our encryption.
+The hang up for me at this point is how to best implement a GUI. If we are doing all the encryption in the USB device, we may be able to have it be transparent to the computer. So 
+no GUI would be needed. Really we just need to meet and hammer out precisely how we want to implement this thing so we know where to put the bulk of our effort.
+
+Robert: An option to allow a more portable graphical interface is wxWidgets, Qt or Mono/.NET all of which support some flavor of C++. Mono/.NET support a flavor of C++ that doesn't directly use pointers (pointers are there but abstracted from the programmer unless explicitly required).
+

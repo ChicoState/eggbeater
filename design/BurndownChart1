@@ -1,0 +1,23 @@
+Burn Down Chart
+
+Sprints:
+-Implement function Delta, Gamma, Tau
+   -built first version
+   -Blocker: need more encryption methods
+-Parse USB Data
+   -have a library for windows parsing
+   -Blocker: need to find linux usb parsing library
+-STM->PC communication
+   -basic STM keyboard built
+   -Blocker: needs
+-GUI
+   -have QT compiling and demos working
+   -have basic design drawn up
+   -Blocker: need to learn more about QT to implement desired features.
+
+Changes:
+  -Not really any yet since we are just beginning to implement our first round of sprints
+  
+Value:
+    -It is an affordable option to having very secure file encryption becasue the encryption keys is only accessible through the devices
+    -Uses biometrics to prevent identity fraud	

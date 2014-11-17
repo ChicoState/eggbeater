@@ -6,3 +6,4 @@ cli/deps/*
 *.d
 *.exe
 *.elf
+*/Thumbs.db
