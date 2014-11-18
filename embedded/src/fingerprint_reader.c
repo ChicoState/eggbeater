@@ -23,8 +23,11 @@
 #define FP_UART_DEV     UART5
 #define FP_UART_GPIO_AF GPIO_AF8_UART5
 
-UART_HandleTypeDef uartEndpoint;
-GT511C1R_Device_t gt511;
+RTC_HandleTypeDef   rtc;
+UART_HandleTypeDef  uartEndpoint;
+GT511C1R_Device_t   gt511;
+
+uint32_t Session_ActivityStamps[20] = {0};
 
 uint32_t fp_find_unused_id(void)
 {
@@ -185,6 +188,18 @@ uint32_t fp_enroll_step_3(void)
   return gt511Ret;
 }
 
+uint32_t fp_get_rtc_time(void)
+{
+  RTC_TimeTypeDef sTime;
+  uint32_t curTime;
+
+  HAL_RTC_GetTime(&rtc, &sTime, FORMAT_BIN);
+
+  curTime = (sTime.Hours * 3600) + (sTime.Minutes * 60) + (sTime.Seconds);
+
+  return curTime;
+}
+
 void InitUART(void)
 {
   GPIO_InitTypeDef gpio;
@@ -223,6 +238,26 @@ void InitUART(void)
   HAL_UART_Init(&uartEndpoint);
 
   BSP_LED_Init(LED3);
+}
+
+void InitRTC(void)
+{
+  __PWR_CLK_ENABLE();
+
+  HAL_PWR_EnableBkUpAccess();
+
+  __HAL_RCC_RTC_CONFIG(RCC_RTCCLKSOURCE_HSE_DIV16);
+
+  __HAL_RCC_RTC_ENABLE();
+
+  rtc.Instance = RTC;
+  rtc.Init.AsynchPrediv = 0x63; // Step down the clock by a factor of 100
+  rtc.Init.SynchPrediv = 0x1387; // Step down the clock by a factor of 5000
+  rtc.Init.HourFormat = RTC_HOURFORMAT_24;
+
+  rtc.Init.OutPut = RTC_OUTPUT_DISABLE;
+  rtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_LOW;
+  rtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
 }
 
 void Fingerprint_Task(void* arg)
@@ -343,9 +378,9 @@ uint32_t fp_session_open(void)
   if (gt511Ret != 0)
     return gt511Ret;
 
-  // Send Enroll1
+  // Send Identify
   gt511Ret = GT511C1R_VerifyAny(&gt511);
-  
+
   id = gt511Ret;
 
   // Turn off the scanner backlight
@@ -358,4 +393,59 @@ uint32_t fp_session_open(void)
   //fp_wait_finger(0, 50);
 
   return id;
+}
+
+uint32_t fp_session_refresh(uint32_t id)
+{
+  uint32_t curTime = fp_get_rtc_time;
+  uint32_t sessionTime = Session_ActivityStamps[id];
+
+  if (id >= 20)
+    return fp_error_id_invalid;
+
+  if (sessionTime == 0)
+    return fp_error_session_not_started;
+
+  if (sessionTime < curTime)) // Somebody is fucking with me
+  {
+    fp_session_close(id);
+    return fp_error_session_not_started;
+  }
+
+  if ((curTime - sessionTime) > SESSION_TIMEOUT)
+  {
+    fp_session_close(id);
+    return fp_session_expired;
+  }
+
+  Session_ActivityStamps[id] = curTime;
+
+  return 0;
+}
+
+uint32_t fp_session_close(uint32_t id)
+{
+  if (id >= 20)
+    return fp_error_id_invalid;
+
+  Session_ActivityStamps[id] = 0;
+
+  return 0;
+}
+
+uint32_t fp_generate_file_key(uint32_t id)
+{
+  uint32_t curTime = fp_get_rtc_time;
+  uint32_t sessionTime = Session_ActivityStamps[id];
+
+  if ((curTime - sessionTime) > SESSION_TIMEOUT)
+  {
+    fp_session_close(id);
+    return fp_session_expired;
+  }
+
+  //! @todo Generate the file key
+  /*
+    file key = SHA2_256(finger print template)
+  */
 }
