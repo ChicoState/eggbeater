@@ -161,9 +161,15 @@ void USB_Write_Task(void* arg)
 
   UNUSED_ARG(arg);
 
+  InitUSB();
+
+  vTaskDelay(100);
+
   //BSP_LED_On(LED3);
 
   USBD_Start(&USBD_Device);
+
+  vTaskDelay(500);
 
   //InitLCD();
 

@@ -39,12 +39,10 @@ int main(void)
   HAL_Init();
   InitClocks();
 
-  InitUSB();
-
   //BSP_LED_Init(LED3);
   //BSP_LED_Init(LED4);
 
-  //*
+  /*
   xTaskCreate(&USB_Write_Task,
               "USB Write Task",
               TASK_STACK_DEPTH,
@@ -60,12 +58,14 @@ int main(void)
               NULL);
   // */
 
+  /*
   xTaskCreate(&Keypad_Task,
               "Keypad Task",
               TASK_STACK_DEPTH,
               NULL,
               KP_TASK_PRIO,
               NULL);
+  // */
 
   //*
   xTaskCreate(&Fingerprint_Task,
