@@ -9,11 +9,12 @@
 #include "usb_interface.h"
 #include "keypad.h"
 #include "fingerprint_reader.h"
+#include "control.h"
 
 #define TASK_STACK_DEPTH  512
 #define FP_TASK_PRIO      5
 #define USB_TASK_PRIO     4
-#define ECHO_TASK_PRIO    3
+#define CTRL_TASK_PRIO    3
 #define KP_TASK_PRIO      2
 
 USBD_HandleTypeDef USBD_Device;
@@ -24,7 +25,8 @@ void InitLCD(void);
 
 // FreeRTOS task functions
 //void USB_Write_Task(void*);
-void Echo_Task(void*);
+//void Echo_Task(void*);
+void Control_Task(void*);
 //void Keypad_Task(void*);
 //void Fingerprint_Task(void*);
 
@@ -50,11 +52,11 @@ int main(void)
               USB_TASK_PRIO,
               NULL);
 
-  xTaskCreate(&Echo_Task,
-              "Echo Task",
+  xTaskCreate(&Control_Task,
+              "Control Task",
               TASK_STACK_DEPTH,
               NULL,
-              ECHO_TASK_PRIO,
+              CTRL_TASK_PRIO,
               NULL);
   // */
 
@@ -140,10 +142,11 @@ void InitLCD()
   BSP_TS_Init(BSP_LCD_GetXSize(), BSP_LCD_GetYSize());
 }
 
-void Echo_Task(void* arg)
+void Control_Task(void* arg)
 {
   USB_Packet packet;
   UNUSED_ARG(arg);
+  Packet_t p;
 
   //BSP_LED_On(LED4);
 
@@ -152,11 +155,21 @@ void Echo_Task(void* arg)
     while (xQueueReceive(usbWriteData.ReceiveQueue, &packet, 50) != pdTRUE)
       USB_ReadyToReceive();
 
-      //USBD_CDC_ReceivePacket(&USBD_Device);
+    p.Data = packet.Data;
+    p.Length = packet.Length;
 
-    //BSP_LED_Toggle(LED4);
-
-    while (xQueueSendToBack(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
+    if (packet_validate(&p) == 0)
+    {
+      while (xQueueSendToBack(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
+    }
+    else
+    {
+      p.Data = NULL;
+      p.Length = 0;
+      free(packet.Data);
+      packet.Data = NULL;
+      packet.Length = 0;
+    }
   }
 }
 

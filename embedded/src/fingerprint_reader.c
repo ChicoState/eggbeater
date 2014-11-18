@@ -26,6 +26,165 @@
 UART_HandleTypeDef uartEndpoint;
 GT511C1R_Device_t gt511;
 
+uint32_t fp_find_unused_id(void)
+{
+  uint32_t id = 0;
+  uint32_t gt511Ret = 0;
+
+  // For each valid ID
+  for (; id < 20; id++)
+  {
+    // Check if in use
+    gt511Ret = GT511C1R_IsIDInUse(&gt511, id);
+
+    // If not
+    if (gt511Ret == 0)
+    {
+      // Use it
+      return id;
+    }
+  }
+
+  return -1;
+}
+
+uint32_t fp_wait_finger(uint32_t state, uint32_t delay)
+{
+  uint32_t gt511Ret = 0;
+
+  // Sanitize to exactly 1 or 0
+  state = (state) ? (1) : (0);
+
+  // Wait for finger down
+  while ((gt511Ret = GT511C1R_IsFingerDown(&gt511)) != state)
+  {
+    vTaskDelay(delay);
+  }
+
+  return gt511Ret;
+}
+
+uint32_t fp_enroll_start(uint32_t id)
+{
+  uint32_t gt511Ret = 0;
+
+  // Send EnrollStart
+  gt511Ret = GT511C1R_StartEnrollment(&gt511, id);
+
+  return gt511Ret;
+}
+
+uint32_t fp_enroll_step_1(void)
+{
+  uint32_t gt511Ret;
+
+  // Turn on the scanner backlight
+  gt511Ret = GT511C1R_LED(&gt511, 1);
+
+  if (gt511Ret != 0)
+    return gt511Ret;
+
+  // Wait for finger down
+  fp_wait_finger(1, 50);
+
+  // Send CaptureFinger
+  gt511Ret = GT511C1R_CaptureFingerprint(&gt511, 1);
+
+  if (gt511Ret != 0)
+    return gt511Ret;
+
+  // Send Enroll1
+  gt511Ret = GT511C1R_EnrollmentStep1(&gt511);
+
+  if (gt511Ret != 0)
+    return gt511Ret;
+
+  // Turn off the scanner backlight
+  gt511Ret = GT511C1R_LED(&gt511, 0);
+
+  if (gt511Ret != 0)
+    return gt511Ret;
+
+  // Wait for finger up
+  fp_wait_finger(0, 50);
+
+  return gt511Ret;
+}
+
+uint32_t fp_enroll_step_2(void)
+{
+  uint32_t gt511Ret;
+
+  // Turn on the scanner backlight
+  gt511Ret = GT511C1R_LED(&gt511, 1);
+
+  if (gt511Ret != 0)
+    return gt511Ret;
+
+  // Wait for finger down
+  fp_wait_finger(1, 50);
+
+  // Send CaptureFinger
+  gt511Ret = GT511C1R_CaptureFingerprint(&gt511, 1);
+
+  if (gt511Ret != 0)
+    return gt511Ret;
+
+  // Send Enroll1
+  gt511Ret = GT511C1R_EnrollmentStep2(&gt511);
+
+  if (gt511Ret != 0)
+    return gt511Ret;
+
+  // Turn off the scanner backlight
+  gt511Ret = GT511C1R_LED(&gt511, 0);
+
+  if (gt511Ret != 0)
+    return gt511Ret;
+
+  // Wait for finger up
+  fp_wait_finger(0, 50);
+
+  return gt511Ret;
+}
+
+uint32_t fp_enroll_step_3(void)
+{
+  uint32_t gt511Ret;
+
+  // Turn on the scanner backlight
+  gt511Ret = GT511C1R_LED(&gt511, 1);
+
+  if (gt511Ret != 0)
+    return gt511Ret;
+
+  // Wait for finger down
+  fp_wait_finger(1, 50);
+
+  // Send CaptureFinger
+  gt511Ret = GT511C1R_CaptureFingerprint(&gt511, 1);
+
+  if (gt511Ret != 0)
+    return gt511Ret;
+
+  // Send Enroll1
+  gt511Ret = GT511C1R_EnrollmentStep3(&gt511);
+
+  if (gt511Ret != 0)
+    return gt511Ret;
+
+  // Turn off the scanner backlight
+  gt511Ret = GT511C1R_LED(&gt511, 0);
+
+  if (gt511Ret != 0)
+    return gt511Ret;
+
+  // Wait for finger up
+  fp_wait_finger(0, 50);
+
+  return gt511Ret;
+}
+
 void InitUART(void)
 {
   GPIO_InitTypeDef gpio;
@@ -122,33 +281,52 @@ void Fingerprint_Task(void* arg)
   }
 }
 
-uint32_t fp_session_new()
+uint32_t fp_session_new(void)
 {
   uint32_t id = 0;
   uint32_t gt511Ret = 0;
-  // Find unused DB location
 
-  for (; id < 20; id++)
-  {
-    gt511Ret = GT511C1R_IsIDInUse(&gt511, id);
+  id = fp_find_unused_id();
 
-    if (gt511Ret == 0)
-    {
-      break;
-    }
-  }
-
-  if (id == 20)
-  {
-    // Database is full
-    return -1;
-  }
-
-  // Send EnrollStart
-  gt511Ret = GT511C1R_StartEnrollment(&gt511, id);
+  gt511Ret = fp_enroll_start(id);
 
   if (gt511Ret != 0)
+  {
+    asm("bkpt #0");
     return gt511Ret;
+  }
+
+  gt511Ret = fp_enroll_step_1();
+
+  if (gt511Ret != 0)
+  {
+    asm("bkpt #0");
+    return gt511Ret;
+  }
+
+  gt511Ret = fp_enroll_step_2();
+
+  if (gt511Ret != 0)
+  {
+    asm("bkpt #0");
+    return gt511Ret;
+  }
+
+  gt511Ret = fp_enroll_step_3();
+
+  if (gt511Ret != 0)
+  {
+    asm("bkpt #0");
+    return gt511Ret;
+  }
+
+  return id;
+}
+
+uint32_t fp_session_open(void)
+{
+  uint32_t gt511Ret = 0;
+  uint32_t id = 0;
 
   // Turn on the scanner backlight
   gt511Ret = GT511C1R_LED(&gt511, 1);
@@ -157,10 +335,7 @@ uint32_t fp_session_new()
     return gt511Ret;
 
   // Wait for finger down
-  while ((gt511Ret = GT511C1R_IsFingerDown(&gt511)) != 1)
-  {
-    vTaskDelay(50);
-  }
+  fp_wait_finger(1, 50);
 
   // Send CaptureFinger
   gt511Ret = GT511C1R_CaptureFingerprint(&gt511, 1);
@@ -169,10 +344,9 @@ uint32_t fp_session_new()
     return gt511Ret;
 
   // Send Enroll1
-  gt511Ret = GT511C1R_EnrollmentStep1(&gt511);
-
-  if (gt511Ret != 0)
-    return gt511Ret;
+  gt511Ret = GT511C1R_VerifyAny(&gt511);
+  
+  id = gt511Ret;
 
   // Turn off the scanner backlight
   gt511Ret = GT511C1R_LED(&gt511, 0);
@@ -181,66 +355,7 @@ uint32_t fp_session_new()
     return gt511Ret;
 
   // Wait for finger up
-  while ((gt511Ret = GT511C1R_IsFingerDown(&gt511)) != 0)
-  {
-    vTaskDelay(50);
-  }
-
-  // Turn on the scanner backlight
-  gt511Ret = GT511C1R_LED(&gt511, 1);
-
-  if (gt511Ret != 0)
-    return gt511Ret;
-
-  // Wait for finger down
-  while ((gt511Ret = GT511C1R_IsFingerDown(&gt511)) != 1)
-  {
-    vTaskDelay(50);
-  }
-
-  // Send CaptureFinger
-  gt511Ret = GT511C1R_CaptureFingerprint(&gt511, 1);
-
-  if (gt511Ret != 0)
-    return gt511Ret;
-
-  // Send Enroll2
-  gt511Ret = GT511C1R_EnrollmentStep2(&gt511);
-
-  if (gt511Ret != 0)
-    return gt511Ret;
-
-  // Wait for finger up
-  while ((gt511Ret = GT511C1R_IsFingerDown(&gt511)) != 0)
-  {
-    vTaskDelay(50);
-  }
-
-  // Turn on the scanner backlight
-  gt511Ret = GT511C1R_LED(&gt511, 1);
-
-  if (gt511Ret != 0)
-    return gt511Ret;
-
-  // Wait for finger down
-  while ((gt511Ret = GT511C1R_IsFingerDown(&gt511)) != 1)
-  {
-    vTaskDelay(50);
-  }
-
-  // Send CaptureFinger
-  gt511Ret = GT511C1R_CaptureFingerprint(&gt511, 1);
-
-  if (gt511Ret != 0)
-    return gt511Ret;
-
-  // Send Enroll3
-  gt511Ret = GT511C1R_EnrollmentStep3(&gt511);
-
-  if (gt511Ret != 0)
-    return gt511Ret;
+  //fp_wait_finger(0, 50);
 
   return id;
 }
-
-

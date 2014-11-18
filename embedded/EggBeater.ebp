@@ -182,6 +182,7 @@
 		<Unit filename="deps\STM32Cube_FW_F4_V1.1.0\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ioreq.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="inc\Control.h" />
 		<Unit filename="inc\Keypad.h" />
 		<Unit filename="inc\fingerprint_reader.h" />
 		<Unit filename="inc\gt511\gt511c1r.h" />
@@ -189,6 +190,9 @@
 		<Unit filename="inc\usbd_conf.h" />
 		<Unit filename="inc\usbd_desc.h" />
 		<Unit filename="readme.txt" />
+		<Unit filename="src\Control.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src\Keypad.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -217,11 +221,6 @@
 		<Extensions>
 			<code_completion />
 			<debugger>
-				<target_debugging_settings target="Release" active_interface="ST-link">
-					<debug_interface interface_id="ST-link" ip_address="" ip_port="" path="" executable="" description="" dont_start_server="false" backoff_time="" options="0" reg_filter="0" active_family="STMicroelectronics">
-						<family_options family_id="STMicroelectronics" />
-					</debug_interface>
-				</target_debugging_settings>
 				<target_debugging_settings target="Debug" active_interface="ST-link">
 					<debug_interface interface_id="ST-link" ip_address="localhost" ip_port="4242" path="${EMBLOCKS}\share\contrib" executable="STLinkGDB.exe" description="" dont_start_server="false" backoff_time="1000" options="2" reg_filter="0" active_family="STMicroelectronics">
 						<family_options family_id="STMicroelectronics">
@@ -237,6 +236,11 @@
 							<option opt_id="ID_DEV_ADDR" opt_value="" />
 							<option opt_id="ID_VERBOSE_LEVEL" opt_value="3" />
 						</family_options>
+					</debug_interface>
+				</target_debugging_settings>
+				<target_debugging_settings target="Release" active_interface="ST-link">
+					<debug_interface interface_id="ST-link" ip_address="" ip_port="" path="" executable="" description="" dont_start_server="false" backoff_time="" options="0" reg_filter="0" active_family="STMicroelectronics">
+						<family_options family_id="STMicroelectronics" />
 					</debug_interface>
 				</target_debugging_settings>
 			</debugger>

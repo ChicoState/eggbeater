@@ -41,7 +41,7 @@ typedef enum GT511C1R_Command
   GT511C1R_Command_NotAck                         = 0x31
 } GT511C1R_Command;
 
-enum GT511C1R_ErrorCode
+typedef enum GT511C1R_ErrorCode
 {
   GT511C1R_ErrorCode_Success          = 0,
   GT511C1R_ErrorCode_UARTError        = 0x0801,
@@ -60,7 +60,7 @@ enum GT511C1R_ErrorCode
   GT511C1R_ErrorCode_DeviceError      = 0x100F,
   GT511C1R_ErrorCode_InvalidParam     = 0x1011,
   GT511C1R_ErrorCode_NoFinger         = 0x1012
-};
+} GT511C1R_ErrorCode;
 
 typedef struct GT511C1R_CommandPacket_t
 {

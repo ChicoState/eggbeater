@@ -374,7 +374,7 @@
 	"usb_interface.h"
 	<stm32f429i_discovery.h>
 
-1415222781 c:\stuff\csci 430\eggbeater\embedded\inc\usb_interface.h
+1416333363 c:\stuff\csci 430\eggbeater\embedded\inc\usb_interface.h
 	<usbd_core.h>
 	<usbd_cdc.h>
 	<usbd_desc.h>
@@ -743,7 +743,7 @@
 	<string.h>
 	<stm32f429i_discovery_ts.h>
 
-1415143300 c:\stuff\csci 430\eggbeater\embedded\inc\keypad.h
+1416333364 c:\stuff\csci 430\eggbeater\embedded\inc\keypad.h
 	<stdint.h>
 	<stm32f4xx.h>
 	<stm32f429i_discovery_lcd.h>
@@ -764,7 +764,7 @@
 1414022697 c:\stuff\csci 430\eggbeater\embedded\deps\stm32cube_fw_f4_v1.1.0\drivers\bsp\components\common\io.h
 	<stdint.h>
 
-1414022709 c:\stuff\csci 430\eggbeater\embedded\inc\common.h
+1416333443 c:\stuff\csci 430\eggbeater\embedded\inc\common.h
 	<stdint.h>
 	<FreeRTOS.h>
 	<task.h>
@@ -778,7 +778,7 @@
 	<stdlib.h>
 	<string.h>
 
-1415043627 c:\stuff\csci 430\eggbeater\embedded\inc\gt511\gt511c1r.h
+1416249757 c:\stuff\csci 430\eggbeater\embedded\inc\gt511\gt511c1r.h
 	<stdint.h>
 	<FreeRTOS.h>
 	<semphr.h>
@@ -786,7 +786,7 @@
 1414022697 c:\stuff\csci 430\eggbeater\embedded\deps\freertos\freertos\source\include\semphr.h
 	"queue.h"
 
-1415224665 source:c:\stuff\csci 430\eggbeater\embedded\src\fingerprint_reader.c
+1416249626 source:c:\stuff\csci 430\eggbeater\embedded\src\fingerprint_reader.c
 	"fingerprint_reader.h"
 	<gt511/gt511c1r.h>
 	<stm32f4xx_hal_rcc.h>
@@ -795,6 +795,14 @@
 	<stm32f4xx_hal_uart.h>
 	<stm32f429i_discovery.h>
 
-1415042179 c:\stuff\csci 430\eggbeater\embedded\inc\fingerprint_reader.h
+1416333302 c:\stuff\csci 430\eggbeater\embedded\inc\fingerprint_reader.h
+	"common.h"
+
+1416334066 source:c:\stuff\csci 430\eggbeater\embedded\src\control.c
+	"Control.h"
+	<stdlib.h>
+	<string.h>
+
+1416332490 c:\stuff\csci 430\eggbeater\embedded\inc\control.h
 	"common.h"
 

@@ -10,6 +10,10 @@
 extern USBD_CDC_ItfTypeDef  USB_Interface;
 extern USBD_HandleTypeDef   USBD_Device;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct USB_Packet
 {
   uint8_t* Data;
@@ -32,5 +36,9 @@ void USB_OnReceivePacket(uint8_t* buffer, uint32_t length);
 
 // RTOS task entry point
 void USB_Write_Task(void*);
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif //  _EGGBEATER_EMBED_USB_INTERFACE_H_

@@ -10,6 +10,10 @@
 
 #define KEYPAD_MAX_LEN 16
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct keypad_t
 {
   uint32_t  xPos,
@@ -48,5 +52,9 @@ int backspace_checktouch(backspace_t*, TS_StateTypeDef*);
 
 // FreeRTOS task entry point
 void Keypad_Task(void*);
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif // _EGGBEATER_KEYPAD_H_
