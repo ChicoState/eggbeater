@@ -12,14 +12,14 @@
     		FILE *file;
     		char result[1000];
 
-    		file =fopen("Templete File","Templete"); // Open the Templete File 
+    		file =fopen("Template File","Template"); // Open the Template File 
     		if (!ptr)
         		return 1;
 
     		while (fgets(rsult,1000, ptr)!=NULL) // "fgets" for Reading file 
         		printf("%s",result);
 
-        MessageBox(0,"There is an Error in Templete File", "Message Error", MB_OK ); // Creat PopUP window for the error
+        MessageBox(0,"There is an Error in Template File", "Message Error", MB_OK ); // Creat PopUP window for the error
 	
     		return 0;
 	}
