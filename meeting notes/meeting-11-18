@@ -1,0 +1,25 @@
+Embedded
+  FP Library -done
+  Control logic -started
+  Packet code -done
+  
+CLI
+  parse Arguments -done
+  control logic -Andrew
+  crypto++
+    FileSource/FileSink
+    T(key, CipherMode, InitVector, inPath, outPath)
+        vector<bytes> key
+                uint8
+        vector<bytes> InitVector 
+                uint8
+  
+ 
+GUI
+  Invoke CLI
+    run command line with arguments -working
+    read temp file -working
+    error handling -started
+        ^!error
+        ^!fatal
+    update progressbar -started
