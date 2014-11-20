@@ -14,6 +14,7 @@ getOpt::getOpt(int argc, char *argv[]){
   extractFiles(argc, argv);
   extractOptions(argc, argv);
   extractCipher(argc, argv);
+  extractDestFolder(argc, argv);
   errorChecks();               // After all data extracted, do global level error checking. Aka errors between extraction functions, not inside them.
 }
 
