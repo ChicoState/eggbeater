@@ -14,6 +14,7 @@ getOpt::getOpt(int argc, char *argv[]){
   extractFiles(argc, argv);
   extractOptions(argc, argv);
   extractCipher(argc, argv);
+  extractDestFolder(argc, argv);
   errorChecks();               // After all data extracted, do global level error checking. Aka errors between extraction functions, not inside them.
 }
 
@@ -67,6 +68,27 @@ int getOpt::extractSession(int argc, char *argv[]){
   errorLevel += 5;
   return 0;                         // Return false if not found.
 } // end extract session ID
+
+////////////////////////////////////////////////////////////
+// Member function to extract the destination folder from the cmd line args
+// This code does not look for multiple destination folders.
+// Tag is -fd
+// folder path saved to destFolder
+
+int getOpt::extractDestFolder(int argc, char *argv[]){
+  string trigger="-fd";
+  destFolder = "none";
+  for(int count = 1; count < argc; count++){
+    if(argv[count] == trigger ){                  
+	  destFolder = argv[count+1];
+	  return 1;                     // Return true if found.
+	}// end if trigger.
+  }// end for.
+  //pushError("Error: No destination folder passed.");
+  //errorLevel += 1;
+  return 0;                         // Return false if not found.
+} // end extract session ID
+
 
 ////////////////////////////////////////////////////////////
 // Member function to extract the cipher from the cmd line args
@@ -160,30 +182,40 @@ unsigned getOpt::getNumOptions(){
 string getOpt::getOption(unsigned index){
   if(index >= options.size()) return "\0";
   else return options.at(index);
-}// end get file path.
+}// end get options.
 
+
+////////////////////////////////////////////////////////////
+// Member function to access action data.
+
+string getOpt::getAction(){
+  return action;
+}// end get action.
+
+
+////////////////////////////////////////////////////////////
+// Member function to access session ID.
+
+string getOpt::getSessionID(){
+  return sessionID;
+}// end get session ID.
 
 ////////////////////////////////////////////////////////////
 // Member function to access cipher data.
 
-string getOpt::getAction(){
-  return action;
-}// end get file path.
-
-
-////////////////////////////////////////////////////////////
-// Member function to access actions data.
-
-string getOpt::getSessionID(){
-  return sessionID;
-}// end get file path.
-
-////////////////////////////////////////////////////////////
-// Member function to access actions data.
-
 string getOpt::getCipher(){
   return cipher;
-}// end get file path.
+}// end get cipher.
+
+
+////////////////////////////////////////////////////////////
+// Member function to access actions data.
+
+string getOpt::getDestFolder(){
+  return destFolder;
+}// end get dest folder.
+
+
 
 ////////////////////////////////////////////////////////////
 // Member functions to deal with errors.

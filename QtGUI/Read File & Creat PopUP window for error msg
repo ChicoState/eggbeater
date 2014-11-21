@@ -1,0 +1,25 @@
+
+// I could not compile it so far.
+// We need to know which format we will use for Images.
+
+
+#include<stdio.h>
+#include <windows.h> // The Library for PopUP window 
+
+
+	int main()
+	{
+    		FILE *file;
+    		char result[1000];
+
+    		file =fopen("Template File","Template"); // Open the Template File 
+    		if (!ptr)
+        		return 1;
+
+    		while (fgets(rsult,1000, ptr)!=NULL) // "fgets" for Reading file 
+        		printf("%s",result);
+
+        MessageBox(0,"There is an Error in Template File", "Message Error", MB_OK ); // Creat PopUP window for the error
+	
+    		return 0;
+	}

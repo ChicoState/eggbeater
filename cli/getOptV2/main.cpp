@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////
 // main for testing getOpt V2, parsing 
-// ./getOpt.exe --decrypt -f file1 -f file2 -f file3 --session-id 70056 -f file4 -o option1 --cipher-mode ofb
+// ./getOpt.exe --decrypt -f file1 -f file2 -f file3 --session-id 70056 -fd someDrive/someFolder1/ -o option1 --cipher-mode ofb
 // This has been tested successfully on windows using cygwin.
 
 #include <cstdlib>
@@ -27,6 +27,7 @@ int main(int argc, char *argv[]){
   cout << "file[0]= " << specs.getFilePath(0) << endl;
   cout << "file["<< (specs.getNumFiles() - 1) << "]= " << specs.getFilePath(specs.getNumFiles() - 1) << endl;
 
+  cout << "destination folder= " << specs.getDestFolder() << endl;
 
   return 0;
 }// end main
