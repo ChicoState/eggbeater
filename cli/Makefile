@@ -13,30 +13,27 @@ CXXFLAGS += -O0                      \
             -fdata-sections
 LDFLAGS  += "-Llib" -Wl,-gc-sections -lpthread
 
-SOURCES   = src/Crypto.o                      \
-            src/Discovery.o                   \
-            src/SerialCommunication.o         \
-            src/Options.o                     \
-            src/packet.o
+OTHER_SOURCES  = src/Discovery.o               \
+                 src/SerialCommunication.o     \
+                 src/Options.o                 \
+                 src/packet.o
+CRYPTO_SOURCES = src/Crypto.o
+ALL_SOURCES    = $(OTHER_SOURCES) $(CRYPTO_SOURCES)
 
-TESTS     = tests/Crypto_tests.elf            \
-            tests/Crypto_CipherMode_tests.elf \
-            tests/Discovery_test_present.elf  \
-            tests/Discovery_test_absent.elf   \
-            tests/Discovery_tests.elf         \
-            tests/SerialComm_tests.elf        \
-            tests/SerialComm_test_port.elf    \
-            tests/Options_tests.elf           \
-            tests/Packet_tests.elf
+CRYPTO_TESTS = tests/Crypto_tests.crypto.elf     \
+               tests/Crypto_CipherMode_tests.crypto.elf
+OTHER_TESTS  = tests/Discovery_test_present.elf  \
+               tests/Discovery_test_absent.elf   \
+               tests/Discovery_tests.elf         \
+               tests/SerialComm_tests.elf        \
+               tests/SerialComm_test_port.elf    \
+               tests/Options_tests.elf           \
+               tests/Packet_tests.elf
 
-all: lib/libcryptopp.a lib/gtest.a testsuite $(SOURCES)
+all: lib/libcryptopp.a lib/gtest.a testsuite $(ALL_SOURCES) eggbeater.elf
 
 %.o: %.cpp
 	$(CXX) -c -o $@ $+ $(CXXFLAGS)
-
-#lib/.d:
-#	test -d lib || mkdir lib
-#	touch lib/.d
 
 %/.d:
 	test -d $(dir $@) || mkdir $(dir $@)
@@ -45,15 +42,27 @@ all: lib/libcryptopp.a lib/gtest.a testsuite $(SOURCES)
 lib/libcryptopp.a: lib/.d
 	$(MAKE) "-C$(CRYPTOPP_DIR)" libcryptopp.a
 	cp "$(CRYPTOPP_DIR)/libcryptopp.a" lib/libcryptopp.a
-	
+
 lib/gtest.a: lib/.d
 	$(MAKE) "-C$(GTEST_DIR)/make" gtest.a
 	cp "$(GTEST_DIR)/make/gtest.a" lib/gtest.a
 
 .PHONY: testsuite
-testsuite: $(TESTS)
+testsuite: $(CRYPTO_TESTS) $(OTHER_TESTS)
 
-%.elf: %.o $(SOURCES) lib/libcryptopp.a lib/gtest.a
+.PHONY: crypto-tests
+crypto-tests: $(CRYPTO_TESTS)
+
+.PHONY: other-tests
+other-tests: $(OTHER_TESTS)
+
+%.elf: %.o $(OTHER_SOURCES) lib/gtest.a
+	$(CXX) -o $@ $+ $(LDFLAGS)
+	
+%.crypto.elf: %.o $(ALL_SOURCES) lib/libcryptopp.a lib/gtest.a
+	$(CXX) -o $@ $+ $(LDFLAGS)
+
+eggbeater.elf: src/main.o $(ALL_SOURCES) lib/libcryptopp.a
 	$(CXX) -o $@ $+ $(LDFLAGS)
 
 .PHONY: clean

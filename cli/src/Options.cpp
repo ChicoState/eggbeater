@@ -36,16 +36,6 @@ namespace EggBeater
     return ParseCLIOptions(this, argc, argv);
   }
   
-  bool Options::haveErrors() const
-  {
-    return false;
-  }
-  
-  bool Options::haveFatalError() const
-  {
-    return false;
-  }
-  
   const StringList& Options::getFileList() const
   {
     return fileList;
@@ -76,6 +66,23 @@ namespace EggBeater
     return cipherMode;
   }
   
+  bool Options::haveErrors() const
+  {
+    for (auto iter : errorList)
+      if (iter.Class == ErrorClass::FatalError || iter.Class == ErrorClass::Error)
+        return true;
+      
+    return false;
+  }
+  
+  bool Options::haveFatalError() const
+  {
+    for (auto iter : errorList)
+      if (iter.Class == ErrorClass::FatalError)
+        return true;
+    
+    return false;
+  }
   const ErrorList& Options::getErrors() const
   {
     return errorList;
@@ -84,6 +91,15 @@ namespace EggBeater
   Status_t Options::getCurrentStatus() const
   {
     return currentStatus;
+  }
+  
+  void Options::addError(ErrorClass errClass, String str)
+  {
+    Error_t err;
+    err.Class = errClass;
+    err.Message = str;
+    
+    this->errorList.push_back(err);
   }
   
   bool Options::ParseCLIOptions(Options* _this, int argc, const char** argv)
@@ -107,8 +123,6 @@ namespace EggBeater
       {
         int stride = iter->second(_this, i, argc, argv);
         
-        D_RUN(std::cout << "stride: " << stride << std::endl);
-        
         if (stride < 0)
           return false;
         
@@ -124,12 +138,10 @@ namespace EggBeater
   }
   
   int Options::ParseStartSession(Options* _this, int i, int argc, const char** argv)
-  {
-    D_RUN(std::cout << "ParseStartSession" << std::endl);
-    
+  { 
     if (_this->cliAction != CLI_Action::None)
     {
-      D_RUN(std::cout << "CLI action already set" << std::endl);
+      _this->addError(ErrorClass::FatalError, "CLI Action already set");
       return -1;
     }
     
@@ -139,11 +151,9 @@ namespace EggBeater
   
   int Options::ParseRefreshSession(Options* _this, int i, int argc, const char** argv)
   {
-    D_RUN(std::cout << "ParseRefreshSession" << std::endl);
-    
     if (_this->cliAction != CLI_Action::None)
     {
-      D_RUN(std::cout << "CLI action already set" << std::endl);
+      _this->addError(ErrorClass::FatalError, "CLI Action already set");
       return -1;
     }
     
@@ -153,11 +163,9 @@ namespace EggBeater
   
   int Options::ParseCloseSession(Options* _this, int i, int argc, const char** argv)
   {
-    D_RUN(std::cout << "ParseCloseSession" << std::endl);
-    
     if (_this->cliAction != CLI_Action::None)
     {
-      D_RUN(std::cout << "CLI action already set" << std::endl);
+      _this->addError(ErrorClass::FatalError, "CLI Action already set");
       return -1;
     }
     
@@ -167,11 +175,9 @@ namespace EggBeater
   
   int Options::ParseEncrypt(Options* _this, int i, int argc, const char** argv)
   {
-    D_RUN(std::cout << "ParseEncrypt" << std::endl);
-    
     if (_this->cliAction != CLI_Action::None)
     {
-      D_RUN(std::cout << "CLI action already set" << std::endl);
+      _this->addError(ErrorClass::FatalError, "CLI Action already set");
       return -1;
     }
     
@@ -181,11 +187,9 @@ namespace EggBeater
   
   int Options::ParseDecrypt(Options* _this, int i, int argc, const char** argv)
   {
-    D_RUN(std::cout << "ParseDecrypt" << std::endl);
-    
     if (_this->cliAction != CLI_Action::None)
     {
-      D_RUN(std::cout << "CLI action already set" << std::endl);
+      _this->addError(ErrorClass::FatalError, "CLI Action already set");
       return -1;
     }
     
@@ -195,11 +199,9 @@ namespace EggBeater
   
   int Options::ParseDiscoverDevice(Options* _this, int i, int argc, const char** argv)
   {
-    D_RUN(std::cout << "ParseDecrypt" << std::endl);
-    
     if (_this->cliAction != CLI_Action::None)
     {
-      D_RUN(std::cout << "CLI action already set" << std::endl);
+      _this->addError(ErrorClass::FatalError, "CLI Action already set");
       return -1;
     }
     
@@ -209,11 +211,9 @@ namespace EggBeater
   
   int Options::ParseSessionID(Options* _this, int i, int argc, const char** argv)
   {
-    D_RUN(std::cout << "ParseSessionID" << std::endl);
-    
     if ((i + 1) >= argc)
     {
-      D_RUN(std::cout << "(" << i << " + 1) >= " << argc << std::endl);
+      _this->addError(ErrorClass::FatalError, "--session-id: missing argument");
       return -1;
     }
     
@@ -223,12 +223,11 @@ namespace EggBeater
   
   int Options::ParseCipherMode(Options* _this, int i, int argc, const char** argv)
   {
-    D_RUN(std::cout << "ParseCipherMode" << std::endl);
     String cipherMode;
     
     if ((i + 1) >= argc)
     {
-      D_RUN(std::cout << "(" << i << " + 1) >= " << argc << std::endl);
+      _this->addError(ErrorClass::FatalError, "--cipher-mode: missing argument");
       return -1;
     }
     
@@ -251,7 +250,7 @@ namespace EggBeater
     }
     else
     {
-      D_RUN(std::cout << "invalid cipher mode" << std::endl);
+      _this->addError(ErrorClass::FatalError, "--cipher-mode: invalid selection");
       return -1;
     }
     
@@ -260,8 +259,6 @@ namespace EggBeater
   
   int Options::ParseFileEntry(Options* _this, int i, int argc, const char** argv)
   {
-    D_RUN(std::cout << "ParseFileEntry" << std::endl);
-    
     _this->fileList.push_back(argv[i]);
     
     return 0;
