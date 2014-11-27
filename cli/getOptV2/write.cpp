@@ -19,7 +19,7 @@ int addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 );
 
 
 int main(){
-  std::vector<std::string> poop;
+  std::vector<std::string> poop; // Create instance of string vector.
   
   addMsg(poop,"^_^ ", "go");
   addMsg(poop,"12=",12);
@@ -67,7 +67,6 @@ int addMsg(std::vector<std::string> &vec, std::string arg1, std::string arg2 )
 {
   arg1.append(arg2);
   vec.push_back(arg1);
-  std::cout<< "pushed: " << arg1 << std::endl;
   return 0;
 }// end add string function.
 
@@ -84,7 +83,9 @@ int addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 )
   return 0;
 }// end add string function.
 
-
+// For making longer messages such as " 0 ^ 9 ^ C:/programfiles/file.txt ^ 4 ^ 12 ^ 4 ^ 12 "
+// I think we should make an additional unique addMsg function that takes the specific arguments and formats them.
+// Then does the same functionality as addMsg adding that string to the vector.
 
 
 
