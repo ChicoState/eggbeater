@@ -23,7 +23,7 @@ uint32_t  fp_session_new(void);
 uint32_t  fp_session_refresh(uint32_t id);
 uint32_t  fp_session_close(uint32_t id);
 
-uint32_t  fp_generate_file_key(uint32_t id);
+uint32_t  fp_generate_file_key(uint32_t id, uint8_t* digest);
 
 // RTOS task entry point
 void Fingerprint_Task(void*);

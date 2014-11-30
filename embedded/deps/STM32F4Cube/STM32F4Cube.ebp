@@ -45,9 +45,11 @@
 		</Device>
 		<Compiler>
 			<Add option="-mfloat-abi=softfp" />
+			<Add option="-std=c11" />
+			<Add option="-fgcse" />
 			<Add option="-fdata-sections" />
 			<Add option="-ffunction-sections" />
-			<Add option="-Os" />
+			<Add option="-Ofast" />
 			<Add option="-DARM_MATH_CM4" />
 			<Add option="-D__FPU_USED" />
 			<Add option="-DSTM32F429xx" />

@@ -1,4 +1,7 @@
 #include "fingerprint_reader.h"
+#include "Control.h"
+
+#include "polarssl/sha256.h"
 
 #include <gt511/gt511c1r.h>
 
@@ -10,6 +13,7 @@
 #include <stm32f429i_discovery.h>
 #include <stm32f429i_discovery_lcd.h>
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
 
@@ -34,6 +38,8 @@ UART_HandleTypeDef  uartEndpoint;
 GT511C1R_Device_t   gt511;
 
 uint32_t Session_ActivityStamps[20] = {0};
+
+uint32_t fp_session_start(void);
 
 uint8_t* format_string(char* fmt, ...)
 {
@@ -283,12 +289,19 @@ void InitRTC(void)
 
 void Fingerprint_Task(void* arg)
 {
-  TickType_t lastWake = 0;
+  //TickType_t lastWake = 0;
   uint32_t gt511Err = -1;
   uint32_t i = 0;
   uint32_t id = 0;
-  (void)(arg);
-  (void)(gt511Err);
+  Packet_t* packet = NULL;
+  PacketHeader_t* head = NULL;
+  uint16_t len = 0;
+  uint8_t* data = NULL;
+  Packet_t* response = NULL;
+  uint8_t digest[32];
+
+  UNUSED_ARG(arg);
+  UNUSED_ARG(gt511Err);
 
   InitLCD();
   InitUART();
@@ -297,6 +310,145 @@ void Fingerprint_Task(void* arg)
   BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
   BSP_LCD_SetBackColor(LCD_COLOR_WHITE);
 
+  while (1)
+  {
+    BSP_LCD_ClearStringLine(1);
+    BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"Waiting on PC");
+
+    i = 0;
+
+    while (xQueueReceive(ctrlDataQueue.Rx, &packet, 500) != pdTRUE)
+    {
+      i += 1;
+
+      BSP_LCD_ClearStringLine(1);
+
+      switch (i & 3)
+      {
+        default:
+        case 0:
+          BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"Waiting on PC");
+          break;
+        case 1:
+          BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"Waiting on PC.");
+          break;
+        case 2:
+          BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"Waiting on PC..");
+          break;
+        case 3:
+          BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"Waiting on PC...");
+          break;
+      }
+    }
+
+    if (packet_get_header(packet, &head))
+    {
+      // Error
+    }
+
+    if (packet_get_data_length(packet, &len))
+    {
+      // Error
+    }
+
+    if (packet_get_data(packet, &data))
+    {
+      // Error
+    }
+
+    switch (head->Command)
+    {
+      default:
+        // Error
+        break;
+
+      case CtrlCommand_OpenSession:
+      case CtrlCommand_NewSession:
+      {
+        id = fp_session_start();
+
+        response = malloc(sizeof(Packet_t));
+
+        if (packet_create(response, head->Command, (uint8_t*)&id, sizeof(id)))
+        {
+          // Error
+        }
+        break;
+      }
+
+      case CtrlCommand_RefreshSession:
+      {
+        if (len >= 4)
+        {
+          id = *(uint32_t*)data;
+          fp_session_refresh(id);
+
+          id = 0x01;
+        }
+        else
+          id = fp_error_id_invalid;
+
+        response = malloc(sizeof(Packet_t));
+
+        if (packet_create(response, head->Command, (uint8_t*)&id, sizeof(id)))
+        {
+          // Error
+        }
+        break;
+      }
+
+      case CtrlCommand_CloseSession:
+      {
+        if (len >= 4)
+        {
+          id = *(uint32_t*)data;
+          fp_session_close(id);
+        }
+        break;
+      }
+
+      case CtrlCommand_GetFileKey:
+      {
+        if (len >= 4)
+        {
+          id = *(uint32_t*)data;
+          fp_generate_file_key(id, digest);
+
+          response = malloc(sizeof(Packet_t));
+
+          if (packet_create(response, head->Command, (uint8_t*)&digest, sizeof(id)))
+          {
+            // Error
+          }
+        }
+        else
+        {
+          id = fp_error_id_invalid;
+
+          response = malloc(sizeof(Packet_t));
+
+          if (packet_create(response, head->Command, (uint8_t*)&id, sizeof(id)))
+          {
+            // Error
+          }
+        }
+        // Session ID is in data section
+        break;
+      }
+    }
+
+    if (response)
+      while (xQueueSendToBack(ctrlDataQueue.Tx, &response, -1) != pdTRUE);
+
+    packet_free(packet);
+
+    memset(digest, 0, sizeof(digest));
+    id = 0;
+    response = NULL;
+    packet = NULL;
+  }
+
+  /*
   BSP_LED_Off(LED3);
 
   vTaskDelay(50);
@@ -363,8 +515,9 @@ void Fingerprint_Task(void* arg)
 
   while (1)
     vTaskDelay(-1);
+  // */
 
-/*
+  /*
   //GT511C1R_DeleteOneTemplate(&gt511, id);
 
   lastWake = xTaskGetTickCount();
@@ -381,6 +534,12 @@ void Fingerprint_Task(void* arg)
   } // */
 }
 
+uint32_t fp_session_start(void)
+{
+  //! @todo Finish me
+  return fp_error_session_not_started;
+}
+
 uint32_t fp_session_new(void)
 {
   uint32_t id = 0;
@@ -392,7 +551,7 @@ uint32_t fp_session_new(void)
 
   if (gt511Ret != 0)
   {
-    asm("bkpt #0");
+    __asm__("bkpt #0");
     return gt511Ret;
   }
 
@@ -400,7 +559,7 @@ uint32_t fp_session_new(void)
 
   if (gt511Ret != 0)
   {
-    asm("bkpt #0");
+    __asm__("bkpt #0");
     return gt511Ret;
   }
 
@@ -413,7 +572,7 @@ uint32_t fp_session_new(void)
 
   if (gt511Ret != 0)
   {
-    asm("bkpt #0");
+    __asm__("bkpt #0");
     return gt511Ret;
   }
 
@@ -426,7 +585,7 @@ uint32_t fp_session_new(void)
 
   if (gt511Ret != 0)
   {
-    asm("bkpt #0");
+    __asm__("bkpt #0");
     return gt511Ret;
   }
 
@@ -443,7 +602,7 @@ uint32_t fp_session_open(void)
 
   if (gt511Ret != 0)
   {
-    asm("bkpt #0");
+    __asm__("bkpt #0");
     return gt511Ret;
   }
 
@@ -460,7 +619,7 @@ uint32_t fp_session_open(void)
 
   if (gt511Ret != 0)
   {
-    asm("bkpt #0");
+    __asm__("bkpt #0");
     return gt511Ret;
   }
 
@@ -474,7 +633,7 @@ uint32_t fp_session_open(void)
 
   if (gt511Ret != 0)
   {
-    asm("bkpt #0");
+    __asm__("bkpt #0");
     return gt511Ret;
   }
 
@@ -522,10 +681,12 @@ uint32_t fp_session_close(uint32_t id)
   return 0;
 }
 
-uint32_t fp_generate_file_key(uint32_t id)
+uint32_t fp_generate_file_key(uint32_t id, uint8_t* digest)
 {
+  uint32_t errCode = 0;
   uint32_t curTime = fp_get_rtc_time();
   uint32_t sessionTime = Session_ActivityStamps[id];
+  GT511C1R_Template_t* t = NULL;
 
   if ((curTime - sessionTime) > SESSION_TIMEOUT)
   {
@@ -533,10 +694,15 @@ uint32_t fp_generate_file_key(uint32_t id)
     return fp_session_expired;
   }
 
-  //! @todo Generate the file key
-  /*
-    file key = SHA2_256(finger print template)
-  */
+  t = malloc(sizeof(GT511C1R_Template_t));
 
-  return 1;
+  // Read fingerprint template from GT511
+  if ((errCode = GT511C1R_GetStoredTemplate(&gt511, id, t)))
+    // Error
+
+  sha256(t->Data, sizeof(GT511C1R_Template_t), digest, 0);
+
+  free(t);
+
+  return 0;
 }

@@ -18,12 +18,26 @@
   #define UNUSED_ARG(x) ( (void) ( x ) )
 #endif // UNUSED_ARG
 
-// Because min is crazy
-#define egb_min(a, b) ( ( ( a ) < ( b ) ) ? ( a ) : ( b ) )
+#ifndef egb_min
+  // Because min is crazy
+  #define egb_min(a, b) ( ( ( a ) < ( b ) ) ? ( a ) : ( b ) )
+#endif // egb_min
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef struct Packet_t
+{
+  uint8_t* Data;
+  uint32_t Length;
+} Packet_t;
+
+typedef struct RTOS_Data_Queue_t
+{
+  QueueHandle_t Tx;
+  QueueHandle_t Rx;
+} RTOS_Data_Queue_t;
 
 void InitLCD(void);
 

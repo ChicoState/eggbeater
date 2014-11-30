@@ -42,7 +42,7 @@ int main(void)
   //BSP_LED_Init(LED3);
   //BSP_LED_Init(LED4);
 
-  /*
+  //*
   xTaskCreate(&USB_Write_Task,
               "USB Write Task",
               TASK_STACK_DEPTH,
@@ -75,8 +75,10 @@ int main(void)
               FP_TASK_PRIO,
               NULL); // */
 
-  usbWriteData.TransmitQueue  = xQueueCreate(16, sizeof(USB_Packet));
-  usbWriteData.ReceiveQueue   = xQueueCreate(16, sizeof(USB_Packet));
+  // usbWriteData.TransmitQueue  = xQueueCreate(16, sizeof(USB_Packet));
+  // usbWriteData.ReceiveQueue   = xQueueCreate(16, sizeof(USB_Packet));
+  usbWriteData.Tx  = xQueueCreate(16, sizeof(Packet_t));
+  usbWriteData.Rx   = xQueueCreate(16, sizeof(Packet_t));
 
   vTaskStartScheduler();
 
@@ -144,7 +146,7 @@ void InitLCD()
 
 void Control_Task(void* arg)
 {
-  USB_Packet packet;
+  Packet_t packet;
   UNUSED_ARG(arg);
   Packet_t p;
 
@@ -152,7 +154,8 @@ void Control_Task(void* arg)
 
   while (1)
   {
-    while (xQueueReceive(usbWriteData.ReceiveQueue, &packet, 50) != pdTRUE)
+    // while (xQueueReceive(usbWriteData.ReceiveQueue, &packet, 50) != pdTRUE)
+    while (xQueueReceive(usbWriteData.Rx, &packet, 50) != pdTRUE)
       USB_ReadyToReceive();
 
     p.Data = packet.Data;
@@ -160,7 +163,8 @@ void Control_Task(void* arg)
 
     if (packet_validate(&p) == 0)
     {
-      while (xQueueSendToBack(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
+      // while (xQueueSendToBack(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
+      while (xQueueSendToBack(usbWriteData.Tx, &packet, -1) != pdTRUE);
     }
     else
     {
@@ -175,7 +179,7 @@ void Control_Task(void* arg)
 
 void USB_OnReceivePacket(uint8_t* buffer, uint32_t length)
 {
-  USB_Packet packet;
+  Packet_t packet;
 
   packet.Data   = malloc((length + 1) * sizeof(uint8_t));
   memcpy(packet.Data, buffer, length * sizeof(uint8_t));
@@ -185,7 +189,8 @@ void USB_OnReceivePacket(uint8_t* buffer, uint32_t length)
 
   OTG_ShouldYield = 0;
 
-  xQueueSendToBackFromISR(usbWriteData.ReceiveQueue, &packet, &OTG_ShouldYield);
+  // xQueueSendToBackFromISR(usbWriteData.ReceiveQueue, &packet, &OTG_ShouldYield);
+  xQueueSendToBackFromISR(usbWriteData.Rx, &packet, &OTG_ShouldYield);
 }
 
 void SysTick_Handler(void)

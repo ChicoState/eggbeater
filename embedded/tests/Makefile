@@ -11,7 +11,7 @@ CFLAGS   += -O0                       \
 LDFLAGS  += -Wl,-gc-sections          \
             -lpthread
 
-SOURCES   = ../src/Control.o
+SOURCES   = ../src/Packet.o
 
 TESTS     = control_tests.elf
 

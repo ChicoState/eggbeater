@@ -154,7 +154,7 @@ void USB_ReadyToReceive(void)
 
 void USB_Write_Task(void* arg)
 {
-  USB_Packet packet;
+  Packet_t packet;
   uint8_t buffer[512];
   uint32_t offset, len;
   USBD_CDC_HandleTypeDef   *hcdc;
@@ -186,7 +186,8 @@ void USB_Write_Task(void* arg)
 
   while (1)
   {
-    while (xQueueReceive(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
+    // while (xQueueReceive(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
+    while (xQueueReceive(usbWriteData.Tx, &packet, -1) != pdTRUE);
 
     while (hcdc->TxState != 0) // I should turn this into an RTOS event variable
       vTaskDelay(1); // Wait 1 ms for the transmitter to finish

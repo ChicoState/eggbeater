@@ -63,9 +63,11 @@
 		</Device>
 		<Compiler>
 			<Add option="-mfloat-abi=softfp" />
+			<Add option="-std=c11" />
+			<Add option="-fgcse" />
 			<Add option="-fdata-sections" />
 			<Add option="-ffunction-sections" />
-			<Add option="-O0" />
+			<Add option="-Ofast" />
 			<Add option="-DARM_MATH_CM4" />
 			<Add option="-D__FPU_USED" />
 			<Add option="-DSTM32F429xx" />
@@ -85,6 +87,7 @@
 			<Add directory="deps\FreeRTOS\FreeRTOS\Source\portable\GCC\ARM_CM4F" />
 			<Add directory="deps\FreeRTOS\inc" />
 			<Add directory="deps\STM32F4Cube\inc" />
+			<Add directory="deps\sha-256" />
 		</Compiler>
 		<Linker>
 			<Add option="-eb_start_files" />
@@ -182,8 +185,14 @@
 		<Unit filename="deps\STM32Cube_FW_F4_V1.1.0\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ioreq.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="deps\sha-256\polarssl\config.h" />
+		<Unit filename="deps\sha-256\polarssl\sha256.h" />
+		<Unit filename="deps\sha-256\sha256.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="inc\Control.h" />
 		<Unit filename="inc\Keypad.h" />
+		<Unit filename="inc\Packet.h" />
 		<Unit filename="inc\fingerprint_reader.h" />
 		<Unit filename="inc\gt511\gt511c1r.h" />
 		<Unit filename="inc\usb_interface.h" />
@@ -194,6 +203,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\Keypad.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\Packet.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\fingerprint_reader.c">
