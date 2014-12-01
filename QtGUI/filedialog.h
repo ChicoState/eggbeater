@@ -11,6 +11,8 @@
 #include <QMessageBox>
 
 // SelectFileDirDialog
+// This class is sub class for QFileDialog.
+// This class is made for selecting files and folders at the same time
 class FileDialog : public QFileDialog{
     Q_OBJECT
 private:
