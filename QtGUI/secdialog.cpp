@@ -36,7 +36,7 @@ void SecDialog::clock_time()
         QString time_text = time.toString("hh : mm : ss");
         ui->Digital_clock->setText(time_text);
     }
-    else
+    else // When time is 0
     {
         QMessageBox::critical(this, tr("The title"), tr("Timeout!!"));
         this->close();
@@ -47,7 +47,8 @@ void SecDialog::on_refresh_button_clicked()
 {
     int min = 0;
     int sec = 0;
-
+    
+    // Refresh time to 10 mins
     startMillionseconds = 1000 * 60 *10;
     min = (startMillionseconds%(1000*60*60))/(1000*60);
     sec = ((startMillionseconds%(1000*60*60))%(1000*60))/1000;
@@ -58,12 +59,13 @@ void SecDialog::on_refresh_button_clicked()
 
 void SecDialog::on_choose_input_files_clicked()
 {
+    // Choose file(s) user want to encrypt/decrypt and display file name(s) on second window
     file_dlg = new FileDialog();
     int count = 0;
 
     if(file_dlg->exec())
     {
-        fileNames = file_dlg->selectedFiles();
+        fileNames = file_dlg->selectedFiles(); // Copy files user selected
 
         if(!fileNames.isEmpty())
         {
@@ -82,6 +84,7 @@ void SecDialog::on_choose_input_files_clicked()
                 else
                 {
                     count++;
+                    // Display tow file names for each line
                     if((i%2)==1)
                     {
                         temp.append(", " + QFileInfo(fn).fileName());
@@ -98,6 +101,8 @@ void SecDialog::on_choose_input_files_clicked()
             }
         }
     }
+    
+    // When user close the dialog without selecting files, reset
     else
     {
         fileNames = QStringList();
@@ -108,6 +113,7 @@ void SecDialog::on_choose_input_files_clicked()
 
 void SecDialog::on_choose_output_folder_clicked()
 {
+    // Choose a destination folder and display folder name on second window
     folderName = QFileDialog::getExistingDirectory(
                 this,
                 tr("Open Directry"),
@@ -123,6 +129,7 @@ void SecDialog::on_choose_output_folder_clicked()
 
 void SecDialog::on_encrypt_clicked()
 {
+    // Check user select file(s) and a destination folder
     if(!fileNames.isEmpty() && folderName.isEmpty())
     {
         QMessageBox::warning(this, tr("The title"), tr("Slect Destination Folder."));
@@ -141,6 +148,7 @@ void SecDialog::on_encrypt_clicked()
         return;
     }
 
+    // If Both of file(s) and destinatind folder are not empty, go into it
     else
     {
         for(int i=0; i<fileNames.size(); i++)
@@ -157,8 +165,32 @@ void SecDialog::on_encrypt_clicked()
             
             else
             {
-                invoke->encryptFiles(this, fileNames, folderName);
-                invoke->closeSession();   
+                bool discover = invoke->discoverDevice();
+                bool checkSession = invoke->sessionIsOpen();
+
+                // Check session is open and divice is discovered
+                if(discover==false && checkSession==false)
+                {
+                    QMessageBox::warning(this, tr("The title"), tr("Session is not opened\nand\nDevice is not connected!"));
+                    return;
+                }
+                else if(discover==true && checkSession==false)
+                {
+                    QMessageBox::warning(this, tr("The title"), tr("Session is not opened!"));
+                    return;
+                }
+                else if(discover==false && checkSession==true)
+                {
+                    QMessageBox::warning(this, tr("The title"), tr("Device is not connected!"));
+                    return;
+                }
+
+                // When discover is true and checkSession is ture, encrypt files user selected
+                else
+                {
+                    invoke->encryptFiles(this, fileNames, folderName);
+                    invoke->closeSession();
+                }
             }
         }
     }
@@ -284,6 +316,7 @@ void SecDialog::on_encrypt_clicked()
 
 void SecDialog::on_decrypt_clicked()
 {
+    // Check user select file(s) and a destination folder
     if(fileNames.isEmpty() && folderName.isEmpty())
     {
         QMessageBox::warning(this, tr("The title"), tr("Slect File(s) or Folder(s)\nand Destination Folder."));
@@ -302,6 +335,7 @@ void SecDialog::on_decrypt_clicked()
         return;
     }
 
+    // If Both of file(s) and destinatind folder are not empty, go into it
     else
     {
         for(int i=0; i<fileNames.size(); i++)
@@ -320,6 +354,8 @@ void SecDialog::on_decrypt_clicked()
             {
                 bool discover = invoke->discoverDevice();
                 bool checkSession = invoke->sessionIsOpen();
+                
+                //Check session is open and divice is discovered
                 if(discover==false && checkSession==false)
                 {
                     QMessageBox::warning(this, tr("The title"), tr("Session is not opened\nand\nDevice is not connected!"));
@@ -335,6 +371,8 @@ void SecDialog::on_decrypt_clicked()
                     QMessageBox::warning(this, tr("The title"), tr("Device is not connected!"));
                     return;
                 }
+                
+                // When discover is true and checkSession is ture, decrypt files user selected
                 else
                 {
                     invoke->decryptFiles(this, fileNames, folderName, "cfb");
