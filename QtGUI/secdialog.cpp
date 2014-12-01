@@ -157,31 +157,8 @@ void SecDialog::on_encrypt_clicked()
             
             else
             {
-                   /**************Start of startsession updade*******************
-                    * getOpt.exe -a encrypt -f file1 -f file2 -f file3 -s 0056 -f file4 -o option1 -o option2
-                    *
-                    * Start Session-- It works, but needs to invokeCLI
-                    */
-                    QProcess* proc = new QProcess(this);
-                    QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOpt/getOpt.exe";
-                    QStringList attributes;
-                    attributes << "-a" << "encrypt";
-                    for(int i=0; i<fileNames.size(); i++)
-                        attributes << "-f" << fileNames.at(i);
-                    attributes << "--session-id" << "0056";
-                    attributes << "-f" << folderName;
-                    attributes << "-o" << "option1";
-                    attributes  << "-o" << "option2";
-                    proc->setProcessChannelMode(QProcess::MergedChannels);
-                    proc->start(program, attributes);
-                    if(!proc->waitForFinished())
-                        qDebug() << "Fail: "<< proc->errorString();
-                    else
-                    {
-                        qDebug() << "Success: " << proc->readAll();
-                        qDebug("Done!\n");
-                    }
-                    /*********** End of startSession update--Yuki****************/
+                invoke->encryptFiles(this, fileNames, folderName);
+                invoke->closeSession();   
             }
         }
     }
@@ -360,31 +337,8 @@ void SecDialog::on_decrypt_clicked()
                 }
                 else
                 {
-                    /**************Start of startsession updade*******************
-                     * getOpt.exe --decrypt -f file1 -f file2 -f file3 --session-id 70056 -f file4 -o option1 --cipher-mode ofb
-                     *
-                     * Start Session-- It works, but needs to invokeCLI
-                     */
-                    QProcess* proc = new QProcess(this);
-                    QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptv2/getOpt.exe";
-                    QStringList attributes;
-                    attributes << "--decrypt";
-                    for(int i=0; i<fileNames.size(); i++)
-                        attributes << "-f" << fileNames.at(i);
-                    attributes << "--session-id" << "70056";
-                    attributes << "-f" << folderName;
-                    attributes << "-o" << "option1";
-                    attributes  << "--cipher-mode" << "ofb";
-                    proc->setProcessChannelMode(QProcess::MergedChannels);
-                    proc->start(program, attributes);
-                    if(!proc->waitForFinished())
-                        qDebug() << "Fail: "<< proc->errorString();
-                    else
-                    {
-                        qDebug() << "Success: " << proc->readAll();
-                        qDebug("Done!\n");
-                    }
-                    /*********** End of startSession update--Yuki****************/
+                    invoke->decryptFiles(this, fileNames, folderName, "cfb");
+                    invoke->closeSession();
                 }
             }
         }
