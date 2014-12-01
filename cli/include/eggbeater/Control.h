@@ -1,6 +1,13 @@
 #ifndef _EGGBEATER_CONTROL_H_
 #define _EGGBEATER_CONTROL_H_
 
+#include <stdio.h>
+#include <sys/stat.h>
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <string>
+
 #include <eggbeater/Options.h>
 
 /*******************************************************************************
@@ -30,6 +37,11 @@ namespace EggBeater
     void encryptFiles();
     //! Internal function to decrypt the specified files
     void decryptFiles();
+	
+	int write( std::vector<std::string> &lines, std::string targetFile);
+    int addMsg(std::vector<std::string> &vec, std::string arg1, std::string arg2 = "\0" );
+    int addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 );
+	
   };
 }
 
