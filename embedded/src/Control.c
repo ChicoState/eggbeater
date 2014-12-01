@@ -10,10 +10,16 @@ uint32_t control_init(Control_t* c)
   if (c == NULL)
     return CtrlError_NullArgument;
 
-  c->CurrentPacket = NULL;
-  c->ResponsePacket = NULL;
+  // Initialize Control_t structure
+  c->CurrentPacket.Data     = NULL;
+  c->CurrentPacket.Length   = 0;
+  c->ResponsePacket.Data    = NULL;
+  c->ResponsePacket.Length  = 0;
 
   // Setup message queues
+  ctrlDataQueue.Tx = xQueueCreate(8, sizeof(Packet_t));
+  ctrlDataQueue.Rx = xQueueCreate(8, sizeof(Packet_t));
+
   return CtrlError_Success;
 }
 
@@ -25,7 +31,7 @@ uint32_t control_should_handle_packet(Control_t* c, Packet_t* p)
   if (c == NULL || p == NULL)
     return CtrlError_NullArgument;
 
-  if (c->CurrentPacket != NULL)
+  if (c->CurrentPacket.Data != NULL)
     return CtrlError_Busy;
 
   if ((errCode = packet_get_header(p, &head)))
@@ -67,8 +73,10 @@ uint32_t control_handle_packet(Control_t* c, Packet_t* p)
   if ((errCode = packet_get_header(p, &head)))
     return errCode;
 
-  c->CurrentPacket = p;
-  c->ResponsePacket = NULL;
+  c->CurrentPacket.Data     = p->Data;
+  c->CurrentPacket.Length   = p->Length;
+  c->ResponsePacket.Data    = NULL;
+  c->ResponsePacket.Length  = 0;
 
   switch (head->Command)
   {
@@ -107,36 +115,51 @@ uint32_t control_handle_packet(Control_t* c, Packet_t* p)
 
 uint32_t control_is_packet_ready(Control_t* c, Packet_t* p)
 {
+  Packet_t resp;
+
   if (c == NULL || p == NULL)
     return CtrlError_NullArgument;
 
-  if (c->CurrentPacket != p)
+  if (c->CurrentPacket.Data == NULL)
+    return CtrlError_NotReady;
+
+  if (c->CurrentPacket.Data != p->Data)
     return CtrlError_Busy;
 
-  // Check fingerprint_task->control_task message queue
+  // Non-blocking message queue receive
+  if (xQueueReceive(ctrlDataQueue.Tx, &resp, 0) == pdTRUE)
+  {
+    // Have a response packet
+    c->ResponsePacket.Data    = resp.Data;
+    c->ResponsePacket.Length  = resp.Length;
+  }
 
-  if (c->ResponsePacket != NULL)
+  if (c->ResponsePacket.Data != NULL)
     return CtrlError_Yes;
   else
     return CtrlError_No;
 }
 
-uint32_t control_get_resp_packet(Control_t* c, Packet_t** d)
+uint32_t control_get_resp_packet(Control_t* c, Packet_t* d)
 {
   if (c == NULL)
     return CtrlError_NullArgument;
 
-  if (c->CurrentPacket == NULL)
+  if (c->CurrentPacket.Data == NULL)
     return CtrlError_NotReady;
 
-  if (c->ResponsePacket == NULL)
+  if (c->ResponsePacket.Data == NULL)
     return CtrlError_Busy;
 
   if (d != NULL)
   {
-    *d = c->ResponsePacket;
-    c->CurrentPacket = NULL;
-    c->ResponsePacket = NULL;
+    d->Data   = c->ResponsePacket.Data;
+    d->Length = c->ResponsePacket.Length;
+
+    c->CurrentPacket.Data     = NULL;
+    c->CurrentPacket.Length   = 0;
+    c->ResponsePacket.Data    = NULL;
+    c->ResponsePacket.Length  = 0;
   }
 
   return CtrlError_Success;
@@ -144,7 +167,17 @@ uint32_t control_get_resp_packet(Control_t* c, Packet_t** d)
 
 uint32_t control_start_session(Control_t* c, Packet_t* p)
 {
+  Packet_t packet;
+
+  if (c == NULL || p == NULL)
+    return CtrlError_NullArgument;
+
+  packet.Data   = p->Data;
+  packet.Length = p->Length;
+
   // Place p on the control_task->fingerprint_task message queue
+  while (xQueueSendToBack(ctrlDataQueue.Rx, &packet, -1) != pdTRUE);
+
   return CtrlError_Fail;
 }
 
@@ -156,28 +189,74 @@ uint32_t control_refresh_session(Control_t* c, Packet_t* p)
 
 uint32_t control_close_session(Control_t* c, Packet_t* p)
 {
+  Packet_t packet;
+
+  if (c == NULL || p == NULL)
+    return CtrlError_NullArgument;
+
+  packet.Data   = p->Data;
+  packet.Length = p->Length;
+
   // Place p on the control_task->fingerprint_task message queue
+  while (xQueueSendToBack(ctrlDataQueue.Rx, &packet, -1) != pdTRUE);
+
   // Clear CurrentPacket
+  c->CurrentPacket.Data   = NULL;
+  c->CurrentPacket.Length = 0;
+
   // Return success
-  return CtrlError_Fail;
+  return CtrlError_Success;
 }
 
 uint32_t control_get_file_key(Control_t* c, Packet_t* p)
 {
+  Packet_t packet;
+
+  if (c == NULL || p == NULL)
+    return CtrlError_NullArgument;
+
+  packet.Data   = p->Data;
+  packet.Length = p->Length;
+
   // Place p on the control_task->fingerprint_task message queue
-  return CtrlError_Fail;
+  while (xQueueSendToBack(ctrlDataQueue.Rx, &packet, -1) != pdTRUE);
+
+  return CtrlError_Success;
 }
 
 uint32_t control_cancel_current_command(Control_t* c, Packet_t* p)
 {
+  Packet_t packet;
+
+  if (c == NULL || p == NULL)
+    return CtrlError_NullArgument;
+
+  packet.Data   = p->Data;
+  packet.Length = p->Length;
+
   // Place p on the control_task->fingerprint_task message queue
-  return CtrlError_Fail;
+  while (xQueueSendToBack(ctrlDataQueue.Rx, &packet, -1) != pdTRUE);
+
+  return CtrlError_Success;
 }
 
 uint32_t control_keep_alive(Control_t* c, Packet_t* p)
 {
+  Packet_t packet;
+
+  if (c == NULL || p == NULL)
+    return CtrlError_NullArgument;
+
   // Construct return keep alive packet
+  packet.Data   = malloc(p->Length);
+  packet.Length = p->Length;
+
+  memcpy(packet.Data, p->Data, p->Length);
+
   // Set ResponsePacket
+  c->ResponsePacket.Data    = packet.Data;
+  c->ResponsePacket.Length  = packet.Length;
+
   // Return success
-  return CtrlError_Fail;
+  return CtrlError_Success;
 }

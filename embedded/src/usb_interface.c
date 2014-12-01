@@ -1,6 +1,7 @@
 #include <stdint.h>
 
 #include "usb_interface.h"
+#include "packet.h"
 
 #include <stm32f429i_discovery.h>
 
@@ -137,6 +138,7 @@ __attribute__((weak)) void USB_OnReceivePacket(uint8_t* buffer, uint32_t length)
   // No-op, weak symbol
 }
 
+// Initialize the USB device and API
 void InitUSB(void)
 {
   USBD_Init(&USBD_Device, &VCP_Desc, 0);
@@ -145,6 +147,7 @@ void InitUSB(void)
                              &USB_Interface);
 
   HAL_NVIC_EnableIRQ(OTG_HS_IRQn);
+  HAL_NVIC_EnableIRQ(OTG_FS_IRQn);
 }
 
 void USB_ReadyToReceive(void)
@@ -163,55 +166,48 @@ void USB_Write_Task(void* arg)
 
   InitUSB();
 
+  // Wait for other tasks to start up
   vTaskDelay(100);
-
-  //BSP_LED_On(LED3);
-
+  // Activate the USB device
   USBD_Start(&USBD_Device);
-
+  // Wait for USB enumeration to complete
   vTaskDelay(500);
 
-  //InitLCD();
-
-  //BSP_LCD_ClearStringLine(0);
-  //BSP_LCD_DisplayStringAtLine(0, (uint8_t*)"USB Write task ready");
-
-  //hcdc = (USBD_CDC_HandleTypeDef*)USBD_Device.pClassData;
-
+  // Wait until we have a device
   while ((hcdc = (USBD_CDC_HandleTypeDef*)USBD_Device.pClassData) == 0)
   {
     __DMB();
     vTaskDelay(100);
   }
 
+  // Now begin the interface loop
   while (1)
   {
-    // while (xQueueReceive(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
     while (xQueueReceive(usbWriteData.Tx, &packet, -1) != pdTRUE);
 
-    while (hcdc->TxState != 0) // I should turn this into an RTOS event variable
-      vTaskDelay(1); // Wait 1 ms for the transmitter to finish
+    // I should turn this into an RTOS event variable
+    while (hcdc->TxState != 0)
+      // Wait 1 ms for the transmitter to finish
+      vTaskDelay(1);
 
-    //BSP_LED_Toggle(LED3);
-
+    // Decompose the packet in USB transmission units
     offset = 0;
-
     while (offset < packet.Length)
     {
+      // Calculate the next transmission unit size, =min(MTU, remaining data)
       len = egb_min(CDC_DATA_FS_MAX_PACKET_SIZE, packet.Length - offset);
+      // Copy the data to the Tx buffer
       memcpy(buffer, &(packet.Data[offset]), len);
       offset += len;
-
+      // Send via USB
       USBD_CDC_SetTxBuffer(&USBD_Device, buffer, len);
       USBD_CDC_TransmitPacket(&USBD_Device);
 
+      // Wait for the transmission to complete
       while (hcdc->TxState != 0)
         vTaskDelay(1);
     }
-
-    //BSP_LCD_ClearStringLine(1);
-    //BSP_LCD_DisplayStringAtLine(1, packet.Data);
-
-    free(packet.Data);
+    // Clean up the outbound packet
+    packet_free(&packet);
   }
 }

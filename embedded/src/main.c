@@ -7,9 +7,9 @@
 #include "common.h"
 
 #include "usb_interface.h"
-#include "keypad.h"
+#include "Keypad.h"
 #include "fingerprint_reader.h"
-#include "control.h"
+#include "Control.h"
 
 #define TASK_STACK_DEPTH  512
 #define FP_TASK_PRIO      5
@@ -17,7 +17,7 @@
 #define CTRL_TASK_PRIO    3
 #define KP_TASK_PRIO      2
 
-USBD_HandleTypeDef USBD_Device;
+//USBD_HandleTypeDef USBD_Device;
 
 void InitClocks(void);
 void InitUSB(void);
@@ -146,11 +146,10 @@ void InitLCD()
 
 void Control_Task(void* arg)
 {
-  Packet_t packet;
+  Packet_t packet, resp;
   UNUSED_ARG(arg);
-  Packet_t p;
 
-  //BSP_LED_On(LED4);
+  control_init(&ctrlState);
 
   while (1)
   {
@@ -158,22 +157,29 @@ void Control_Task(void* arg)
     while (xQueueReceive(usbWriteData.Rx, &packet, 50) != pdTRUE)
       USB_ReadyToReceive();
 
-    p.Data = packet.Data;
-    p.Length = packet.Length;
+    //! @todo Reconstruct fractured packets, as needed
 
-    if (packet_validate(&p) == 0)
+    if (control_should_handle_packet(&ctrlState, &packet) == CtrlError_Success)
     {
-      // while (xQueueSendToBack(usbWriteData.TransmitQueue, &packet, -1) != pdTRUE);
-      while (xQueueSendToBack(usbWriteData.Tx, &packet, -1) != pdTRUE);
+      if (control_handle_packet(&ctrlState, &packet) == CtrlError_Success)
+      {
+        // Check if a response packet is expected
+        if (control_is_packet_ready(&ctrlState, &packet) != CtrlError_NotReady)
+        {
+
+          while (control_is_packet_ready(&ctrlState, &packet) != CtrlError_Yes)
+          {
+            vTaskDelay(5);
+          }
+
+          control_get_resp_packet(&ctrlState, &resp);
+
+          while (xQueueSendToBack(usbWriteData.Tx, &resp, -1) != pdTRUE);
+        }
+      }
     }
-    else
-    {
-      p.Data = NULL;
-      p.Length = 0;
-      free(packet.Data);
-      packet.Data = NULL;
-      packet.Length = 0;
-    }
+
+    packet_free(&packet);
   }
 }
 
@@ -202,8 +208,8 @@ void SysTick_Handler(void)
 
 void _exit(int status)
 {
-    (void)(status);
-    NVIC_SystemReset();
+  UNUSED_ARG(status);
+  NVIC_SystemReset();
 
-    while (1);
+  while (1);
 }

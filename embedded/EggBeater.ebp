@@ -191,6 +191,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="inc\Control.h" />
+		<Unit filename="inc\GUI_Button.h" />
 		<Unit filename="inc\Keypad.h" />
 		<Unit filename="inc\Packet.h" />
 		<Unit filename="inc\fingerprint_reader.h" />
@@ -200,6 +201,9 @@
 		<Unit filename="inc\usbd_desc.h" />
 		<Unit filename="readme.txt" />
 		<Unit filename="src\Control.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\GUI_Button.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\Keypad.c">

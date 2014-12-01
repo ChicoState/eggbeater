@@ -536,8 +536,9 @@ uint32_t GT511C1R_VerifyAny(GT511C1R_Device_t* device)
 
   if (ret == GT511C1R_ErrorCode_Success)
   {
-    if (ackPacket.CommandCode == GT511C1R_Command_NotAck)
-      return ackPacket.Parameter;
+    return ackPacket.Parameter;
+    //if (ackPacket.CommandCode == GT511C1R_Command_NotAck)
+    //  return ackPacket.Parameter;
   }
 
   return ret;

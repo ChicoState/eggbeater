@@ -10,8 +10,8 @@ extern "C" {
 
 typedef struct Control_t
 {
-  Packet_t* CurrentPacket;
-  Packet_t* ResponsePacket;
+  Packet_t CurrentPacket;
+  Packet_t ResponsePacket;
 } Control_t;
 
 typedef enum CtrlError_t
@@ -27,6 +27,7 @@ typedef enum CtrlError_t
 
 // Fingerprint task to control task message queues
 RTOS_Data_Queue_t ctrlDataQueue;
+Control_t         ctrlState;
 
 //! @section Control flow functions
 //! Initialize the control subsystem
@@ -40,7 +41,7 @@ uint32_t control_handle_packet(Control_t*, Packet_t*);
 uint32_t control_is_packet_ready(Control_t*, Packet_t*);
 //! Get the response packet for the last handled packet
 //! @note This function will clear the current and response packet pointers
-uint32_t control_get_resp_packet(Control_t*, Packet_t**);
+uint32_t control_get_resp_packet(Control_t*, Packet_t*);
 
 //! @section Packet handler functions
 uint32_t control_start_session(Control_t*, Packet_t*);
