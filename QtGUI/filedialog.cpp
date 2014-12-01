@@ -65,8 +65,11 @@ void FileDialog::chooseClicked()
         {
             if(i!=-1)
             {
-                m_selectedFiles.append(this->directory().absolutePath() + "/" + index.data().toString());
-                i--;
+                if(QFileInfo(this->directory().absolutePath()).fileName()!=index.data().toString())
+                {
+                    m_selectedFiles.append(this->directory().absolutePath() + "/" + index.data().toString());
+                    i--;
+                }
             }
             else
             {
