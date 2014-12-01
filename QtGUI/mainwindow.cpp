@@ -16,6 +16,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_authentication_clicked()
 {
+    // If user could get Authentication, go to second window
     SecDialog secdialog;
     secdialog.setModal(true);
     secdialog.exec();
