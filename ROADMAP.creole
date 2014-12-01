@@ -1,14 +1,14 @@
-Eggbeaters: Thumb decrypter devise
-Everything in QTGUI is nessecary generated code: dont try to follow it. AWESOME
-eggbeater / cli / src / Crypto.cpp
-  This would seem to encrypt the password into an encryption key
-eggbeater / cli / src / Discovery.cpp
-  Discovery will look for the fingerprint device
-eggbeater / cli / src / Options.cpp  
-  options records and manages all the command line options
-eggbeater / cli / src / packet.cpp
-  takes in commands and generates a packet
-eggbeater / SerialCom / 
-  This allows them the basics for serial communication to communicate between devises
-eggbeater / design /   
-  has all the concepts and design
+
+EggBeater: Fingerprint based file encryption device
+* Command line interface
+** Header files: cli/include/eggbeater
+** Source files: cli/src
+** Test cases: cli/tests
+* Embedded device
+** Header files: embedded/inc
+** Source files: embedded/src
+** Test cases: embedded/tests
+* Graphical user interface
+** All files: QtGUI
+* Design files
+** design
