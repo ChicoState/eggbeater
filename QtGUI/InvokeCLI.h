@@ -4,7 +4,9 @@
 #include <string>
 #include <vector>
 #include <stdint.h>
+#include <QStringList>
 #include <QProcess>
+#include <QDebug>
 
 namespace EggBeater
 {
@@ -46,16 +48,15 @@ namespace EggBeater
       Encrypt the specified files with the specified cipher mode. Defaults to
       CFB if no cipher mode is passed.
     **/
-    void encryptFiles(const QStringList& files, String cipherMode);
+    void encryptFiles(QObject* curr, QStringList fileNames, QString folderName);
 
     /**
       Decrypt the specified files with the specified cipher mode. Defaults to
       CFB if no cipher mode is passed.
     **/
-    void decryptFiles(const QStringList& files, String cipherMode);
+    void decryptFiles(QObject* curr, QStringList fileNames, QString folderName, QString cipherMode);
 
-    QProcess *process;
-    InvokeCLI* invoke;
+    QProcess* proc;
 
   private:
     uint32_t sessionID;
