@@ -70,3 +70,29 @@ int Control::addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 )
 // For making longer messages such as " 0 ^ 9 ^ C:/programfiles/file.txt ^ 4 ^ 12 ^ 4 ^ 12 "
 // I think we should make an additional unique addMsg function that takes the specific arguments and formats them.
 // Then does the same functionality as addMsg adding that string to the vector.
+/*
+Data Flags used in output file:
+  ^!error
+  ^!fatal
+        File Contents:
+          --start_session (decimal)
+          --refresh_session (1/0)
+          --encrypt -running status 
+                        (everyline)
+                          # overall(files done), # total, current(path, blocks done, blocks total), overall(blocks done, blocks total)
+          --decrypt -running status 
+                        (everyline)
+                          # overall(files done), # total, current(path, blocks done, blocks total), overall(blocks done, blocks total)
+          --discovery (1/0)
+          --Close_session (done)
+EX file-encrypt:   0 ^ 9 ^ C:/programfiles/file.txt ^ 4 ^ 12 ^ 4 ^ 12
+EX file-error:   ^!error ----------------
+EX file-close:   ^!done
+  
+
+*/
+
+
+
+
+
