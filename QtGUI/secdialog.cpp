@@ -1,6 +1,7 @@
 #include "secdialog.h"
 #include "ui_secdialog.h"
 #include <QTextStream>
+#include <QProgressDialog>
 #include <iterator>
 
 SecDialog::SecDialog(QWidget *parent) :
@@ -15,6 +16,12 @@ SecDialog::SecDialog(QWidget *parent) :
     countDown->setSingleShot(false);    //Multipul shot. This means that the signal timeout will be signed each second
     connect(countDown, SIGNAL(timeout()), this, SLOT(clock_time()));  //Connect the timeout signal to my slot timeOut
     countDown->start(); //Start the timer
+
+    pd = new QProgressDialog("Encrypting File(s)...", "Cancel", 0, 100);
+    connect(pd, SIGNAL(canceled()), this, SLOT(cancel()));
+    t = new QTimer(this);
+    connect(t, SIGNAL(timeout()), this, SLOT(perform()));
+    t->start(0);
 }
 
 SecDialog::~SecDialog()
@@ -194,124 +201,7 @@ void SecDialog::on_encrypt_clicked()
             }
         }
     }
-
-
-/****Start of progress bar update*******/
-    //testing code for updating the progress bar
-    //need to break into functions and integrate into "InvokeCLI"
-
-        QString temp = QDir::tempPath()+"TempComm.cpp"; //"C:\Users\sam\AppData\Local\TempComm.cpp"; //System::GetTempPath();
-        qint64 min=0;
-        qint64 max=100;
-        qint64 i=0;
-        qint64 progress=0;
-        qint64 curBlock=0;
-        qint64 positionTrack=0;
-        QString curFileCount=0;
-        QString maxCount=0;
-        ui->progressBar->setMaximum(max);
-        ui->progressBar->setMinimum(min);
-        QFile file(temp);
-        if(!file.open(QFile::ReadOnly))
-        {
-            QMessageBox::warning(this, tr("Application"), QDir::currentPath()+file.fileName(), tr("ok")); //tr("Cant find temp file \n")
-            return;
-        }
-        QTextStream in(&file);
-        while(!in.atEnd())
-        {
-            QString line=in.readLine();
-            QString::iterator it= line.begin();
-            QVector<char> curFileName;
-            if(it->isDigit()==true)
-            {
-                int linePos=0;
-                for(it=line.begin(); linePos<line.length(); linePos++)
-                {
-                    if(*it== "\"")
-                    {
-                        i=0;
-                        while(*it+1!="\"")
-                        {
-                            QByteArray temparray = (*it+1).toUtf8();
-                            curFileName[i] = temparray.at(i);
-                            i++;
-                        }
-                    }
-
-
-                    switch(positionTrack)
-                    {
-                        case 0:
-                            i=0;
-                            while(it->isDigit()==true)
-                            {
-                                if(i=0)
-                                    curFileCount=*it;
-                                else
-                                    curFileCount=curFileCount.append(*it);
-                                i++;
-                                it++;
-                            }
-                            positionTrack++;
-                        case 1:
-                            i=0;
-                            if(it->isDigit()==false)
-                                it++;
-                            while(it->isDigit()==true)
-                            {
-                                if(i=0)
-                                {
-                                    maxCount=*it;
-                                }
-                                else
-                                    maxCount=maxCount.append(*it);
-                                i++;
-                                it++;
-                                positionTrack++;
-                            }
-                        case 2:
-                            while(it->isDigit()==true)
-                            {
-                                it++;
-                                positionTrack++;
-                            }
-                        case 3:
-                            while(it->isDigit()==true)
-                            {
-                                it++;
-                                positionTrack++;
-                            }
-                    }
-                }
-            }
-        }
-        file.close();
-        qreal curC=curFileCount.toInt();
-        qreal maxC=maxCount.toInt();
-        progress=(curC/maxC)*100;
-
-        //use message box to test values
-        //QMessageBox::warning(this, sprogress, curFileCount, maxCount); //tr("Cant find temp file \n")
-        QString sprogress=QString::number(progress);
-        ui->progressBar->setValue(progress);
-
-/****End of progressbar update --SamAdams*******/
-
-/*
-    QProgressDialog *dlg = new QProgressDialog(this);
-    qint64 len = src.bytesAvailable();
-    dlg->setRange(0,len);
-    dlg->show();
-
-    char ch;
-    while(!src.atEnd())
-    {
-      src.getChar(&ch);
-      dst.putChar(ch);
-      dlg->setValue(dlg->value()+1);
-      qApp->processEvents();
-    }*/
+   invoke->progressBarPopUp(this);
 }
 
 void SecDialog::on_decrypt_clicked()

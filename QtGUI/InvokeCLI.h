@@ -7,6 +7,12 @@
 #include <QStringList>
 #include <QProcess>
 #include <QDebug>
+#include <QMessageBox>
+#include <QTranslator>
+#include <QTextStream>
+#include <QProgressDialog>
+#include <iterator>
+#include <QDir>
 
 namespace EggBeater
 {
@@ -38,6 +44,9 @@ namespace EggBeater
       Close the current session.
     **/
     void closeSession();
+
+    //function to update the progressbar
+    void progressBarPopUp(QWidget* curr);
 
     /**
       Check for the connected fingerprint device.
