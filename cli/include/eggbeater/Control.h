@@ -18,7 +18,7 @@ namespace EggBeater
   class Control
   {
   public:
-    // Control(OptionsContainer) // or whatever the class is named
+    Control(Options optionsContainer); // or whatever the class is named
     
     bool run(void);
     

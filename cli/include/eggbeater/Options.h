@@ -89,7 +89,7 @@ namespace EggBeater
     static int  ParseCipherMode(Options*, int, int, const char**);
     static int  ParseFileEntry(Options*, int, int, const char**);
     static int  ParseDiscoverDevice(Options*, int, int, const char**);
-  
+    
     String      sessionID;
     CLI_Action  cliAction;
     CipherMode  cipherMode;

@@ -4,7 +4,7 @@
 // then writing status updates to output file.
 
 
-// Control::Control(OptionsContainer) {}  // Constructor
+Control::Control( Options optionsContainer) {}  // Constructor
 
 ~Control::Control()               // Destructor
 {
@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////
 // Function to write vector of strings to file.
 // In main have data to be sent to GUI appended to a vector<string>
-// Once all functions have added their status/ messages
+// Once all functions have added their status/messages
 // Call this function to write them to the output file.
 
 int Control::write(std::vector<std::string> &lines, std::string targetFile)
