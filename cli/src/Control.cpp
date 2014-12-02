@@ -1,4 +1,23 @@
-// Control functions for taking data parsed by "options" and calling other functions, then writing status updates to output file.
+////////////////////////////////////////////////////////////
+// Control functions for taking data parsed by "options" 
+// and calling other functions, 
+// then writing status updates to output file.
+
+
+// Control::Control(OptionsContainer) {}  // Constructor
+
+~Control::Control()               // Destructor
+{
+}
+
+//bool Control::run(void){}
+//String Control::getStatus(){}
+//void Control::newSession(){}
+//void Control::openSession(){}
+//void Control::refreshSession(){}
+//void Control::closeSession()
+//void Control::encryptFiles(){}
+//void Control::decryptFiles(){}
 
 
 ////////////////////////////////////////////////////////////
