@@ -1,0 +1,12 @@
+* Run on Windows
+   We use MFC to developing GUI.
+   Preconditions: install mingw for compiling the program
+   Steps:
+     1. cd windowpopup/
+     2. gcc -o main.exe main.c
+* Run on Linux
+   We use GTK to developing GUI.
+   Preconditions: install gtk lib.
+  Steps:
+     1. cd windowpopup/
+     2. gcc `pkg-config --cflags --libs gtk+-2.0` main.c -o main
