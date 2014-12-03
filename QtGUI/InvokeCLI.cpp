@@ -2,7 +2,7 @@
 
 namespace EggBeater
 {
-  InvokeCLI::InvokeCLI() 
+  InvokeCLI::InvokeCLI()
   : sessionID(0)
   {
   }
@@ -192,6 +192,7 @@ namespace EggBeater
         qDebug() << "Success:\n" << proc->readAll();
         qDebug("Done!\n");
     }
+    proc->close();
   }
 
   void InvokeCLI::decryptFiles(QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc)
@@ -217,5 +218,6 @@ namespace EggBeater
         qDebug() << "Success:\n" << proc->readAll();
         qDebug("Done!\n");
     }
+    proc->close();
   }
 }
