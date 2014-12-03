@@ -31,13 +31,6 @@ typedef struct PacketHeader_t
               Data0;
 } PacketHeader_t;
 
-/*
-typedef struct Packet_t
-{
-  uint8_t*  Data;
-  uint32_t  Length;
-} Packet_t; // */
-
 typedef enum PacketError_t
 {
   PacketError_NullArgument  = 0x8001,

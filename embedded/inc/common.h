@@ -27,18 +27,21 @@
 extern "C" {
 #endif
 
+// Buffer, length pair used to pass transmission packets between modules
 typedef struct Packet_t
 {
   uint8_t* Data;
   uint32_t Length;
 } Packet_t;
 
+// Pair of message queues to synchronize passing of packets between modules
 typedef struct RTOS_Data_Queue_t
 {
   QueueHandle_t Tx;
   QueueHandle_t Rx;
 } RTOS_Data_Queue_t;
 
+// Initialize the LCD and touch screen
 void InitLCD(void);
 
 #ifdef __cplusplus

@@ -16,26 +16,12 @@ extern "C" {
 
 RTOS_Data_Queue_t usbWriteData;
 
-/*
-typedef struct USB_Packet
-{
-  uint8_t* Data;
-  uint32_t Length;
-} USB_Packet;
-
-typedef struct USB_Write_Data
-{
-  QueueHandle_t TransmitQueue;
-  QueueHandle_t ReceiveQueue;
-} USB_Write_Data;
-
-USB_Write_Data usbWriteData;
-// */
-
 void InitUSB(void);
 void USB_ReadyToReceive(void);
 
 // User callbacks
+// Called when a packet is received via USB
+// The buffer should be copied from, as its contents will change
 void USB_OnReceivePacket(uint8_t* buffer, uint32_t length);
 
 // RTOS task entry point

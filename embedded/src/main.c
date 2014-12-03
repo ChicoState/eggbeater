@@ -17,18 +17,12 @@
 #define CTRL_TASK_PRIO    3
 #define KP_TASK_PRIO      2
 
-//USBD_HandleTypeDef USBD_Device;
-
 void InitClocks(void);
 void InitUSB(void);
 void InitLCD(void);
 
 // FreeRTOS task functions
-//void USB_Write_Task(void*);
-//void Echo_Task(void*);
 void Control_Task(void*);
-//void Keypad_Task(void*);
-//void Fingerprint_Task(void*);
 
 void xPortSysTickHandler(void);
 
@@ -38,9 +32,6 @@ int main(void)
 {
   HAL_Init();
   InitClocks();
-
-  //BSP_LED_Init(LED3);
-  //BSP_LED_Init(LED4);
 
   //*
   xTaskCreate(&USB_Write_Task,
@@ -73,10 +64,9 @@ int main(void)
               TASK_STACK_DEPTH,
               NULL,
               FP_TASK_PRIO,
-              NULL); // */
+              NULL);
+  // */
 
-  // usbWriteData.TransmitQueue  = xQueueCreate(16, sizeof(USB_Packet));
-  // usbWriteData.ReceiveQueue   = xQueueCreate(16, sizeof(USB_Packet));
   usbWriteData.Tx  = xQueueCreate(16, sizeof(Packet_t));
   usbWriteData.Rx   = xQueueCreate(16, sizeof(Packet_t));
 
@@ -153,7 +143,6 @@ void Control_Task(void* arg)
 
   while (1)
   {
-    // while (xQueueReceive(usbWriteData.ReceiveQueue, &packet, 50) != pdTRUE)
     while (xQueueReceive(usbWriteData.Rx, &packet, 50) != pdTRUE)
       USB_ReadyToReceive();
 
@@ -195,7 +184,6 @@ void USB_OnReceivePacket(uint8_t* buffer, uint32_t length)
 
   OTG_ShouldYield = 0;
 
-  // xQueueSendToBackFromISR(usbWriteData.ReceiveQueue, &packet, &OTG_ShouldYield);
   xQueueSendToBackFromISR(usbWriteData.Rx, &packet, &OTG_ShouldYield);
 }
 

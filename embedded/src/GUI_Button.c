@@ -23,7 +23,8 @@ uint32_t gui_button_init(GUI_Button_t* b)
 
 uint32_t gui_button_draw(GUI_Button_t* b)
 {
-  uint32_t lastColor = BSP_LCD_GetTextColor();
+  uint32_t lastTextColor = BSP_LCD_GetTextColor();
+  uint32_t lastBackColor = BSP_LCD_GetBackColor();
   uint32_t strLen = 0;
 
   if (b == NULL)
@@ -59,13 +60,15 @@ uint32_t gui_button_draw(GUI_Button_t* b)
   {
     strLen = strlen((char*)b->Text);
 
+    BSP_LCD_SetBackColor(b->FillColor);
     BSP_LCD_SetTextColor(b->TextColor);
 
     //BSP_LCD_DisplayStringAt(b->XPosition + (2 * b->BorderWidth), b->YPosition + (2 * b->BorderWidth), b->Text, CENTER_MODE);
     BSP_LCD_DisplayStringAt(b->XPosition + (b->Width / 2) - (strLen * BSP_LCD_GetFont()->Width / 2), b->YPosition + (b->Height / 2) - (BSP_LCD_GetFont()->Height / 2), b->Text, LEFT_MODE);
   }
 
-  BSP_LCD_SetTextColor(lastColor);
+  BSP_LCD_SetTextColor(lastTextColor);
+  BSP_LCD_SetBackColor(lastBackColor);
 
   return GUI_Button_Error_Success;
 }

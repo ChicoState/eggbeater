@@ -35,8 +35,12 @@ typedef enum GUI_Button_Error_t
   GUI_Button_Error_BadSize      = 0x0802
 } GUI_Button_Error_t;
 
+// Initialize the GUI_Button_t structure with sane values
 uint32_t gui_button_init(GUI_Button_t*);
+// Draw the specified GUI button to the LCD
 uint32_t gui_button_draw(GUI_Button_t*);
+// Check the specified GUI button for an interaction based on the specified
+// touch state
 uint32_t gui_button_check_touch(GUI_Button_t*, TS_StateTypeDef*);
 
 #ifdef __cplusplus

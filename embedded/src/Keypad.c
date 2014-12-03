@@ -1,4 +1,5 @@
 #include "keypad.h"
+#include "GUI_Button.h"
 
 #include <string.h>
 
@@ -158,7 +159,7 @@ char kp_getTouchValue(keypad_t* kp, TS_StateTypeDef* ts)
 
   return 0;
 }
-
+#if 0
 int backspace_init(backspace_t* bs, uint32_t xPos, uint32_t yPos, uint32_t height, uint32_t width, uint32_t borderWidth, uint32_t borderColor, uint32_t fillColor)
 {
   if (bs == NULL)
@@ -286,13 +287,15 @@ int backspace_checktouch(backspace_t* bs, TS_StateTypeDef* ts)
 
   return 0;
 }
+#endif
 
 void Keypad_Task(void* arg)
 {
   uint32_t nextDrawUpdate = 0;
   TickType_t lastWake = 0;
   keypad_t kp;
-  backspace_t bs;
+  //backspace_t bs;
+  GUI_Button_t bs;
   TS_StateTypeDef ts;
 
   UNUSED_ARG(arg);
@@ -300,12 +303,24 @@ void Keypad_Task(void* arg)
   InitLCD();
 
   keypad_init(&kp, &Font16, 20, 230);
-  backspace_init(&bs, 174, 230, 55, 57, 3, LCD_COLOR_BLACK, LCD_COLOR_RED);
+
+  gui_button_init(&bs);
+  bs.XPosition = 174;
+  bs.YPosition = 230;
+  bs.Height = 55;
+  bs.Width = 57;
+  bs.BorderWidth = 3;
+  bs.BorderColor = LCD_COLOR_BLACK;
+  bs.FillColor = LCD_COLOR_RED;
+  bs.TextColor = LCD_COLOR_WHITE;
+  bs.Text = (uint8_t*)"Back";
+
+  //backspace_init(&bs, 174, 230, 55, 57, 3, LCD_COLOR_BLACK, LCD_COLOR_RED);
 
   vTaskDelay(50);
 
   keypad_draw(&kp);
-  backspace_draw(&bs);
+  gui_button_draw(&bs);
 
   while (1)
   {
@@ -314,7 +329,8 @@ void Keypad_Task(void* arg)
 //    backspace_draw(&bs);
     keypad_checktouch(&kp, &ts);
 
-    if (backspace_checktouch(&bs, &ts) > 0)
+    //if (backspace_checktouch(&bs, &ts) > 0)
+    if (gui_button_check_touch(&bs, &ts) == GUI_Button_Error_Yes)
     {
       if (kp.bufIndex > 0)
       {
@@ -326,8 +342,8 @@ void Keypad_Task(void* arg)
 
     if (HAL_GetTick() > nextDrawUpdate)
     {
-      keypad_draw(&kp);
-      backspace_draw(&bs);
+      //keypad_draw(&kp);
+      //gui_button_draw(&bs);
 
       BSP_LCD_ClearStringLine(3);
       BSP_LCD_DisplayStringAtLine(3, (uint8_t*)kp.buffer);
