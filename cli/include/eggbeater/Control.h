@@ -38,7 +38,7 @@ namespace EggBeater
     //! Internal function to decrypt the specified files
     void decryptFiles();
 	
-	int write( std::vector<std::string> &lines, std::string targetFile);
+	  int write( std::vector<std::string> &lines, std::string targetFile);
     int addMsg(std::vector<std::string> &vec, std::string arg1, std::string arg2 = "\0" );
     int addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 );
 	

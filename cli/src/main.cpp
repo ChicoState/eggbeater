@@ -12,6 +12,7 @@ int main(int argc, const char** argv)
   
   Options opt;
   
+  
   // Parse the passed command line args
   if (!opt.parseOptions(argc, argv))
   {
@@ -47,6 +48,7 @@ int main(int argc, const char** argv)
       return 1;
   }
   
+  Control ctrl;                                  // This must be instantiated after options have been parsed.
   switch (opt.getAction())
   {
     default:
@@ -56,6 +58,7 @@ int main(int argc, const char** argv)
     
     case CLI_Action::StartSession:
       std::cout << "start session" << std::endl;
+      ctrl.newSession(opt)                        // Call ctrl function to start new session.
       break;
     
     case CLI_Action::RefreshSession:
@@ -95,13 +98,6 @@ int main(int argc, const char** argv)
   {
     std::cout << "  " << f << std::endl;
   }
-  
-  
-  
-  
-  
-  
-  
   
   
   return 0;

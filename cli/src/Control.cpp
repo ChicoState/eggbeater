@@ -15,7 +15,7 @@ Control::Control( Options optionsContainer) {}  // Constructor
 //void Control::newSession(){}
 //void Control::openSession(){}
 //void Control::refreshSession(){}
-//void Control::closeSession()
+//void Control::closeSession(){}
 //void Control::encryptFiles(){}
 //void Control::decryptFiles(){}
 
