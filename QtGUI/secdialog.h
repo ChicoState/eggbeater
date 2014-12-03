@@ -22,6 +22,8 @@ public:
     ~SecDialog();
 
     QTimer *countDown;
+    QTimer *t;
+    QProgressDialog* pd;
     int startMillionseconds;
 
     QStringList fileNames;
