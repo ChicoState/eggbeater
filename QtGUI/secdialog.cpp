@@ -195,7 +195,8 @@ void SecDialog::on_encrypt_clicked()
                 // When discover is true and checkSession is ture, encrypt files user selected
                 else
                 {
-                    invoke->encryptFiles(this, fileNames, folderName);
+                    QProcess* proc = new QProcess(this);
+                    invoke->encryptFiles(fileNames, folderName, proc);
                     invoke->closeSession();
                 }
             }
@@ -265,7 +266,8 @@ void SecDialog::on_decrypt_clicked()
                 // When discover is true and checkSession is ture, decrypt files user selected
                 else
                 {
-                    invoke->decryptFiles(this, fileNames, folderName, "cfb");
+                    QProcess* proc = new QProcess(this);
+                    invoke->decryptFiles(fileNames, folderName, "cfb", proc);
                     invoke->closeSession();
                 }
             }
