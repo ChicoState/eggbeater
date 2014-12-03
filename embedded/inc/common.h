@@ -34,12 +34,20 @@ typedef struct Packet_t
   uint32_t Length;
 } Packet_t;
 
+#ifndef _EGGBEATER_TESTS_
 // Pair of message queues to synchronize passing of packets between modules
 typedef struct RTOS_Data_Queue_t
 {
   QueueHandle_t Tx;
   QueueHandle_t Rx;
 } RTOS_Data_Queue_t;
+#else
+typedef struct RTOS_Data_Queue_t
+{
+  void* Tx,
+      * Rx;
+} RTOS_Data_Queue_t;
+#endif
 
 // Initialize the LCD and touch screen
 void InitLCD(void);
