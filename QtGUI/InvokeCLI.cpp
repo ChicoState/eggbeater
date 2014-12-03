@@ -3,7 +3,7 @@
 namespace EggBeater
 {
   InvokeCLI::InvokeCLI() 
-  : sessionID(0), proc(NULL)
+  : sessionID(0)
   {
   }
 
@@ -170,12 +170,11 @@ namespace EggBeater
     return true;
   }
 
-  void InvokeCLI::encryptFiles(QObject* curr, QStringList fileNames, QString folderName)
+  void InvokeCLI::encryptFiles(QStringList fileNames, QString folderName, QProcess* proc)
   {
     /*
      * getOpt.exe -a encrypt -f file1 -f file2 -f file3 -s 0056 -fd file4 -o option1 -o option2
      */
-    proc = new QProcess(curr);
     QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOpt/getOpt.exe";
     QStringList attributes;
     attributes << "-a" << "encrypt";
@@ -195,13 +194,12 @@ namespace EggBeater
     }
   }
 
-  void InvokeCLI::decryptFiles(QObject* curr, QStringList fileNames, QString folderName, QString cipherMode)
+  void InvokeCLI::decryptFiles(QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc)
   {
    /*
     * getOpt.exe --decrypt -f file1 -f file2 -f file3 --session-id 70056 -f file4 -o option1 --cipher-mode ofb
     */
 
-    proc = new QProcess(curr);
     QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptv2/getOpt.exe";
     QStringList attributes;
     attributes << "--decrypt";
