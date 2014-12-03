@@ -43,7 +43,6 @@ private slots:
 private:
     Ui::SecDialog *ui;
     FileDialog *file_dlg;
-    EggBeater::InvokeCLI *invoke;
 };
 
 #endif // SECDIALOG_H
