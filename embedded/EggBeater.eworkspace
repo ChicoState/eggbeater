@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<EmBlocks_workspace_file>
+	<Workspace title="EggBeater">
+		<Project filename="deps/STM32F4Cube/STM32F4Cube.ebp" />
+		<Project filename="EggBeater.ebp" active="1" />
+		<Project filename="deps/FreeRTOS/FreeRTOS.ebp" />
+	</Workspace>
+</EmBlocks_workspace_file>

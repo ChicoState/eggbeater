@@ -4,6 +4,8 @@
 #include <gcm.h>
 #include <aes.h>
 #include <modes.h>
+#include <files.h>
+#include <filters.h>
 
 #ifndef EB_DEBUG
 #define EB_DEBUG 0
@@ -126,4 +128,194 @@ namespace EggBeater
     
     return cipherText;
   }
+  
+  Crypto::Crypto() : cipherMode(CipherMode::GCM)
+  {
+  }
+  
+  Crypto::~Crypto()
+  {
+    // Clear the key and IV
+    memset(key.data(), 0, key.size());
+    memset(iv.data(), 0, iv.size());
+  }
+  
+  void Crypto::setCipherMode(CipherMode mode)
+  {
+    this->cipherMode = mode;
+  }
+  
+  void Crypto::setEncryptionKey(const ByteArray& key)
+  {
+    this->key = key;
+  }
+  
+  void Crypto::setInitialVector(const ByteArray& iv)
+  {
+    this->iv = iv;
+  }
+  
+  void Crypto::encryptFile(const String& inputFile, const String& outputFile)
+  {
+    Sink* sink = new CryptoPP::FileSink(outputFile.c_str());
+    std::shared_ptr<CryptoPP::Source> source(new CryptoPP::FileSource(inputFile.c_str(), true));
+  
+    encrypt(source.get(), sink);
+  }
+  
+  void Crypto::decryptFile(const String& inputFile, const String& outputFile)
+  {
+    Sink* sink = new CryptoPP::FileSink(outputFile.c_str());
+    std::shared_ptr<CryptoPP::Source> source(new CryptoPP::FileSource(inputFile.c_str(), true));
+  
+    decrypt(source.get(), sink);
+  }
+  
+  void Crypto::encrypt(CryptoPP::Source* source, CryptoPP::Sink* sink)
+  {
+    MeterFilter meter(sink, true);
+    std::function<void(const ByteArray& key, const ByteArray& iv)> cipherFunction;
+    
+    // Because Crypto++ doesn't fucking take pointers for StreamTransformationFilter
+    switch (this->cipherMode)
+    {
+      case CipherMode::CFB:
+        cipherFunction = [source, &meter](const ByteArray& key, const ByteArray& iv)
+        {
+          CFB_Mode<AES>::Encryption enc;
+          
+          enc.SetKeyWithIV(key.data(), key.size(), iv.data(), iv.size());
+          
+          source->Attach(new StreamTransformationFilter(enc, new Redirector(meter)));
+          
+          source->PumpAll();
+        };
+        break;
+      
+      case CipherMode::OFB:
+        cipherFunction = [source, &meter](const ByteArray& key, const ByteArray& iv)
+        {
+          OFB_Mode<AES>::Encryption enc;
+          
+          enc.SetKeyWithIV(key.data(), key.size(), iv.data(), iv.size());
+          
+          source->Attach(new StreamTransformationFilter(enc, new Redirector(meter)));
+          
+          source->PumpAll();
+        };
+        break;
+      default:
+      case CipherMode::GCM:
+        cipherFunction = [source, &meter](const ByteArray& key, const ByteArray& iv)
+        {
+          GCM<AES>::Encryption enc;
+          
+          enc.SetKeyWithIV(key.data(), key.size(), iv.data(), iv.size());
+          
+          source->Attach(new AuthenticatedEncryptionFilter(enc, new Redirector(meter)));
+          
+          source->PumpAll();
+        };
+        break;
+    }
+    
+    if (!cipherFunction)
+      return;
+    
+    cipherFunction(key, iv);
+  }
+  
+  void Crypto::decrypt(CryptoPP::Source* source, CryptoPP::Sink* sink)
+  {
+    MeterFilter meter(sink, true);
+    std::function<void(const ByteArray& key, const ByteArray& iv)> cipherFunction;
+    
+    // Because Crypto++ doesn't fucking take pointers for StreamTransformationFilter
+    switch (this->cipherMode)
+    {
+      case CipherMode::CFB:
+        cipherFunction = [source, &meter](const ByteArray& key, const ByteArray& iv)
+        {
+          CFB_Mode<AES>::Decryption enc;
+          
+          enc.SetKeyWithIV(key.data(), key.size(), iv.data(), iv.size());
+          
+          source->Attach(new StreamTransformationFilter(enc, new Redirector(meter)));
+          
+          source->PumpAll();
+        };
+        break;
+      
+      case CipherMode::OFB:
+        cipherFunction = [source, &meter](const ByteArray& key, const ByteArray& iv)
+        {
+          OFB_Mode<AES>::Decryption enc;
+          
+          enc.SetKeyWithIV(key.data(), key.size(), iv.data(), iv.size());
+          
+          source->Attach(new StreamTransformationFilter(enc, new Redirector(meter)));
+          
+          source->PumpAll();
+        };
+        break;
+      default:
+      case CipherMode::GCM:
+        cipherFunction = [source, &meter](const ByteArray& key, const ByteArray& iv)
+        {
+          GCM<AES>::Decryption enc;
+          
+          enc.SetKeyWithIV(key.data(), key.size(), iv.data(), iv.size());
+          
+          source->Attach(new AuthenticatedDecryptionFilter(enc, new Redirector(meter)));
+          
+          source->PumpAll();
+        };
+        break;
+    }
+    
+    if (!cipherFunction)
+      return;
+    
+    cipherFunction(key, iv);
+  }
+  
+  #if 0
+  void Crypto::decryptFile(const String& inputFile, const String& outputFile)
+  {
+    CryptoPP::Sink* sink = new FileSink(outputFile);
+  }
+  
+  void Crypto::decrypt(std::shared_ptr<CryptoPP::Source> source, std::shared_ptr<CryptoPP::Sink> sink)
+  {
+    std::shared_ptr<StreamTransformation> decrypt;
+    std::shared_ptr<CryptoPP::Filter> filter;
+    
+    switch (this->cipherMode)
+    {
+      default:
+        decrypt = nullptr;
+        break;
+      
+      case CipherMode::CFB:
+        decrypt = new CryptoPP::CFB_Mode<CryptoPP::AES>::Decryption(sink);
+        break;
+      case CipherMode::OFB:
+        decrypt = new CryptoPP::OFB_Mode<CryptoPP::AES>::Decryption(sink);
+        break;
+      case CipherMode::GCM:
+        decrypt = new CryptoPP::GCM<CryptoPP::AES>::Decryption(sink);
+        break;
+    }
+    
+    if (!decrypt)
+      return;
+    
+    decrypt.SetKeyWithIV(key.data(), key.size(), iv.data(), iv.size());
+    
+    filter = new Filter(decrypt);
+    
+    source.attach(new CryptoPP::Filter(decrypt));
+  }
+  
+  #endif
 }

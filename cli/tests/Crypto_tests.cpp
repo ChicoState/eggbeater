@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 
 #include <EggBeater/Crypto.h>
-//#include <deps/cryptopp/sha3.h>
 
 using namespace EggBeater;
 

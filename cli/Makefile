@@ -22,6 +22,7 @@ CRYPTO_SOURCES = src/Crypto.o
 ALL_SOURCES    = $(OTHER_SOURCES) $(CRYPTO_SOURCES)
 
 CRYPTO_TESTS = tests/Crypto_tests.crypto.elf     \
+               tests/CryptoPP_tests.crypto.elf   \
                tests/Crypto_CipherMode_tests.crypto.elf
 OTHER_TESTS  = tests/Discovery_test_present.elf  \
                tests/Discovery_test_absent.elf   \

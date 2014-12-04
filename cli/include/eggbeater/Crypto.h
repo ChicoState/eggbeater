@@ -6,10 +6,11 @@
 
 #include <eggbeater/Common.h>
 
+#include <filters.h>
+#include <files.h>
+
 namespace EggBeater
 {
-  //typedef std::vector<uint8_t> ByteArray;
-  
   enum class CipherMode : uint32_t
   {
     None  = 0,
@@ -33,6 +34,29 @@ namespace EggBeater
   ByteArray delta(const ByteArray& phase1Password);
   ByteArray gamma(const ByteArray& phase2Passcode);
   ByteArray tau(const ByteArray& phase2Key, const ByteArray& plainText, CipherMode = CipherMode::CFB, const ByteArray& = {0});
+  
+  class Crypto
+  {
+  public:
+    Crypto();
+    ~Crypto();
+    
+    void setCipherMode(CipherMode);
+    void setEncryptionKey(const ByteArray&);
+    void setInitialVector(const ByteArray&);
+    
+    void encryptFile(const String&, const String&);
+    void decryptFile(const String&, const String&);
+  protected:
+    // To facilitate testing
+    void encrypt(CryptoPP::Source*, CryptoPP::Sink*);
+    void decrypt(CryptoPP::Source*, CryptoPP::Sink*);
+    //void decrypt(std::shared_ptr<CryptoPP::Source>, std::shared_ptr<CryptoPP::Sink>);
+  
+    CipherMode  cipherMode;
+    ByteArray   iv;
+    ByteArray   key;
+  };
 }
 
 #endif // _EGGBEATER_CRYPTO_H_
