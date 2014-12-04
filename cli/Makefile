@@ -1,6 +1,6 @@
 GTEST_DIR     = deps/gtest-1.7.0
-CRYPTOPP_DIR  = deps/cryptopp562
-#CRYPTOPP_DIR  = D:\cryptopp562
+#CRYPTOPP_DIR  = deps/cryptopp562
+CRYPTOPP_DIR  = /cygdrive/d/cryptopp562
 
 CXXFLAGS += -O0                      \
             -g                       \
