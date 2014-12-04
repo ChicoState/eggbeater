@@ -436,13 +436,13 @@ void Fingerprint_Task(void* arg)
   gt511_startup();
 
   //*
-  fp_test();
+  //fp_test();
   // */
 
   while (1)
   {
-    BSP_LCD_ClearStringLine(1);
-    BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"Waiting on PC");
+    BSP_LCD_ClearStringLine(2);
+    BSP_LCD_DisplayStringAtLine(2, (uint8_t*)"Waiting on PC");
 
     i = 0;
 
@@ -450,22 +450,22 @@ void Fingerprint_Task(void* arg)
     {
       i += 1;
 
-      BSP_LCD_ClearStringLine(1);
+      BSP_LCD_ClearStringLine(2);
 
       switch (i & 3)
       {
         default:
         case 0:
-          BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"Waiting on PC");
+          BSP_LCD_DisplayStringAtLine(2, (uint8_t*)"Waiting on PC");
           break;
         case 1:
-          BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"Waiting on PC.");
+          BSP_LCD_DisplayStringAtLine(2, (uint8_t*)"Waiting on PC.");
           break;
         case 2:
-          BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"Waiting on PC..");
+          BSP_LCD_DisplayStringAtLine(2, (uint8_t*)"Waiting on PC..");
           break;
         case 3:
-          BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"Waiting on PC...");
+          BSP_LCD_DisplayStringAtLine(2, (uint8_t*)"Waiting on PC...");
           break;
       }
     }
