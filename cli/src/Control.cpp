@@ -11,8 +11,15 @@ Control::Control( Options optionsContainer) {}  // Constructor
 }
 
 //bool Control::run(void){}
-//String Control::getStatus(){}
-//void Control::newSession(){}
+//String Control::getStatus(){
+  addMsg(fileVec, "Status=",opt.getCurrentStatus();
+  Control::writeVec(fileVec, tmpFile);
+}
+void Control::newSession(Options opt){
+  addMsg(fileVec, "SessionID=", opt.getSessionID() );
+  addMsg(fileVec, "Action=", opt.getAction() );
+  Control::writeVec(fileVec, tmpFile);
+}
 //void Control::openSession(){}
 //void Control::refreshSession(){}
 //void Control::closeSession(){}
@@ -26,7 +33,7 @@ Control::Control( Options optionsContainer) {}  // Constructor
 // Once all functions have added their status/messages
 // Call this function to write them to the output file.
 
-int Control::write(std::vector<std::string> &lines, std::string targetFile)
+int Control::writeVec(std::vector<std::string> &lines, std::string targetFile)
 {
     std::ofstream outfile;
     int i=0;
