@@ -14,6 +14,8 @@
 #include <iterator>
 #include <QDir>
 
+#include "secdialog.h"
+
 namespace EggBeater
 {
   typedef std::string String;
@@ -46,7 +48,7 @@ namespace EggBeater
     void closeSession();
 
     //function to update the progressbar
-    void progressBarPopUp(QWidget* curr);
+    void progressBarPopUp(SecDialog* curr);
 
     /**
       Check for the connected fingerprint device.

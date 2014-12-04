@@ -1,5 +1,7 @@
 #include "InvokeCLI.h"
 
+using namespace EggBeater;
+
 namespace EggBeater
 {
   InvokeCLI::InvokeCLI()
@@ -35,21 +37,22 @@ namespace EggBeater
     //process->close();
   }
 
-  void InvokeCLI::progressBarPopUp(QWidget* curr)
+  void InvokeCLI::progressBarPopUp(SecDialog* curr)
   {
       /****Start of progress bar update*******/
       QString temp = QDir::tempPath()+"/TempComm.cpp"; //"C:\Users\sam\AppData\Local\TempComm.cpp"; //System::GetTempPath();
-     // qint64 min=0;
-     // qint64 max=100;
+      // qint64 min=0;
+      // qint64 max=100;
       qint64 i=0;
       qint64 progresscount=0;
-     // qint64 curBlock=0;
+      // qint64 curBlock=0;
       qint64 positionTrack=0;
       QString curFileCount=0;
       QString maxCount=0;
-      //ui->progressBar->setMaximum(max);
-      //ui->progressBar->setMinimum(min);
       QFile file(temp);
+
+      // The file stuff should go in its own function/class
+
       if(!file.open(QFile::ReadOnly))
       {
           QMessageBox::warning(curr, "Application", file.fileName(), "ok"); //"Cant find temp file \n"
@@ -123,23 +126,22 @@ namespace EggBeater
           }
       }
       file.close();
-      qreal curC=curFileCount.toInt();
-      qreal maxC=maxCount.toInt();
+      int curC=curFileCount.toInt();
+      int maxC=maxCount.toInt();
       progresscount=100*curC/maxC;
+      curr->pd->setValue(progresscount);
 
       //use message box to test values
       //QMessageBox::warning(this, progress, curFileCount, maxCount); //tr("Cant find temp file \n")
-      int numTasks = 100000;
-      QProgressDialog progress("Encrypting File(s)...", "Cancel Encryption", 0, numTasks, curr);
-      progress.setWindowModality(Qt::WindowModal);
 
-      for (int i = 0; i < numTasks; i++) {
-          progress.setValue(i);
+      /*
+      for (int i = 0; i < 100; i++) {
+          progress->setValue(i);
 
-          if (progress.wasCanceled())
+          if (progress->wasCanceled())
               break;
-      }
-      progress.setValue(numTasks);
+      } // */
+      //progress->setValue(numTasks);
       //QString sprogress=QString::number(progresscount);
       //QProgressDialog progress("Encrypting File(s)...", "Cancel", 0, 100);
       //ui->progressBar->setValue(progress);

@@ -7,7 +7,12 @@
 #include <QProgressDialog>
 #include <QMessageBox>
 #include "filedialog.h"
-#include "InvokeCLI.h"
+//#include "InvokeCLI.h"
+
+namespace EggBeater
+{
+    class InvokeCLI;
+}
 
 namespace Ui {
 class SecDialog;
@@ -39,6 +44,8 @@ private slots:
     void on_choose_output_folder_clicked();
     void on_encrypt_clicked();
     void on_decrypt_clicked();
+    void cancel();
+    void perform();
 
 private:
     Ui::SecDialog *ui;

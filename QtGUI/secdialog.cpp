@@ -3,6 +3,7 @@
 #include <QTextStream>
 #include <QProgressDialog>
 #include <iterator>
+#include "InvokeCLI.h"
 
 SecDialog::SecDialog(QWidget *parent) :
     QDialog(parent),
@@ -18,10 +19,11 @@ SecDialog::SecDialog(QWidget *parent) :
     countDown->start(); //Start the timer
 
     pd = new QProgressDialog("Encrypting File(s)...", "Cancel", 0, 100);
+    pd->setWindowModality(Qt::ApplicationModal);
     connect(pd, SIGNAL(canceled()), this, SLOT(cancel()));
     t = new QTimer(this);
     connect(t, SIGNAL(timeout()), this, SLOT(perform()));
-    t->start(0);
+    //t->start(0);
 }
 
 SecDialog::~SecDialog()
@@ -196,13 +198,15 @@ void SecDialog::on_encrypt_clicked()
                 else
                 {
                     QProcess* proc = new QProcess(this);
-                    invoke->encryptFiles(fileNames, folderName, proc);
-                    invoke->closeSession();
+                    //invoke->encryptFiles(fileNames, folderName, proc);
+                    //invoke->closeSession();
+                    t->start();
                 }
             }
         }
     }
-   invoke->progressBarPopUp(this);
+    //pd->showNormal();
+   //invoke->progressBarPopUp(this);
 }
 
 void SecDialog::on_decrypt_clicked()
@@ -267,10 +271,22 @@ void SecDialog::on_decrypt_clicked()
                 else
                 {
                     QProcess* proc = new QProcess(this);
-                    invoke->decryptFiles(fileNames, folderName, "cfb", proc);
-                    invoke->closeSession();
+                    //invoke->decryptFiles(fileNames, folderName, "cfb", proc);
+                    //invoke->closeSession();
+                    t->start();
                 }
             }
         }
     }
 }
+
+void SecDialog::cancel()
+{
+    t->stop();
+}
+
+void SecDialog::perform()
+{
+    invoke->progressBarPopUp(this);
+}
+
