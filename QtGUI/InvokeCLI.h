@@ -57,15 +57,13 @@ namespace EggBeater
       Encrypt the specified files with the specified cipher mode. Defaults to
       CFB if no cipher mode is passed.
     **/
-    void encryptFiles(QObject* curr, QStringList fileNames, QString folderName);
+    void encryptFiles(QStringList fileNames, QString folderName, QProcess* proc);
 
     /**
       Decrypt the specified files with the specified cipher mode. Defaults to
       CFB if no cipher mode is passed.
     **/
-    void decryptFiles(QObject* curr, QStringList fileNames, QString folderName, QString cipherMode);
-
-    QProcess* proc;
+    void decryptFiles(QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc);
 
   private:
     uint32_t sessionID;
