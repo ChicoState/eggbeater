@@ -41,7 +41,7 @@ namespace EggBeater
 	  int write( std::vector<std::string> &lines, std::string targetFile);
     int addMsg(std::vector<std::string> &vec, std::string arg1, std::string arg2 = "\0" );
     int addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 );
-	
+	  int addMsg(std::vector<std::string> &vec, int fDone, int total, std::string path, int bDone, int bTotal, int bDoneSum, int bTotalSum );
   };
 }
 
