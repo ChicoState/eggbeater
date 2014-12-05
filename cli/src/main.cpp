@@ -48,7 +48,7 @@ int main(int argc, const char** argv)
       return 1;
   }
   
-  Control ctrl;                                  // This must be instantiated after options have been parsed.
+  Control ctrl(opt);                                  // This must be instantiated after options have been parsed.
   switch (opt.getAction())
   {
     default:
@@ -58,7 +58,6 @@ int main(int argc, const char** argv)
     
     case CLI_Action::StartSession:
       std::cout << "start session" << std::endl;
-      ctrl.newSession(opt)                        // Call ctrl function to start new session.
       break;
     
     case CLI_Action::RefreshSession:
@@ -98,7 +97,8 @@ int main(int argc, const char** argv)
   {
     std::cout << "  " << f << std::endl;
   }
-  
+  std::cout << "Calling ctrl.run()" << std::endl;
+  ctrl.run();
   
   return 0;
 }

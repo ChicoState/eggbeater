@@ -4,20 +4,69 @@
 // then writing status updates to output file.
 
 
-Control::Control( Options optionsContainer) {}  // Constructor
+Control::Control( Options opt) {
+// copy all data into opt so that Control object and member functions have access to it.
+    sessionID = opt.getSessionID();
+    cliAction = opt.getAction();
+    cipherMode = opt.getCipherMode();
+    currentStatus = opt.getStatus();
+    errorList = opt.getErrors();
+    fileList = opt.getFileList();
+    
+}  // Constructor
 
 ~Control::Control()               // Destructor
 {
 }
 
-//bool Control::run(void){}
-//String Control::getStatus(){
+bool Control::run(void){
+// case statement for what action to do.
+// Also do error checking on opt data?
+  switch ( cliAction )
+  {
+    default:
+    case CLI_Action::None:
+      return False;
+      break;
+    
+    case CLI_Action::StartSession:
+      // call start session
+      newSession();
+      break;
+    
+    case CLI_Action::RefreshSession:
+      // call refresh session
+      refreshSession();
+      break;
+    
+    case CLI_Action::CloseSession:
+      //call close session
+      closeSession();
+      break;
+    
+    case CLI_Action::Encrypt:
+      //call encrypt
+      encryptFiles();
+      break;
+    
+    case CLI_Action::Decrypt:
+      // call decrypt
+      decryptFiles();
+      break;
+    
+    case CLI_Action::DiscoverDevice:
+      // call discover
+      break;
+  }// end case.
+
+}// end run.
+String Control::getStatus(){
   addMsg(fileVec, "Status=",opt.getCurrentStatus();
   Control::writeVec(fileVec, tmpFile);
 }
-void Control::newSession(Options opt){
-  addMsg(fileVec, "SessionID=", opt.getSessionID() );
-  addMsg(fileVec, "Action=", opt.getAction() );
+void Control::newSession(){
+  addMsg(fileVec, "SessionID=", sessionID );
+  addMsg(fileVec, "Action=", cliAction );
   Control::writeVec(fileVec, tmpFile);
 }
 //void Control::openSession(){}
@@ -57,7 +106,7 @@ int Control::writeVec(std::vector<std::string> &lines, std::string targetFile)
 ////////////////////////////////////////////////////////////
 // Function to build string from pair of strings and append
 // that string into vector<string>
-// example call coudl be addMsg("^!error ", errorMessage[i] );
+// example call could be addMsg("^!error ", errorMessage[i] );
 // or addMsg("^!error ", "No session ID given!" );
 
 int Control::addMsg(std::vector<std::string> &vec, std::string arg1, std::string arg2 )
@@ -84,7 +133,7 @@ int Control::addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 )
 
 
 /*
-// Notes on this stuff from meeting..
+// Notes on file format from meeting..
 Data Flags used in output file:
   ^!error
   ^!fatal

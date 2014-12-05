@@ -18,16 +18,24 @@ namespace EggBeater
   class Control
   {
   public:
-    Control(Options optionsContainer); // or whatever the class is named
+    Control(Options opt); // or whatever the class is named
     
     bool run(void);
     
     String getStatus();
   private:
-    vector<string> fileVec;
   
+    vector<string> fileVec;
+    String      sessionID;
+    CLI_Action  cliAction;
+    CipherMode  cipherMode;
+    Status_t    currentStatus;
+    ErrorList   errorList;
+    StringList  fileList;
+    
+    
     //! Internal function to start a new session
-    void newSession(Options opt);
+    void newSession();
     //! Internal function to open a session with an existing fingerprint
     void openSession();
     //! Internal function to refresh the session timer
