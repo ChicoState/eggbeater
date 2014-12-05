@@ -1,19 +1,3 @@
-// g++ -DDEBUG=1 -g3 -O0 -Wall -Wextra v4_CLI_fileEncrypt.cpp -o crypt -lcryptopp
-// ./crypt -dec OFB tacos.jpg.egg 00000000000000sam000000000000001
- 
-
-/**
-    All Modes currently working.........
-
-    To Do's
-    - how to recive and sink the key.
-    - remove unnescarry crap
-    - document / comment
-    - take everything out of main
-    - error checking
-    - delete the original file / encrypted file on action?
-    - hash the key?
-**/
 #include <iostream>
 #include <string>
 #include <vector>
@@ -91,38 +75,15 @@ using CryptoPP::ASN1::secp521r1;
 #include <cryptopp/modes.h>
 using CryptoPP::OFB_Mode;
 using CryptoPP::CFB_Mode;
-
 using CryptoPP::Exception;
 
+#include "enc_functions.h"
+
 using namespace std;
- 
- 
-void encrypt_file(string, string, string, string);
-void decrypt_file(string, string, string, string);
 
-byte key[AES::MAX_KEYLENGTH];
-byte iv[ AES::BLOCKSIZE ];
-
-int main(int argc, char* argv[])
+void enc_functions::encrypt_file(string encMode, string oFile, string pwordKey, string ivec)
 {
-    string action = argv[1];
 
-    if(argc == 6 && action == "-enc")
-        encrypt_file(argv[2], argv[3], argv[4], argv[5]); //argv3 is the provided key
-
-    else if(argc == 6 && action == "-dec")
-        decrypt_file(argv[2], argv[3], argv[4], argv[5]);
-
-    else
-        cout<<"shit"<<endl;
-
-    return 0;  
-
-}
-void encrypt_file(string encMode, string oFile, string pwordKey, string ivec)
-{
-    // SecByteBlock key(AES::MAX_KEYLENGTH);
-    // byte iv[ AES::BLOCKSIZE ];
 
     for (int i = 0; i < pwordKey.size(); i++)
         key[i] = pwordKey[i];
@@ -174,15 +135,13 @@ void encrypt_file(string encMode, string oFile, string pwordKey, string ivec)
     }
 }
 
-void decrypt_file(string decMode, string efile, string pwordKey2, string ivec)  //keep hash
+void enc_functions::decrypt_file(string decMode, string efile, string pwordKey2, string ivec)  //keep hash
 {   
 
     string efilename = efile;
     efile.erase(efile.end()-4, efile.end());
     string rfilename = efile;
 
-    //SecByteBlock key(AES::MAX_KEYLENGTH);
-    //byte iv[ AES::BLOCKSIZE ];
     for (int i = 0; i < pwordKey2.size(); i++)
         key[i] = pwordKey2[i];
     for (int i = 0; i < ivec.size(); i++)
