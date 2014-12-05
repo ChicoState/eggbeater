@@ -56,7 +56,7 @@ void SecDialog::on_refresh_button_clicked()
 {
     int min = 0;
     int sec = 0;
-    
+
     // Refresh time to 10 mins
     startMillionseconds = 1000 * 60 *10;
     min = (startMillionseconds%(1000*60*60))/(1000*60);
@@ -110,7 +110,7 @@ void SecDialog::on_choose_input_files_clicked()
             }
         }
     }
-    
+
     // When user close the dialog without selecting files, reset
     else
     {
@@ -171,7 +171,7 @@ void SecDialog::on_encrypt_clicked()
                                      .arg(file.errorString())
                                      );
             }
-            
+
             else
             {
                 bool discover = invoke->discoverDevice();
@@ -198,7 +198,7 @@ void SecDialog::on_encrypt_clicked()
                 else
                 {
                     QProcess* proc = new QProcess(this);
-                    //invoke->encryptFiles(fileNames, folderName, proc);
+                    //invoke->encryptFiles(fileNames, folderName, "cfb", proc);
                     //invoke->closeSession();
                     t->start();
                 }
@@ -249,7 +249,7 @@ void SecDialog::on_decrypt_clicked()
             {
                 bool discover = invoke->discoverDevice();
                 bool checkSession = invoke->sessionIsOpen();
-                
+
                 //Check session is open and divice is discovered
                 if(discover==false && checkSession==false)
                 {
@@ -266,7 +266,7 @@ void SecDialog::on_decrypt_clicked()
                     QMessageBox::warning(this, tr("The title"), tr("Device is not connected!"));
                     return;
                 }
-                
+
                 // When discover is true and checkSession is ture, decrypt files user selected
                 else
                 {

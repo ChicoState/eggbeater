@@ -175,17 +175,18 @@ namespace EggBeater
   void InvokeCLI::encryptFiles(QStringList fileNames, QString folderName, QProcess* proc)
   {
     /*
-     * getOpt.exe -a encrypt -f file1 -f file2 -f file3 -s 0056 -fd file4 -o option1 -o option2
-     */
-    QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOpt/getOpt.exe";
+    * getOpt.exe --encrypt -f file1 -f file2 -f file3 --session-id 70056 -fd someDrive/someFolder1/ -o option1 --cipher-mode ofb
+    */
+    QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
     QStringList attributes;
-    attributes << "-a" << "encrypt";
+    attributes << "--encrypt";
     for(int i=0; i<fileNames.size(); i++)
         attributes << "-f" << fileNames.at(i);
     attributes << "--session-id" << "0056";
     attributes << "-fd" << folderName;
-    attributes << "-o" << "option1";
-    attributes  << "-o" << "option2";
+    attributes  << "--cipher-mode" << cipherMode;
+    //attributes << "-o" << "option1";
+    //attributes  << "-o" << "option2";
     proc->start(program, attributes);
     if(!proc->waitForFinished())
         qDebug() << "Fail:\n"<< proc->errorString();
@@ -200,7 +201,7 @@ namespace EggBeater
   void InvokeCLI::decryptFiles(QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc)
   {
    /*
-    * getOpt.exe --decrypt -f file1 -f file2 -f file3 --session-id 70056 -f file4 -o option1 --cipher-mode ofb
+    * getOpt.exe --decrypt -f file1 -f file2 -f file3 --session-id 70056 -fd someDrive/someFolder1/ -o option1 --cipher-mode ofb
     */
 
     QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptv2/getOpt.exe";
@@ -209,8 +210,8 @@ namespace EggBeater
     for(int i=0; i<fileNames.size(); i++)
         attributes << "-f" << fileNames.at(i);
     attributes << "--session-id" << "70056";
-    attributes << "-f" << folderName;
-    attributes << "-o" << "option1";
+    attributes << "-fd" << folderName;
+    //attributes << "-o" << "option1";
     attributes  << "--cipher-mode" << cipherMode;
     proc->start(program, attributes);
     if(!proc->waitForFinished())
