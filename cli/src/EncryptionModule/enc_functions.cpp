@@ -81,15 +81,12 @@ using CryptoPP::Exception;
 
 using namespace std;
 
-void enc_functions::encrypt_file(string encMode, string oFile, string pwordKey, string ivec)
+void enc_functions::encrypt_file(string encMode, string oFile, vector<uint8_t> pwordKey, vector<uint8_t> ivec)
 {
 
+   copy(pwordKey.begin(), pwordKey.end()-1, key);
+   copy(ivec.begin(), ivec.end()-1, iv);
 
-    for (int i = 0; i < pwordKey.size(); i++)
-        key[i] = pwordKey[i];
-    for (int i = 0; i < ivec.size(); i++)
-        iv[i] = ivec[i];
-   
     string ofilename = oFile;
     string outFile = oFile + ".egg";
     string efilename = outFile;   
@@ -135,17 +132,15 @@ void enc_functions::encrypt_file(string encMode, string oFile, string pwordKey, 
     }
 }
 
-void enc_functions::decrypt_file(string decMode, string efile, string pwordKey2, string ivec)  //keep hash
+void enc_functions::decrypt_file(string decMode, string efile, vector<uint8_t> pwordKey, vector<uint8_t> ivec)  //keep hash
 {   
 
     string efilename = efile;
     efile.erase(efile.end()-4, efile.end());
     string rfilename = efile;
 
-    for (int i = 0; i < pwordKey2.size(); i++)
-        key[i] = pwordKey2[i];
-    for (int i = 0; i < ivec.size(); i++)
-        iv[i] = ivec[i];
+    copy(pwordKey.begin(), pwordKey.end()-1, key);
+    copy(ivec.begin(), ivec.end()-1, iv);
 
     if(decMode == "OFB")
     {

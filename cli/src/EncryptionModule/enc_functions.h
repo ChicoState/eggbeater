@@ -9,8 +9,8 @@
 class enc_functions
 {
 	public:
-		void encrypt_file(std::string, std::string, std::string, std::string);
-		void decrypt_file(std::string, std::string, std::string, std::string);
+		void encrypt_file(std::string, std::string, std::vector<uint8_t>, std::vector<uint8_t>);
+		void decrypt_file(std::string, std::string, std::vector<uint8_t>, std::vector<uint8_t>);
 
 	private:
 		
