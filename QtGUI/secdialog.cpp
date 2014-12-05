@@ -160,49 +160,33 @@ void SecDialog::on_encrypt_clicked()
     // If Both of file(s) and destinatind folder are not empty, go into it
     else
     {
-        for(int i=0; i<fileNames.size(); i++)
+        bool discover = invoke->discoverDevice();
+        bool checkSession = invoke->sessionIsOpen();
+
+        // Check session is open and divice is discovered
+        if(discover==false && checkSession==false)
         {
-            QFile file(fileNames.at(i));
-            if(!file.open(QFile::ReadOnly|QFile::Text))
-            {
-                QMessageBox::warning(this, tr("Application"),
-                                     tr("Cannot read file %1:\n%2")
-                                     .arg(fileNames.at(i))
-                                     .arg(file.errorString())
-                                     );
-            }
+            QMessageBox::warning(this, tr("The title"), tr("Session is not opened\nand\nDevice is not connected!"));
+            return;
+        }
+        else if(discover==true && checkSession==false)
+        {
+            QMessageBox::warning(this, tr("The title"), tr("Session is not opened!"));
+            return;
+        }
+        else if(discover==false && checkSession==true)
+        {
+            QMessageBox::warning(this, tr("The title"), tr("Device is not connected!"));
+            return;
+        }
 
-            else
-            {
-                bool discover = invoke->discoverDevice();
-                bool checkSession = invoke->sessionIsOpen();
-
-                // Check session is open and divice is discovered
-                if(discover==false && checkSession==false)
-                {
-                    QMessageBox::warning(this, tr("The title"), tr("Session is not opened\nand\nDevice is not connected!"));
-                    return;
-                }
-                else if(discover==true && checkSession==false)
-                {
-                    QMessageBox::warning(this, tr("The title"), tr("Session is not opened!"));
-                    return;
-                }
-                else if(discover==false && checkSession==true)
-                {
-                    QMessageBox::warning(this, tr("The title"), tr("Device is not connected!"));
-                    return;
-                }
-
-                // When discover is true and checkSession is ture, encrypt files user selected
-                else
-                {
-                    QProcess* proc = new QProcess(this);
-                    invoke->encryptFiles(fileNames, folderName, "cfb", proc);
-                    //invoke->closeSession();
-                    t->start(); //get crushed because of this code
-                }
-            }
+        // When discover is true and checkSession is ture, encrypt files user selected
+        else
+        {
+            QProcess* proc = new QProcess(this);
+            invoke->encryptFiles(fileNames, folderName, "cfb", proc);
+            //invoke->closeSession();
+            t->start(); //crushed here
         }
     }
     //pd->showNormal();
@@ -233,49 +217,33 @@ void SecDialog::on_decrypt_clicked()
     // If Both of file(s) and destinatind folder are not empty, go into it
     else
     {
-        for(int i=0; i<fileNames.size(); i++)
+        bool discover = invoke->discoverDevice();
+        bool checkSession = invoke->sessionIsOpen();
+
+        //Check session is open and divice is discovered
+        if(discover==false && checkSession==false)
         {
-            QFile file(fileNames.at(i));
-            if(!file.open(QFile::ReadOnly|QFile::Text))
-            {
-                QMessageBox::warning(this, tr("Application"),
-                                     tr("Cannot read file %1:\n%2")
-                                     .arg(fileNames.at(i))
-                                     .arg(file.errorString())
-                                     );
-            }
+            QMessageBox::warning(this, tr("The title"), tr("Session is not opened\nand\nDevice is not connected!"));
+            return;
+        }
+        else if(discover==true && checkSession==false)
+        {
+            QMessageBox::warning(this, tr("The title"), tr("Session is not opened!"));
+            return;
+        }
+        else if(discover==false && checkSession==true)
+        {
+            QMessageBox::warning(this, tr("The title"), tr("Device is not connected!"));
+            return;
+        }
 
-            else
-            {
-                bool discover = invoke->discoverDevice();
-                bool checkSession = invoke->sessionIsOpen();
-
-                //Check session is open and divice is discovered
-                if(discover==false && checkSession==false)
-                {
-                    QMessageBox::warning(this, tr("The title"), tr("Session is not opened\nand\nDevice is not connected!"));
-                    return;
-                }
-                else if(discover==true && checkSession==false)
-                {
-                    QMessageBox::warning(this, tr("The title"), tr("Session is not opened!"));
-                    return;
-                }
-                else if(discover==false && checkSession==true)
-                {
-                    QMessageBox::warning(this, tr("The title"), tr("Device is not connected!"));
-                    return;
-                }
-
-                // When discover is true and checkSession is ture, decrypt files user selected
-                else
-                {
-                    QProcess* proc = new QProcess(this);
-                    invoke->decryptFiles(fileNames, folderName, "cfb", proc);
-                    //invoke->closeSession();
-                    t->start(); //get crushed because of this code
-                }
-            }
+        // When discover is true and checkSession is ture, decrypt files user selected
+        else
+        {
+            QProcess* proc = new QProcess(this);
+            invoke->decryptFiles(fileNames, folderName, "cfb", proc);
+            //invoke->closeSession();
+            t->start(); //crushed here
         }
     }
 }
