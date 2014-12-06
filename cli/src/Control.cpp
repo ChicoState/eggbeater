@@ -22,9 +22,9 @@ Control::Control( Options opt ) {
 bool Control::run(void){
 // case statement for what action to do.
 // Also do error checking on opt data?
-  int pathSize = GetTempPath( sizeof(tmpFilePath),tmpFilePath);
-  if(pathSize < 1) return FALSE;
-  else tmpFilePath[pathSize] = '\0';
+  int pathSize = GetTempPath( sizeof(tmpFilePath),tmpFilePath);  // Get the windows tmp file path.
+  if(pathSize < 1) return FALSE;                                 // Check that it worked.
+  else tmpFilePath[pathSize] = '\0';                             // Make sure last char is a NULL.
   
   switch ( cliAction )
   {
@@ -51,7 +51,7 @@ bool Control::run(void){
     case CLI_Action::Encrypt:
       // call encrypt
       // need to loop through files in list.
-      encryptFiles( cipherMode, fileList.front(), key, iv ); // Need to get key and iv......
+      encryptFiles( cipherMode, fileList.front(), key, iv ); // Need to get key and iv from somewhere..
       break;
     
     case CLI_Action::Decrypt:
@@ -79,6 +79,9 @@ String Control::getStatus(){
 // Start a new session with the micro controller.
 
 void Control::newSession(){
+
+  //StringList discover_devices(uint16_t vid, uint16_t pid);
+
   addMsg(fileVec, "SessionID=", sessionID );
   addMsg(fileVec, "Action=", cliAction );
   Control::writeVec(fileVec, tmpFile);
@@ -136,6 +139,7 @@ int Control::decryptFiles(string decMode, string file, vector<uint8_t> pwordKey,
   myCrypt.setCipherMode(CipherMode);
   myCrypt.setEncryptionKey(pwordKey);
   myCrypt.setInitialVector(ivec);
+  
   string file2;
   if(file.find(".egg" == file.length() - 4);                      // This may need to be -5.
     for(int k=0;k<file.length() - 4;k++) file2.append(file[k]);
