@@ -22,7 +22,7 @@ Control::Control( Options opt ) {
 bool Control::run(void){
 // case statement for what action to do.
 // Also do error checking on opt data?
-  int pathSize=GetTempPath( sizeof(tmpFilePath),tmpFilePath);
+  int pathSize = GetTempPath( sizeof(tmpFilePath),tmpFilePath);
   if(pathSize < 1) return FALSE;
   else tmpFilePath[pathSize] = '\0';
   
@@ -56,6 +56,7 @@ bool Control::run(void){
     
     case CLI_Action::Decrypt:
       // call decrypt
+      // need to loop through files in list.
       decryptFiles( cipherMode, fileList.front(), key, iv );
       break;
     
@@ -136,7 +137,7 @@ int Control::decryptFiles(string decMode, string file, vector<uint8_t> pwordKey,
   myCrypt.setEncryptionKey(pwordKey);
   myCrypt.setInitialVector(ivec);
   string file2;
-  if(file.find(".egg" == file.length() - 4
+  if(file.find(".egg" == file.length() - 4);                      // This may need to be -5.
     for(int k=0;k<file.length() - 4;k++) file2.append(file[k]);
   else return 0;
   myCrypt.decryptFile(file, file2 );
@@ -163,13 +164,13 @@ int Control::writeVec(std::vector<std::string> &lines, std::string targetFile)
   int i=0;
 	
 	struct stat buf;                                          // If there is already a file of this name, delete it.
-    if( stat( targetFile.c_str(), &buf ) != -1) remove( targetFile.c_str() );
+  if( stat( targetFile.c_str(), &buf ) != -1) remove( targetFile.c_str() );
 	
-    outfile.open(targetFile.c_str(),std::ios::app);         // Open the file and write contents of vector to it.
+  outfile.open(targetFile.c_str(),std::ios::app);         // Open the file and write contents of vector to it.
 	if(!outfile) return 1;	
     for (i=0; i < lines.size(); i++ ) outfile << lines[i] << std::endl;
 	lines.clear();                                            // Clear the vector.
-    outfile.close();
+  outfile.close();
 	return 0;
 }//end funct write.
 

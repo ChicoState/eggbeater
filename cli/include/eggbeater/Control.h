@@ -47,17 +47,9 @@ using CryptoPP::CFB_Mode;
 using CryptoPP::Exception;
 //-------------------------------------------
 #include <eggbeater/Options.h>
-
+#include <eggbeater/Crypto.h>
   struct Status_t
-  {
-    uint32_t CurrentBlocksDone,
-             CurrentBlocksTotal,
-             OverallFilesDone,
-             OverallFilesTotal,
-             OverallBlocksDone,
-             OverallBlocksTotal;
-    std::string CurrentPath;
-  };
+
 
 /*******************************************************************************
                      This class is not yet finalized
