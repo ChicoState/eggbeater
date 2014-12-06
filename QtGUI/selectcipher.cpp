@@ -26,6 +26,10 @@ void selectCipher::resetRadioButtons()
     ui->GCM_Button->setAutoExclusive(false);
     ui->GCM_Button->setChecked(false);
 }
+void selectCipher::setI(int num)
+{
+    i = num;
+}
 int selectCipher::getI()
 {
     return i;
