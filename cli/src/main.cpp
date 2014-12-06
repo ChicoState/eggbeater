@@ -49,7 +49,8 @@ int main(int argc, const char** argv)
   }
   
   Control ctrl(opt);                                  // This must be instantiated after options have been parsed.
-  switch (opt.getAction())
+  
+  switch (opt.getAction())                            // This switch is just to display what the CLI parsed from the GUI. 
   {
     default:
     case CLI_Action::None:
@@ -97,8 +98,10 @@ int main(int argc, const char** argv)
   {
     std::cout << "  " << f << std::endl;
   }
+  
+  
   std::cout << "Calling ctrl.run()" << std::endl;
-  ctrl.run();
+  ctrl.run();                                          // Call run to do error checking and call relevant functions, then write to output file.
   
   return 0;
 }

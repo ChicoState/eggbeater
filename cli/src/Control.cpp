@@ -4,7 +4,7 @@
 // then writing status updates to output file.
 
 
-Control::Control( Options opt) {
+Control::Control( Options opt ) {
 // copy all data into opt so that Control object and member functions have access to it.
     sessionID = opt.getSessionID();
     cliAction = opt.getAction();
