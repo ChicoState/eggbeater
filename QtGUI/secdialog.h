@@ -7,7 +7,7 @@
 #include <QProgressDialog>
 #include <QMessageBox>
 #include "filedialog.h"
-//#include "InvokeCLI.h"
+#include "selectCipher.h"
 
 namespace EggBeater
 {
@@ -33,6 +33,7 @@ public:
 
     QStringList fileNames;
     QString folderName;
+    QString cipherMode;
     EggBeater::InvokeCLI* invoke;
 
 protected slots:
@@ -50,6 +51,7 @@ private slots:
 private:
     Ui::SecDialog *ui;
     FileDialog *file_dlg;
+    selectCipher SelectCipher;
 };
 
 #endif // SECDIALOG_H

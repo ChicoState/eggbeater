@@ -160,6 +160,7 @@ void SecDialog::on_encrypt_clicked()
     // If Both of file(s) and destinatind folder are not empty, go into it
     else
     {
+
         bool discover = invoke->discoverDevice();
         bool checkSession = invoke->sessionIsOpen();
 
@@ -183,10 +184,13 @@ void SecDialog::on_encrypt_clicked()
         // When discover is true and checkSession is ture, encrypt files user selected
         else
         {
+            SelectCipher.setModal(true);
+            SelectCipher.exec();
+            cipherMode = SelectCipher.getCipherMode();
             QProcess* proc = new QProcess(this);
-            invoke->encryptFiles(fileNames, folderName, "cfb", proc);
+            invoke->encryptFiles(fileNames, folderName, cipherMode, proc);
             //invoke->closeSession();
-            t->start(); //crashed here
+            //t->start();
         }
     }
     //pd->showNormal();
@@ -240,10 +244,13 @@ void SecDialog::on_decrypt_clicked()
         // When discover is true and checkSession is ture, decrypt files user selected
         else
         {
+            SelectCipher.setModal(true);
+            SelectCipher.exec();
+            cipherMode = SelectCipher.getCipherMode();
             QProcess* proc = new QProcess(this);
-            invoke->decryptFiles(fileNames, folderName, "cfb", proc);
+            invoke->decryptFiles(fileNames, folderName, cipherMode, proc);
             //invoke->closeSession();
-            t->start(); //crashed here
+            //t->start();
         }
     }
 }
@@ -257,4 +264,3 @@ void SecDialog::perform()
 {
     invoke->progressBarPopUp(this);
 }
-

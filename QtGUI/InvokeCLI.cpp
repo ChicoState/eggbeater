@@ -40,7 +40,7 @@ namespace EggBeater
   void InvokeCLI::progressBarPopUp(SecDialog* curr)
   {
       /****Start of progress bar update*******/
-      QString temp = QDir::tempPath()+"/TempComm.cpp"; //"C:\Users\sam\AppData\Local\TempComm.cpp"; //System::GetTempPath();
+      QString temp = "C:/Qt/Tools/QtCreator/bin/EncryptApp/TempComm.cpp"; //"C:\Users\sam\AppData\Local\TempComm.cpp"; //System::GetTempPath();
       // qint64 min=0;
       // qint64 max=100;
       qint64 i=0;
@@ -172,18 +172,20 @@ namespace EggBeater
     return true;
   }
 
-  void InvokeCLI::encryptFiles(QStringList fileNames, QString folderName, QProcess* proc)
+  void InvokeCLI::encryptFiles(QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc)
   {
     /*
-    * getOpt.exe --encrypt -f file1 -f file2 -f file3 --session-id 70056 -fd someDrive/someFolder1/ -o option1 --cipher-mode ofb
-    */
+     * getOpt.exe --encrypt -f file1 -f file2 -f file3 --session-id 70056 -fd someDrive/someFolder1/ -o option1 --cipher-mode ofb
+     */
     QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
     QStringList attributes;
     attributes << "--encrypt";
     for(int i=0; i<fileNames.size(); i++)
         attributes << "-f" << fileNames.at(i);
-    attributes << "--session-id" << "0056";
+    attributes << "--session-id" << "70056";
     attributes << "-fd" << folderName;
+    if(cipherMode!="cfb" && cipherMode!="ofb" && cipherMode!="gcm")
+        cipherMode = "cfb";
     attributes  << "--cipher-mode" << cipherMode;
     //attributes << "-o" << "option1";
     //attributes  << "-o" << "option2";
@@ -196,23 +198,26 @@ namespace EggBeater
         qDebug("Done!\n");
     }
     proc->close();
-  }
+}
 
   void InvokeCLI::decryptFiles(QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc)
   {
    /*
     * getOpt.exe --decrypt -f file1 -f file2 -f file3 --session-id 70056 -fd someDrive/someFolder1/ -o option1 --cipher-mode ofb
     */
-
-    QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptv2/getOpt.exe";
+    QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
     QStringList attributes;
     attributes << "--decrypt";
     for(int i=0; i<fileNames.size(); i++)
         attributes << "-f" << fileNames.at(i);
     attributes << "--session-id" << "70056";
     attributes << "-fd" << folderName;
-    //attributes << "-o" << "option1";
+    if(cipherMode!="cfb" && cipherMode!="ofb" && cipherMode!="gcm")
+        cipherMode = "cfb";
     attributes  << "--cipher-mode" << cipherMode;
+    attributes  << "--cipher-mode" << cipherMode;
+    //attributes << "-o" << "option1";
+    //attributes  << "-o" << "option2";
     proc->start(program, attributes);
     if(!proc->waitForFinished())
         qDebug() << "Fail:\n"<< proc->errorString();
