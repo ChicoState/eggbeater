@@ -32,6 +32,7 @@ namespace EggBeater
     uint32_t CurrentBlocksDone,
              CurrentBlocksTotal,
              OverallFilesDone,
+             OverallFilesTotal,
              OverallBlocksDone,
              OverallBlocksTotal;
     std::string CurrentPath;

@@ -72,8 +72,12 @@ void Control::newSession(){
 //void Control::openSession(){}
 //void Control::refreshSession(){}
 //void Control::closeSession(){}
-//void Control::encryptFiles(){}
-//void Control::decryptFiles(){}
+void Control::encryptFiles(){
+
+}
+void Control::decryptFiles(){
+
+}
 
 
 ////////////////////////////////////////////////////////////
@@ -84,8 +88,9 @@ void Control::newSession(){
 
 int Control::writeVec(std::vector<std::string> &lines, std::string targetFile)
 {
-    std::ofstream outfile;
-    int i=0;
+  if(vec == NULL) return 1;
+  std::ofstream outfile;
+  int i=0;
 	
 	struct stat buf;                                          // If there is already a file of this name, delete it.
     if( stat( targetFile.c_str(), &buf ) != -1) remove( targetFile.c_str() );
@@ -97,10 +102,6 @@ int Control::writeVec(std::vector<std::string> &lines, std::string targetFile)
     outfile.close();
 	return 0;
 }//end funct write.
-
-
-
-
 
 
 ////////////////////////////////////////////////////////////
@@ -157,17 +158,21 @@ EX file-close:   ^!done
 
 ////////////////////////////////////////////////////////////
 // addMsg function to add message to vector<string> to output to file.
-//
-// arg1: Vector<string> to add line to.
-// arg2: int fDone. Over all files done.
-// arg3: int total. Total number of files.
-// arg4: string path. File being de/encrypted, Current path.
-// arg5: int bDone. Current blocks that have been done.
-// arg6: int bTotal. Current, Total blocks that have been and need to be done.
-// arg7: int bDoneSum. Overall blocks that have been done. 
-// arg8: int bTotalSum. Overall, Total blocks that have been and need to be done.
+/*
+  struct Status_t
+  {
+    uint32_t CurrentBlocksDone,
+             CurrentBlocksTotal,
+             OverallFilesDone,
+             OverallFilesTotal,
+             OverallBlocksDone,
+             OverallBlocksTotal;
+    std::string CurrentPath;
+  };
+*/
 
-int Control::addMsg(std::vector<std::string> &vec, int fDone, int total, std::string path, int bDone, int bTotal, int bDoneSum, int bTotalSum )
+
+int Control::addMsg( Status_t status )
 { 
 
   if(vec == NULL) return 1;
@@ -175,29 +180,29 @@ int Control::addMsg(std::vector<std::string> &vec, int fDone, int total, std::st
   string ans="\0";
   char tmp[tmpSize]={'\0'};
   
-  sprintf(tmp,"%i",fDone);
+  sprintf(tmp,"%i",status.OverallFilesDone);
   ans.append(tmp);
   
   memset(tmp,0,tmpSize);
-  sprintf(tmp," ^ %i ^ ",total);
+  sprintf(tmp," ^ %i ^ ",stutus.OverallFilesTotal);
   ans.append(tmp);
   
   ans.append(path);
   
   memset(tmp,0,tmpSize);
-  sprintf(tmp," ^ %i ",bDone);
+  sprintf(tmp," ^ %i ",status.CurrentBlocksDone);
   ans.append(tmp);
   
   memset(tmp,0,tmpSize);
-  sprintf(tmp," ^ %i ",bTotal);
+  sprintf(tmp," ^ %i ",status.CurrentBlocksTotal);
   ans.append(tmp);
   
   memset(tmp,0,tmpSize);
-  sprintf(tmp," ^ %i ",bDoneSum);
+  sprintf(tmp," ^ %i ",status.OverallBlocksDone);
   ans.append(tmp);
   
   memset(tmp,0,tmpSize);
-  sprintf(tmp," ^ %i ",bTotalSum);
+  sprintf(tmp," ^ %i ",status.OverallBlocksTotal);
   ans.append(tmp);
   
   vec.push_back(ans);
