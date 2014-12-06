@@ -45,13 +45,14 @@ bool Control::run(void){
       break;
     
     case CLI_Action::Encrypt:
-      //call encrypt
-      encryptFiles();
+      // call encrypt
+      // args: string encMode, string oFile, vector<uint8_t> pwordKey, vector<uint8_t> ivec
+      encryptFiles( cipherMode, fileList.front(), key, iv );
       break;
     
     case CLI_Action::Decrypt:
       // call decrypt
-      decryptFiles();
+      decryptFiles( cipherMode, fileList.front(), key, iv );
       break;
     
     case CLI_Action::DiscoverDevice:
@@ -83,7 +84,6 @@ void Control::openSession(){
 
 int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey, vector<uint8_t> ivec)
 {
-  Status_t encStat;   // Update status values and write them to output file.
   // Need to have loop here to step through files, until list.next == NULL.
   if( (pwordKey.size() == CryptoPP::AES::MAX_KEYLENGTH) && (ivec.size() == CryptoPP::AES::BLOCKSIZE) )
   {
@@ -99,7 +99,7 @@ int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey
     // creates a copy of the input file
     // and converts it to binary for encryption.
     // Helps avoid the creation of corrupted files
-    // durring decryption process
+    // during decryption process
     ifstream ifile(oFile.c_str(), ios::binary);
     ifstream::pos_type size = ifile.seekg(0, ios_base::end).tellg();
     ifile.seekg(0, ios_base::beg);
@@ -149,7 +149,7 @@ int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey
     return 1;
   }
   addMsg(fileVec, sessionID);
-  addMsg( fileVec, encStat );
+  addMsg( fileVec, currentStatus );
   writeVec( fileVec, tmpFile);
   
 }// end Encrypt files.
