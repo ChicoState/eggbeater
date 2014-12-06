@@ -52,5 +52,6 @@ void selectCipher::on_GCM_Button_clicked()
 
 void selectCipher::on_OK_Button_clicked()
 {
+    i++;
     this->close();
 }
