@@ -65,7 +65,7 @@ void FileDialog::chooseClicked()
         {
             if(i!=-1)
             {
-                if(QFileInfo(this->directory().absolutePath()).fileName()!=index.data().toString())
+                if(QFileInfo(this->directory().absolutePath()).fileName()!=index.data().toString()&&QFileInfo(this->directory().absolutePath()).fileName()!="Windows(C:)")
                 {
                     m_selectedFiles.append(this->directory().absolutePath() + "/" + index.data().toString());
                     i--;
