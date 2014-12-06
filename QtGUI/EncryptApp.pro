@@ -16,12 +16,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     secdialog.cpp \
     filedialog.cpp \
-    InvokeCLI.cpp
+    invokeCLI.cpp \
+    selectCipher.cpp
 
 HEADERS  += mainwindow.h \
     secdialog.h \
     filedialog.h \
-    InvokeCLI.h
+    invokeCLI.h \
+    selectCipher.h
 
 FORMS    += mainwindow.ui \
-    secdialog.ui
+    secdialog.ui \
+    selectCipher.ui
