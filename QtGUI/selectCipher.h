@@ -20,6 +20,7 @@ public:
     QString getCipherMode();
     void resetRadioButtons();
     int getI();
+    void setI(int num);
 
 private slots:
     void on_CFB_Button_clicked();
