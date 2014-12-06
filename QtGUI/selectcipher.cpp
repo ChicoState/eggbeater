@@ -25,6 +25,11 @@ void selectCipher::resetRadioButtons()
     ui->GCM_Button->setAutoExclusive(false);
     ui->GCM_Button->setChecked(false);
 }
+int selectCipher::getI()
+{
+    return i;
+}
+
 void selectCipher::on_CFB_Button_clicked()
 {
     cipherMode = "cfb";
