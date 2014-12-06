@@ -5,6 +5,7 @@ selectCipher::selectCipher(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::selectCipher)
 {
+    i = 0;
     ui->setupUi(this);
 }
 
