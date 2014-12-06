@@ -19,6 +19,7 @@ public:
     ~selectCipher();
     QString getCipherMode();
     void resetRadioButtons();
+    int getI();
 
 private slots:
     void on_CFB_Button_clicked();
@@ -29,6 +30,7 @@ private slots:
 private:
     Ui::selectCipher *ui;
     QString cipherMode;
+    int i;
 };
 
 #endif // SELECTCIPHER_H
