@@ -187,11 +187,15 @@ void SecDialog::on_encrypt_clicked()
         {
             SelectCipher.setModal(true);
             SelectCipher.exec();
-            cipherMode = SelectCipher.getCipherMode();
-            QProcess* proc = new QProcess(this);
-            invoke->encryptFiles(fileNames, folderName, cipherMode, proc);
-            //invoke->closeSession();
-            //t->start();
+            int temp = SelectCipher.getI();
+            if(temp>0)
+            {
+                cipherMode = SelectCipher.getCipherMode();
+                QProcess* proc = new QProcess(this);
+                invoke->encryptFiles(fileNames, folderName, cipherMode, proc);
+                //invoke->closeSession();
+                //t->start();
+            }
         }
     }
     //pd->showNormal();
@@ -248,11 +252,15 @@ void SecDialog::on_decrypt_clicked()
         {
             SelectCipher.setModal(true);
             SelectCipher.exec();
-            cipherMode = SelectCipher.getCipherMode();
-            QProcess* proc = new QProcess(this);
-            invoke->decryptFiles(fileNames, folderName, cipherMode, proc);
-            //invoke->closeSession();
-            //t->start();
+            int temp = SelectCipher.getI();
+            if(temp>0)
+            {
+                cipherMode = SelectCipher.getCipherMode();
+                QProcess* proc = new QProcess(this);
+                invoke->decryptFiles(fileNames, folderName, cipherMode, proc);
+                //invoke->closeSession();
+                //t->start();
+            }
         }
     }
 }
