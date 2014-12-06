@@ -87,6 +87,20 @@ int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey
   // Need to have loop here to step through files, until list.next == NULL.
   if( (pwordKey.size() == CryptoPP::AES::MAX_KEYLENGTH) && (ivec.size() == CryptoPP::AES::BLOCKSIZE) )
   {
+    // creates a copy of the input file
+    // and converts it to binary for encryption.
+    // Helps avoid the creation of corrupted files
+    // durring decryption process
+    // checks to make sure the file exists
+    ifstream ifile(oFile.c_str(), ios::binary);
+    if(!ifile)
+    {
+        cerr<<"[ERROR] File not Found"<<endl;
+        return 1;
+    }
+    ifstream::pos_type size = ifile.seekg(0, ios_base::end).tellg();
+    ifile.seekg(0, ios_base::beg);
+
     //pulls vectors into byte and initilization vectors
     copy(pwordKey.begin(), pwordKey.end(), key);
     copy(ivec.begin(), ivec.end(), iv);
@@ -95,14 +109,6 @@ int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey
     string ofilename = oFile;
     string outFile = oFile + ".egg";
     string efilename = outFile;   
-
-    // creates a copy of the input file
-    // and converts it to binary for encryption.
-    // Helps avoid the creation of corrupted files
-    // during decryption process
-    ifstream ifile(oFile.c_str(), ios::binary);
-    ifstream::pos_type size = ifile.seekg(0, ios_base::end).tellg();
-    ifile.seekg(0, ios_base::beg);
 
     string temp;
     temp.resize(size);
@@ -172,6 +178,14 @@ int Control::decryptFiles(string decMode, string efile, vector<uint8_t> pwordKey
        cerr<<" [ERROR] The File provided is not an Eggbeater encrypted file \n";
        cerr<<"         Please choose a .egg file to decrypt \n";
        return 1;
+    }
+
+    //checks to make sure the file exists
+    ifstream ifile(efile.c_str(), ios::binary);
+    if(!ifile)
+    {
+        cerr<<"[ERROR] File not Found"<<endl;
+        return 1;
     }
 
     //Removes the .egg from the file type provided
