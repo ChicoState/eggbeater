@@ -48,6 +48,17 @@ using CryptoPP::Exception;
 //-------------------------------------------
 #include <eggbeater/Options.h>
 
+  struct Status_t
+  {
+    uint32_t CurrentBlocksDone,
+             CurrentBlocksTotal,
+             OverallFilesDone,
+             OverallFilesTotal,
+             OverallBlocksDone,
+             OverallBlocksTotal;
+    std::string CurrentPath;
+  };
+
 /*******************************************************************************
                      This class is not yet finalized
 *******************************************************************************/
@@ -70,10 +81,11 @@ namespace EggBeater
     Status_t    currentStatus;
     ErrorList   errorList;
     StringList  fileList;
-
+    Status_t    controlStatus;
     byte key[CryptoPP::AES::MAX_KEYLENGTH];
     byte iv[ CryptoPP::AES::BLOCKSIZE ];
     
+    char tmpFilePath[120]={'\0'};
     //! Internal function to start a new session
     void newSession();
     //! Internal function to open a session with an existing fingerprint

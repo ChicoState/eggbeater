@@ -97,6 +97,7 @@ namespace EggBeater
     Status_t    currentStatus;
     ErrorList   errorList;
     StringList  fileList;
+    char tmpFilePath[120]={'\0'};
   };
 }
 

@@ -9,7 +9,7 @@ Control::Control( Options opt ) {
     sessionID = opt.getSessionID();
     cliAction = opt.getAction();
     cipherMode = opt.getCipherMode();
-    currentStatus = opt.getStatus();
+    controlStatus = opt.getStatus();
     errorList = opt.getErrors();
     fileList = opt.getFileList();
     
@@ -22,6 +22,10 @@ Control::Control( Options opt ) {
 bool Control::run(void){
 // case statement for what action to do.
 // Also do error checking on opt data?
+  int pathSize=GetTempPath( sizeof(tmpFilePath),tmpFilePath);
+  if(pathSize < 1) return FALSE;
+  else tmpFilePath[pathSize] = '\0';
+  
   switch ( cliAction )
   {
     default:
@@ -46,8 +50,8 @@ bool Control::run(void){
     
     case CLI_Action::Encrypt:
       // call encrypt
-      // args: string encMode, string oFile, vector<uint8_t> pwordKey, vector<uint8_t> ivec
-      encryptFiles( cipherMode, fileList.front(), key, iv );
+      // need to loop through files in list.
+      encryptFiles( cipherMode, fileList.front(), key, iv ); // Need to get key and iv......
       break;
     
     case CLI_Action::Decrypt:
@@ -61,170 +65,88 @@ bool Control::run(void){
   }// end case.
 
 }// end run.
+
+////////////////////////////////////////////////////////////
+// Return last status in tmpFile to the gui.
+
 String Control::getStatus(){
   addMsg(fileVec, "Status=",opt.getCurrentStatus();
   Control::writeVec(fileVec, tmpFile);
 }
+
+////////////////////////////////////////////////////////////
+// Start a new session with the micro controller.
+
 void Control::newSession(){
   addMsg(fileVec, "SessionID=", sessionID );
   addMsg(fileVec, "Action=", cliAction );
   Control::writeVec(fileVec, tmpFile);
 }
+
+////////////////////////////////////////////////////////////
+// Open a previously existing session with the micro controller.
+
 void Control::openSession(){
   // Get session ID from board.
   // Authenticate.
 }
-//void Control::refreshSession(){}
-//void Control::closeSession(){}
-
-
 
 ////////////////////////////////////////////////////////////
 //
 
+void Control::refreshSession(){
+
+}
+
+////////////////////////////////////////////////////////////
+// Close the current session.
+
+void Control::closeSession(){
+
+}
+
+
+////////////////////////////////////////////////////////////
+// Encrypt a file.
+
 int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey, vector<uint8_t> ivec)
 {
-  // Need to have loop here to step through files, until list.next == NULL.
-  if( (pwordKey.size() == CryptoPP::AES::MAX_KEYLENGTH) && (ivec.size() == CryptoPP::AES::BLOCKSIZE) )
-  {
-    //pulls vectors into byte and initilization vectors
-    copy(pwordKey.begin(), pwordKey.end(), key);
-    copy(ivec.begin(), ivec.end(), iv);
-
-    //Adds .egg to siginifiy that the file is encrypted by eggbeater
-    string ofilename = oFile;
-    string outFile = oFile + ".egg";
-    string efilename = outFile;   
-
-    // creates a copy of the input file
-    // and converts it to binary for encryption.
-    // Helps avoid the creation of corrupted files
-    // during decryption process
-    ifstream ifile(oFile.c_str(), ios::binary);
-    ifstream::pos_type size = ifile.seekg(0, ios_base::end).tellg();
-    ifile.seekg(0, ios_base::beg);
-
-    string temp;
-    temp.resize(size);
-    ifile.read((char*)temp.data(), temp.size());
-
-    if(encMode == "OFB")
-    {
-      OFB_Mode< AES >::Encryption e1;
-      e1.SetKeyWithIV( key, sizeof(key), iv, sizeof(iv) );
-     
-      StringSource( temp, true,
-                      new StreamTransformationFilter( e1,
-                      new FileSink( efilename.c_str() ))); 
-    }
-    else if(encMode == "CFB")
-    {
-      CFB_Mode< AES >::Encryption e1;
-      e1.SetKeyWithIV( key, sizeof(key), iv, sizeof(iv) );
-
-      StringSource( temp, true,
-                      new StreamTransformationFilter( e1,
-                      new FileSink( efilename.c_str() ))); 
-    }
-    else if(encMode == "GCM")
-    {
-      GCM< AES >::Encryption e1;
-      e1.SetKeyWithIV( key, sizeof(key), iv, sizeof(iv) );
-     
-      StringSource ss1( temp, true,
-                      new AuthenticatedEncryptionFilter( e1,
-                      new FileSink( efilename.c_str() )));
-    }
-    else
-    {
-      cerr << "[ERROR] Invalid Mode" <<endl;
-      return 1;
-    }
-
-    return 0;
-  }
-  else
-  {
-    cerr<<"[ERROR] Key size is insufficient"<<endl;
-    return 1;
-  }
-  addMsg(fileVec, sessionID);
-  addMsg( fileVec, currentStatus );
-  writeVec( fileVec, tmpFile);
+  Crypto myCrypt;
+  myCrypt.setCipherMode(CipherMode);
+  myCrypt.setEncryptionKey(pwordKey);
+  myCrypt.setInitialVector(ivec);
   
+  myCrypt.encryptFile(ofile, ofile.append(".egg"));
+
+  addMsg(fileVec, sessionID);
+  addMsg( fileVec, controlStatus );
+  writeVec( fileVec, tmpFile);
+  return 0;
 }// end Encrypt files.
 
 
 
 ////////////////////////////////////////////////////////////
-//
+// Decrypt a file.
 
-int Control::decryptFiles(string decMode, string efile, vector<uint8_t> pwordKey, vector<uint8_t> ivec){
-
-  //Allows encryption if input Vectors are of the required size
-  if( (pwordKey.size() == CryptoPP::AES::MAX_KEYLENGTH) && (ivec.size() == CryptoPP::AES::BLOCKSIZE) )
-  {
-    //Checks if the ending of the provided filename
-    //is an eggbeater encrypted file, otherwise decryption
-    //will halt.
-    if(!efile.compare(efile.size() - 4, 4, ".egg") == 0)
-    {
-       cerr<<" [ERROR] The File provided is not an Eggbeater encrypted file \n";
-       cerr<<"         Please choose a .egg file to decrypt \n";
-       return 1;
-    }
-
-    //Removes the .egg from the file type provided
-    string efilename = efile;
-    efile.erase(efile.end()-4, efile.end());
-    string rfilename = efile;
-
-    copy(pwordKey.begin(), pwordKey.end()-1, key);
-    copy(ivec.begin(), ivec.end()-1, iv);
-
-    if(decMode == "OFB")
-    {
-      OFB_Mode< AES >::Decryption d2;
-      d2.SetKeyWithIV( key, sizeof(key), iv, sizeof(iv) );
-     
-      FileSource( efilename.c_str(), true,
-                      new StreamTransformationFilter( d2,
-                      new FileSink( rfilename.c_str() ))); 
-    }
-    else if(decMode == "CFB")
-    {
-      CFB_Mode< AES >::Decryption d2;
-      d2.SetKeyWithIV( key, sizeof(key), iv, sizeof(iv) );
-     
-      FileSource( efilename.c_str(), true,
-                      new StreamTransformationFilter( d2,
-                      new FileSink( rfilename.c_str() )));
-    }
-    else if(decMode == "GCM")
-    {
-      GCM< AES >::Decryption d2;
-      d2.SetKeyWithIV( key, sizeof(key), iv, sizeof(iv) );
-     
-      FileSource fs2( efilename.c_str(), true,
-                      new AuthenticatedDecryptionFilter( d2,
-                      new FileSink( rfilename.c_str() ),
-                      AuthenticatedDecryptionFilter::THROW_EXCEPTION));
-    }
-    else
-    {
-      cerr << " [ERROR] Decryption Error" <<endl;
-      return 1;
-    }
-
-    return 0;
-  }
-  else
-  {
-    cerr<<" [ERROR] Key size is insufficient"<<endl;
-    return 1;
-  }
-
-}
+int Control::decryptFiles(string decMode, string file, vector<uint8_t> pwordKey, vector<uint8_t> ivec)
+{
+  Crypto myCrypt;
+  myCrypt.setCipherMode(CipherMode);
+  myCrypt.setEncryptionKey(pwordKey);
+  myCrypt.setInitialVector(ivec);
+  string file2;
+  if(file.find(".egg" == file.length() - 4
+    for(int k=0;k<file.length() - 4;k++) file2.append(file[k]);
+  else return 0;
+  myCrypt.decryptFile(file, file2 );
+  
+  // Need to update status values here somehow.
+  addMsg(fileVec, sessionID);
+  addMsg( fileVec, controlStatus );
+  writeVec( fileVec, tmpFile);
+  return 0;
+}// End decryption function.
 
 
 ////////////////////////////////////////////////////////////
