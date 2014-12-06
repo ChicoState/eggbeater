@@ -186,7 +186,7 @@ void SecDialog::on_encrypt_clicked()
             QProcess* proc = new QProcess(this);
             invoke->encryptFiles(fileNames, folderName, "cfb", proc);
             //invoke->closeSession();
-            t->start(); //crushed here
+            t->start(); //crashed here
         }
     }
     //pd->showNormal();
@@ -243,7 +243,7 @@ void SecDialog::on_decrypt_clicked()
             QProcess* proc = new QProcess(this);
             invoke->decryptFiles(fileNames, folderName, "cfb", proc);
             //invoke->closeSession();
-            t->start(); //crushed here
+            t->start(); //crashed here
         }
     }
 }
