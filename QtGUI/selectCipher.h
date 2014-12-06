@@ -18,6 +18,7 @@ public:
     explicit selectCipher(QWidget *parent = 0);
     ~selectCipher();
     QString getCipherMode();
+    void resetRadioButtons();
 
 private slots:
     void on_CFB_Button_clicked();
