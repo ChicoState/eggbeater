@@ -138,6 +138,7 @@ void SecDialog::on_choose_output_folder_clicked()
 
 void SecDialog::on_encrypt_clicked()
 {
+    SelectCipher.setI(0);
     SelectCipher.resetRadioButtons();
     // Check user select file(s) and a destination folder
     if(!fileNames.isEmpty() && folderName.isEmpty())
@@ -204,6 +205,7 @@ void SecDialog::on_encrypt_clicked()
 
 void SecDialog::on_decrypt_clicked()
 {
+    SelectCipher.setI(0);
     SelectCipher.resetRadioButtons();
     // Check user select file(s) and a destination folder
     if(fileNames.isEmpty() && folderName.isEmpty())
