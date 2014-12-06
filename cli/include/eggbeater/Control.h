@@ -63,7 +63,7 @@ namespace EggBeater
     String getStatus();
   private:
   
-    vector<string> fileVec;
+    vector<string> fileVec; // Hold the lines to write to the output file. Sending data to GUI.
     String      sessionID;
     CLI_Action  cliAction;
     CipherMode  cipherMode;

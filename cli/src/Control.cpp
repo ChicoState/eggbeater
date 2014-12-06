@@ -69,11 +69,22 @@ void Control::newSession(){
   addMsg(fileVec, "Action=", cliAction );
   Control::writeVec(fileVec, tmpFile);
 }
-//void Control::openSession(){}
+void Control::openSession(){
+  // Get session ID from board.
+  // Authenticate.
+}
 //void Control::refreshSession(){}
 //void Control::closeSession(){}
-int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey, vector<uint8_t> ivec){
 
+
+
+////////////////////////////////////////////////////////////
+//
+
+int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey, vector<uint8_t> ivec)
+{
+  Status_t encStat;   // Update status values and write them to output file.
+  // Need to have loop here to step through files, until list.next == NULL.
   if( (pwordKey.size() == CryptoPP::AES::MAX_KEYLENGTH) && (ivec.size() == CryptoPP::AES::BLOCKSIZE) )
   {
     //pulls vectors into byte and initilization vectors
@@ -137,7 +148,17 @@ int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey
     cerr<<"[ERROR] Key size is insufficient"<<endl;
     return 1;
   }
-}
+  addMsg(fileVec, sessionID);
+  addMsg( fileVec, encStat );
+  writeVec( fileVec, tmpFile);
+  
+}// end Encrypt files.
+
+
+
+////////////////////////////////////////////////////////////
+//
+
 int Control::decryptFiles(string decMode, string efile, vector<uint8_t> pwordKey, vector<uint8_t> ivec){
 
   //Allows encryption if input Vectors are of the required size
@@ -298,7 +319,7 @@ EX file-close:   ^!done
 */
 
 
-int Control::addMsg( Status_t status )
+int Control::addMsg( std::vector<std::string> &vec, Status_t status )
 { 
 
   if(vec == NULL) return 1;
