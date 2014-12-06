@@ -1,51 +1,13 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <fstream>
-#include <stdio.h>
+
 #include "enc_functions.h"
 
 // crypto libaries found below
 // the "using" includes allows the code
 // to look a little readable.
-#include <cryptopp/cryptlib.h>
-using CryptoPP::Exception;
- 
-#include <cryptopp/files.h>
-using CryptoPP::FileSink;
-using CryptoPP::FileSource;
- 
-#include <cryptopp/hex.h>
-using CryptoPP::HexEncoder;
-using CryptoPP::HexDecoder; 
- 
-#include <cryptopp/filters.h>
-using CryptoPP::StringSink;
-using CryptoPP::StringSource;
-using CryptoPP::FileSink;
-using CryptoPP::FileSource;
-using CryptoPP::StreamTransformationFilter;
-using CryptoPP::AuthenticatedEncryptionFilter;
-using CryptoPP::AuthenticatedDecryptionFilter;
- 
-#include <cryptopp/modes.h>
-using CryptoPP::CBC_Mode;
- 
-#include <cryptopp/gcm.h>
-using CryptoPP::GCM;
- 
-#include <cryptopp/aes.h>
-using CryptoPP::AES;
- 
-#include <cryptopp/modes.h>
-using CryptoPP::OFB_Mode;
-using CryptoPP::CFB_Mode;
-using CryptoPP::Exception;
 
 using namespace std;
 
-void enc_functions::encrypt_file(string encMode, string oFile, vector<uint8_t> pwordKey, vector<uint8_t> ivec)
+int enc_functions::encrypt_file(string encMode, string oFile, vector<uint8_t> pwordKey, vector<uint8_t> ivec)
 {
     //Allows encryption if input Vectors are of the required size
     if( (pwordKey.size() == CryptoPP::AES::MAX_KEYLENGTH) && (ivec.size() == CryptoPP::AES::BLOCKSIZE) )
@@ -101,15 +63,19 @@ void enc_functions::encrypt_file(string encMode, string oFile, vector<uint8_t> p
         else
         {
             cerr << "[ERROR] Invalid Mode" <<endl;
+            return 1;
         }
+
+        return 0;
     }
     else
     {
         cerr<<"[ERROR] Key size is insufficient"<<endl;
+        return 1;
     }
 }
 
-void enc_functions::decrypt_file(string decMode, string efile, vector<uint8_t> pwordKey, vector<uint8_t> ivec)  //keep hash
+int enc_functions::decrypt_file(string decMode, string efile, vector<uint8_t> pwordKey, vector<uint8_t> ivec)  //keep hash
 {   
     //Allows encryption if input Vectors are of the required size
     if( (pwordKey.size() == CryptoPP::AES::MAX_KEYLENGTH) && (ivec.size() == CryptoPP::AES::BLOCKSIZE) )
@@ -121,7 +87,7 @@ void enc_functions::decrypt_file(string decMode, string efile, vector<uint8_t> p
         {
            cerr<<" [ERROR] The File provided is not an Eggbeater encrypted file \n";
            cerr<<"         Please choose a .egg file to decrypt \n";
-           return;
+           return 1;
         }
 
         //Removes the .egg from the file type provided
@@ -163,10 +129,14 @@ void enc_functions::decrypt_file(string decMode, string efile, vector<uint8_t> p
         else
         {
             cerr << " [ERROR] Decryption Error" <<endl;
+            return 1;
         }
+
+        return 0;
     }
     else
     {
         cerr<<" [ERROR] Key size is insufficient"<<endl;
+        return 1;
     }
 }

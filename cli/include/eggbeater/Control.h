@@ -7,7 +7,45 @@
 #include <vector>
 #include <fstream>
 #include <string>
+//---------------------------
+#include <stdint.h>
+#include <string>
+#include <algorithm>
 
+#include <cryptopp/cryptlib.h>
+using CryptoPP::Exception;
+ 
+#include <cryptopp/files.h>
+using CryptoPP::FileSink;
+using CryptoPP::FileSource;
+ 
+#include <cryptopp/hex.h>
+using CryptoPP::HexEncoder;
+using CryptoPP::HexDecoder; 
+ 
+#include <cryptopp/filters.h>
+using CryptoPP::StringSink;
+using CryptoPP::StringSource;
+using CryptoPP::FileSink;
+using CryptoPP::FileSource;
+using CryptoPP::StreamTransformationFilter;
+using CryptoPP::AuthenticatedEncryptionFilter;
+using CryptoPP::AuthenticatedDecryptionFilter;
+ 
+#include <cryptopp/modes.h>
+using CryptoPP::CBC_Mode;
+ 
+#include <cryptopp/gcm.h>
+using CryptoPP::GCM;
+ 
+#include <cryptopp/aes.h>
+using CryptoPP::AES;
+ 
+#include <cryptopp/modes.h>
+using CryptoPP::OFB_Mode;
+using CryptoPP::CFB_Mode;
+using CryptoPP::Exception;
+//-------------------------------------------
 #include <eggbeater/Options.h>
 
 /*******************************************************************************
@@ -32,7 +70,9 @@ namespace EggBeater
     Status_t    currentStatus;
     ErrorList   errorList;
     StringList  fileList;
-    
+
+    byte key[CryptoPP::AES::MAX_KEYLENGTH];
+    byte iv[ CryptoPP::AES::BLOCKSIZE ];
     
     //! Internal function to start a new session
     void newSession();
@@ -44,9 +84,9 @@ namespace EggBeater
     void closeSession();
     
     //! Internal function to encrypt the specified files
-    void encryptFiles();
+    int encryptFiles(std::string, std::string, std::vector<uint8_t>, std::vector<uint8_t>);
     //! Internal function to decrypt the specified files
-    void decryptFiles();
+    int decryptFiles(std::string, std::string, std::vector<uint8_t>, std::vector<uint8_t>);
 	
 	  int writeVec( std::vector<std::string> &lines, std::string targetFile);
     int addMsg(std::vector<std::string> &vec, std::string arg1, std::string arg2 = "\0" );
