@@ -195,6 +195,7 @@ void SecDialog::on_encrypt_clicked()
                 QProcess* proc = new QProcess(this);
                 invoke->encryptFiles(fileNames, folderName, cipherMode, proc);
                 //invoke->closeSession();
+                pd->setLabelText("Encrypting file(s)...");
                 t->start();
             }
         }
@@ -261,6 +262,7 @@ void SecDialog::on_decrypt_clicked()
                 QProcess* proc = new QProcess(this);
                 invoke->decryptFiles(fileNames, folderName, cipherMode, proc);
                 //invoke->closeSession();
+                pd->setLabelText("Decrypting file(s)...");
                 t->start();
             }
         }

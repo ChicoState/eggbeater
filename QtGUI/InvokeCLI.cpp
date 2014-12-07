@@ -74,12 +74,13 @@ namespace EggBeater
           QString line=in.readLine();
           QString::iterator it= line.begin();
           QVector<char> curFileName;
+          QString word=" ";
           QString firstWord = line.split(" ").at(0);
-          QString secondWord = line.split(" ").at(1);
-          QString thirdWord = line.split(" ").at(2);\
-          QString forthWord = line.split(" ").at(3);
           if(firstWord=="--encrypt")
           {
+              QString curFile = line.split(" ").at(1);
+             // QString upCarrot = line.split(" ").at(2);
+              QString totalFile = line.split(" ").at(3);
               if(it->isDigit()==true)
               {
                   int linePos=0;
@@ -141,13 +142,16 @@ namespace EggBeater
                   }
               }
               file.close();
-              int curC=secondWord.toInt();
-              int maxC=forthWord.toInt();
+              int curC=curFile.toInt();
+              int maxC=totalFile.toInt();
               progresscount=100*curC/maxC;
               return progresscount;
           }
           if(firstWord=="--decrypt")
           {
+              QString curFile = line.split(" ").at(1);
+             // QString upCarrot = line.split(" ").at(2);
+              QString totalFile = line.split(" ").at(3);
               if(it->isDigit()==true)
               {
                   int linePos=0;
@@ -209,8 +213,8 @@ namespace EggBeater
                   }
               }
               file.close();
-              int curC=secondWord.toInt();
-              int maxC=forthWord.toInt();
+              int curC=curFile.toInt();
+              int maxC=totalFile.toInt();
               progresscount=100*curC/maxC;
               return progresscount;
           }
