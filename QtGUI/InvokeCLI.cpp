@@ -40,7 +40,7 @@ namespace EggBeater
   void InvokeCLI::progressBarPopUp(SecDialog* curr)
   {
       /****Start of progress bar update*******/
-      QString temp = "C:/Qt/Tools/QtCreator/bin/EncryptApp/TempComm.cpp"; //"C:\Users\sam\AppData\Local\TempComm.cpp"; //System::GetTempPath();
+      QString temp =  QDir::tempPath()+"/TempComm.cpp"; ; //"C:\Users\sam\AppData\Local\TempComm.cpp"; //System::GetTempPath();
       // qint64 min=0;
       // qint64 max=100;
       qint64 i=0;
