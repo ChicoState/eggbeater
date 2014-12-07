@@ -22,9 +22,22 @@ namespace EggBeater
     return true;
   }
 
-  void InvokeCLI::startSession()
+  void InvokeCLI::startSession(QProcess* proc)
   {
     //needs to get session ID
+      QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
+      QStringList attributes;
+      attributes << "--start_session";
+      proc->start(program, attributes);
+      if(!proc->waitForFinished())
+          qDebug() << "Fail:\n"<< proc->errorString();
+      else
+      {
+          qDebug() << "Success:\n" << proc->readAll();
+          qDebug("Done!\n");
+      }
+
+      proc->close();
   }
 
   void InvokeCLI::refreshSession()
@@ -37,9 +50,8 @@ namespace EggBeater
     //process->close();
   }
 
-  void InvokeCLI::progressBarPopUp(SecDialog* curr)
+  int InvokeCLI::fileParse(SecDialog* curr)
   {
-      /****Start of progress bar update*******/
       QString temp =  QDir::tempPath()+"/TempComm.cpp"; ; //"C:\Users\sam\AppData\Local\TempComm.cpp" //System::GetTempPath()
       qint64 i=0;
       qint64 progresscount=0;
@@ -54,7 +66,7 @@ namespace EggBeater
       if(!file.open(QFile::ReadOnly))
       {
           QMessageBox::warning(curr, "Application", file.fileName(), "ok"); //"Cant find temp file \n"
-          return;
+          return -1;
       }
       QTextStream in(&file);
       while(!in.atEnd())
@@ -62,71 +74,153 @@ namespace EggBeater
           QString line=in.readLine();
           QString::iterator it= line.begin();
           QVector<char> curFileName;
-          if(it->isDigit()==true)
+          QString firstWord = line.split(" ").at(0);
+          QString secondWord = line.split(" ").at(1);
+          QString thirdWord = line.split(" ").at(2);\
+          QString forthWord = line.split(" ").at(3);
+          if(firstWord=="--encrypt")
           {
-              int linePos=0;
-              for(it=line.begin(); linePos<line.length(); linePos++)
+              if(it->isDigit()==true)
               {
-                  if(*it== "\"")
+                  int linePos=0;
+                  for(it=line.begin(); linePos<line.length(); linePos++)
                   {
-                      i=0;
-                      while(*it+1!="\"")
+                      if(*it== "\"")
                       {
-                          QByteArray temparray = (*it+1).toUtf8();
-                          curFileName[i] = temparray.at(i);
-                          i++;
+                          i=0;
+                          while(*it+1!="\"")
+                          {
+                              QByteArray temparray = (*it+1).toUtf8();
+                              curFileName[i] = temparray.at(i);
+                              i++;
+                          }
+                      }
+                      switch(positionTrack)
+                      {
+                          case 0:
+                              i=0;
+                              while(it->isDigit()==true)
+                              {
+                                  if(i=0)
+                                      curFileCount=*it;
+                                  else
+                                      curFileCount=curFileCount.append(*it);
+                                  i++;
+                                  it++;
+                              }
+                              positionTrack++;
+                          case 1:
+                              i=0;
+                              if(it->isDigit()==false)
+                                  it++;
+                              while(it->isDigit()==true)
+                              {
+                                  if(i=0)
+                                  {
+                                      maxCount=*it;
+                                  }
+                                  else
+                                      maxCount=maxCount.append(*it);
+                                  i++;
+                                  it++;
+                                  positionTrack++;
+                              }
+                          case 2:
+                              while(it->isDigit()==true)
+                              {
+                                  it++;
+                                  positionTrack++;
+                              }
+                          case 3:
+                              while(it->isDigit()==true)
+                              {
+                                  it++;
+                                  positionTrack++;
+                              }
                       }
                   }
-                  switch(positionTrack)
+              }
+              file.close();
+              int curC=secondWord.toInt();
+              int maxC=forthWord.toInt();
+              progresscount=100*curC/maxC;
+              return progresscount;
+          }
+          if(firstWord=="--decrypt")
+          {
+              if(it->isDigit()==true)
+              {
+                  int linePos=0;
+                  for(it=line.begin(); linePos<line.length(); linePos++)
                   {
-                      case 0:
+                      if(*it== "\"")
+                      {
                           i=0;
-                          while(it->isDigit()==true)
+                          while(*it+1!="\"")
                           {
-                              if(i=0)
-                                  curFileCount=*it;
-                              else
-                                  curFileCount=curFileCount.append(*it);
+                              QByteArray temparray = (*it+1).toUtf8();
+                              curFileName[i] = temparray.at(i);
                               i++;
-                              it++;
                           }
-                          positionTrack++;
-                      case 1:
-                          i=0;
-                          if(it->isDigit()==false)
-                              it++;
-                          while(it->isDigit()==true)
-                          {
-                              if(i=0)
+                      }
+                      switch(positionTrack)
+                      {
+                          case 0:
+                              i=0;
+                              while(it->isDigit()==true)
                               {
-                                  maxCount=*it;
+                                  if(i=0)
+                                      curFileCount=*it;
+                                  else
+                                      curFileCount=curFileCount.append(*it);
+                                  i++;
+                                  it++;
                               }
-                              else
-                                  maxCount=maxCount.append(*it);
-                              i++;
-                              it++;
                               positionTrack++;
-                          }
-                      case 2:
-                          while(it->isDigit()==true)
-                          {
-                              it++;
-                              positionTrack++;
-                          }
-                      case 3:
-                          while(it->isDigit()==true)
-                          {
-                              it++;
-                              positionTrack++;
-                          }
+                          case 1:
+                              i=0;
+                              if(it->isDigit()==false)
+                                  it++;
+                              while(it->isDigit()==true)
+                              {
+                                  if(i=0)
+                                  {
+                                      maxCount=*it;
+                                  }
+                                  else
+                                      maxCount=maxCount.append(*it);
+                                  i++;
+                                  it++;
+                                  positionTrack++;
+                              }
+                          case 2:
+                              while(it->isDigit()==true)
+                              {
+                                  it++;
+                                  positionTrack++;
+                              }
+                          case 3:
+                              while(it->isDigit()==true)
+                              {
+                                  it++;
+                                  positionTrack++;
+                              }
+                      }
                   }
               }
+              file.close();
+              int curC=secondWord.toInt();
+              int maxC=forthWord.toInt();
+              progresscount=100*curC/maxC;
+              return progresscount;
           }
       }
-      file.close();
-      int curC=curFileCount.toInt();
-      int maxC=maxCount.toInt();
-      progresscount=100*curC/maxC;
+  }
+
+  void InvokeCLI::progressBarPopUp(SecDialog* curr)
+  {
+      /****Start of progress bar update*******/
+      int progresscount=fileParse(curr);
       curr->pd->setValue(progresscount);
 
       //use message box to test values

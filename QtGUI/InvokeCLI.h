@@ -35,7 +35,7 @@ namespace EggBeater
     /**
       Start the session and get the session ID.
     **/
-    void startSession();
+    void startSession(QProcess* proc);
 
     /**
       Refresh the current session.
@@ -46,6 +46,8 @@ namespace EggBeater
       Close the current session.
     **/
     void closeSession();
+
+    int fileParse(SecDialog* curr);
 
     //function to update the progressbar
     void progressBarPopUp(SecDialog* curr);
