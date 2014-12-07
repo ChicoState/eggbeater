@@ -40,9 +40,7 @@ namespace EggBeater
   void InvokeCLI::progressBarPopUp(SecDialog* curr)
   {
       /****Start of progress bar update*******/
-      QString temp =  QDir::tempPath()+"/TempComm.cpp"; ; //"C:\Users\sam\AppData\Local\TempComm.cpp"; //System::GetTempPath();
-      // qint64 min=0;
-      // qint64 max=100;
+      QString temp =  QDir::tempPath()+"/TempComm.cpp"; ; //"C:\Users\sam\AppData\Local\TempComm.cpp" //System::GetTempPath()
       qint64 i=0;
       qint64 progresscount=0;
       // qint64 curBlock=0;
@@ -133,35 +131,6 @@ namespace EggBeater
 
       //use message box to test values
       //QMessageBox::warning(this, progress, curFileCount, maxCount); //tr("Cant find temp file \n")
-
-      /*
-      for (int i = 0; i < 100; i++) {
-          progress->setValue(i);
-
-          if (progress->wasCanceled())
-              break;
-      } // */
-      //progress->setValue(numTasks);
-      //QString sprogress=QString::number(progresscount);
-      //QProgressDialog progress("Encrypting File(s)...", "Cancel", 0, 100);
-      //ui->progressBar->setValue(progress);
-
-      /****End of progressbar update --SamAdams*******/
-
-      /*
-          QProgressDialog *dlg = new QProgressDialog(this);
-          qint64 len = src.bytesAvailable();
-          dlg->setRange(0,len);
-          dlg->show();
-
-          char ch;
-          while(!src.atEnd())
-          {
-            src.getChar(&ch);
-            dst.putChar(ch);
-            dlg->setValue(dlg->value()+1);
-            qApp->processEvents();
-          }*/
   }
 
   bool InvokeCLI::discoverDevice()
