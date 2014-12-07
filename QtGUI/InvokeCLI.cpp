@@ -184,7 +184,6 @@ namespace EggBeater
     if(cipherMode!="cfb" && cipherMode!="ofb" && cipherMode!="gcm")
         cipherMode = "cfb";
     attributes  << "--cipher-mode" << cipherMode;
-    attributes  << "--cipher-mode" << cipherMode;
     //attributes << "-o" << "option1";
     //attributes  << "-o" << "option2";
     proc->start(program, attributes);
