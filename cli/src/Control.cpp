@@ -9,7 +9,7 @@ Control::Control( Options opt ) {
     sessionID = opt.getSessionID();
     cliAction = opt.getAction();
     cipherMode = opt.getCipherMode();
-    controlStatus = opt.getStatus();
+    currentStatus = opt.getStatus();
     errorList = opt.getErrors();
     fileList = opt.getFileList();
     
@@ -52,6 +52,7 @@ bool Control::run(void){
       // call encrypt
       // need to loop through files in list.
       encryptFiles( cipherMode, fileList.front(), key, iv ); // Need to get key and iv from somewhere..
+      
       break;
     
     case CLI_Action::Decrypt:
@@ -62,6 +63,8 @@ bool Control::run(void){
     
     case CLI_Action::DiscoverDevice:
       // call discover
+      
+//      devList = discover_devices(uint16_t vid, uint16_t pid); 
       break;
   }// end case.
 
@@ -71,6 +74,7 @@ bool Control::run(void){
 // Return last status in tmpFile to the gui.
 
 String Control::getStatus(){
+  addMsg(fileVec,sessionID );
   addMsg(fileVec, "Status=",opt.getCurrentStatus();
   Control::writeVec(fileVec, tmpFile);
 }
@@ -80,7 +84,6 @@ String Control::getStatus(){
 
 void Control::newSession(){
 
-  //StringList discover_devices(uint16_t vid, uint16_t pid);
 
   addMsg(fileVec, "SessionID=", sessionID );
   addMsg(fileVec, "Action=", cliAction );
@@ -123,7 +126,7 @@ int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey
   myCrypt.encryptFile(ofile, ofile.append(".egg"));
 
   addMsg(fileVec, sessionID);
-  addMsg( fileVec, controlStatus );
+  addMsg( fileVec, currentStatus );
   writeVec( fileVec, tmpFile);
   return 0;
 }// end Encrypt files.
@@ -148,7 +151,7 @@ int Control::decryptFiles(string decMode, string file, vector<uint8_t> pwordKey,
   
   // Need to update status values here somehow.
   addMsg(fileVec, sessionID);
-  addMsg( fileVec, controlStatus );
+  addMsg( fileVec, currentStatus );
   writeVec( fileVec, tmpFile);
   return 0;
 }// End decryption function.

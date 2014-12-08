@@ -68,12 +68,14 @@ namespace EggBeater
   
     vector<string> fileVec; // Hold the lines to write to the output file. Sending data to GUI.
     String      sessionID;
+    String      tmpFile;
     CLI_Action  cliAction;
     CipherMode  cipherMode;
-    Status_t    currentStatus;
-    ErrorList   errorList;
-    StringList  fileList;
-    Status_t    controlStatus;
+    Status_t    currentStatus;   
+    ErrorList   errorList;       // List of current errors.
+    StringList  fileList;        // List of files to operate on.
+    StringList devList;          // List of connected devices.
+    //Status_t    controlStatus;
     byte key[CryptoPP::AES::MAX_KEYLENGTH];
     byte iv[ CryptoPP::AES::BLOCKSIZE ];
     
