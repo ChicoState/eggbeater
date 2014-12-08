@@ -186,6 +186,7 @@ void SecDialog::on_encrypt_clicked()
         // When discover is true and checkSession is ture, encrypt files user selected
         else
         {
+            SelectCipher.setWindowTitle("EncryptApp");
             SelectCipher.setModal(true);
             SelectCipher.exec();
             int temp = SelectCipher.getI();
@@ -253,6 +254,7 @@ void SecDialog::on_decrypt_clicked()
         // When discover is true and checkSession is ture, decrypt files user selected
         else
         {
+            SelectCipher.setWindowTitle("EncryptApp");
             SelectCipher.setModal(true);
             SelectCipher.exec();
             int temp = SelectCipher.getI();
