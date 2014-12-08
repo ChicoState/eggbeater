@@ -12,18 +12,18 @@
 #include <string>
 #include <algorithm>
 
-#include <cryptopp/cryptlib.h>
+#include <cryptlib.h>
 using CryptoPP::Exception;
  
-#include <cryptopp/files.h>
+#include <files.h>
 using CryptoPP::FileSink;
 using CryptoPP::FileSource;
  
-#include <cryptopp/hex.h>
+#include <hex.h>
 using CryptoPP::HexEncoder;
 using CryptoPP::HexDecoder; 
  
-#include <cryptopp/filters.h>
+#include <filters.h>
 using CryptoPP::StringSink;
 using CryptoPP::StringSource;
 using CryptoPP::FileSink;
@@ -32,16 +32,16 @@ using CryptoPP::StreamTransformationFilter;
 using CryptoPP::AuthenticatedEncryptionFilter;
 using CryptoPP::AuthenticatedDecryptionFilter;
  
-#include <cryptopp/modes.h>
+#include <modes.h>
 using CryptoPP::CBC_Mode;
  
-#include <cryptopp/gcm.h>
+#include <gcm.h>
 using CryptoPP::GCM;
  
 #include <cryptopp/aes.h>
 using CryptoPP::AES;
  
-#include <cryptopp/modes.h>
+#include <modes.h>
 using CryptoPP::OFB_Mode;
 using CryptoPP::CFB_Mode;
 using CryptoPP::Exception;
