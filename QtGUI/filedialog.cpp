@@ -84,7 +84,7 @@ void FileDialog::chooseClicked()
             }
             else
             {
-                QMessageBox::warning(this, tr("The title"), tr("Maximum is 10!"));
+                QMessageBox::warning(this, tr("EncryptApp"), tr("Maximum is 10!"));
                 return;
             }
         }

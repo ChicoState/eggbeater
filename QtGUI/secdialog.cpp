@@ -47,7 +47,7 @@ void SecDialog::clock_time()
     }
     else // When time is 0
     {
-        QMessageBox::critical(this, tr("The title"), tr("Timeout!!"));
+        QMessageBox::critical(this, tr("EncryptApp"), tr("Timeout!!"));
         this->close();
 
     }
@@ -70,6 +70,7 @@ void SecDialog::on_choose_input_files_clicked()
 {
     // Choose file(s) user want to encrypt/decrypt and display file name(s) on second window
     file_dlg = new FileDialog();
+    file_dlg->setWindowTitle("Select File(s) and Folder(s)");
     int count = 0;
 
     if(file_dlg->exec())
@@ -125,7 +126,7 @@ void SecDialog::on_choose_output_folder_clicked()
     // Choose a destination folder and display folder name on second window
     folderName = QFileDialog::getExistingDirectory(
                 this,
-                tr("Open Directry"),
+                tr("Select the Destination Folder"),
                 "C/:",
                 QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
                 );
@@ -143,19 +144,19 @@ void SecDialog::on_encrypt_clicked()
     // Check user select file(s) and a destination folder
     if(!fileNames.isEmpty() && folderName.isEmpty())
     {
-        QMessageBox::warning(this, tr("The title"), tr("Slect Destination Folder."));
+        QMessageBox::warning(this, tr("EncryptApp"), tr("Slect Destination Folder."));
         return;
     }
 
     else if(fileNames.isEmpty() && !folderName.isEmpty())
     {
-        QMessageBox::warning(this, tr("The title"), tr("Slect File(s) or Folder(S)."));
+        QMessageBox::warning(this, tr("EncryptApp"), tr("Slect File(s) or Folder(S)."));
         return;
     }
 
     else if(fileNames.isEmpty() && folderName.isEmpty())
     {
-        QMessageBox::warning(this, tr("The title"), tr("Slect File(s) or Folder(s)\nand Destination Folder."));
+        QMessageBox::warning(this, tr("EncryptApp"), tr("Slect File(s) or Folder(s)\nand Destination Folder."));
         return;
     }
 
@@ -169,17 +170,17 @@ void SecDialog::on_encrypt_clicked()
         // Check session is open and divice is discovered
         if(discover==false && checkSession==false)
         {
-            QMessageBox::warning(this, tr("The title"), tr("Session is not opened\nand\nDevice is not connected!"));
+            QMessageBox::warning(this, tr("EncryptApp"), tr("Session is not opened\nand\nDevice is not connected!"));
             return;
         }
         else if(discover==true && checkSession==false)
         {
-            QMessageBox::warning(this, tr("The title"), tr("Session is not opened!"));
+            QMessageBox::warning(this, tr("EncryptApp"), tr("Session is not opened!"));
             return;
         }
         else if(discover==false && checkSession==true)
         {
-            QMessageBox::warning(this, tr("The title"), tr("Device is not connected!"));
+            QMessageBox::warning(this, tr("EncryptApp"), tr("Device is not connected!"));
             return;
         }
 
@@ -212,19 +213,19 @@ void SecDialog::on_decrypt_clicked()
     // Check user select file(s) and a destination folder
     if(fileNames.isEmpty() && folderName.isEmpty())
     {
-        QMessageBox::warning(this, tr("The title"), tr("Slect File(s) or Folder(s)\nand Destination Folder."));
+        QMessageBox::warning(this, tr("EncryptApp"), tr("Slect File(s) or Folder(s)\nand Destination Folder."));
         return;
     }
 
     else if(!fileNames.isEmpty() && folderName.isEmpty())
     {
-        QMessageBox::warning(this, tr("The title"), tr("Slect Destination Folder."));
+        QMessageBox::warning(this, tr("EncryptApp"), tr("Slect Destination Folder."));
         return;
     }
 
     else if(fileNames.isEmpty() && !folderName.isEmpty())
     {
-        QMessageBox::warning(this, tr("The title"), tr("Slect File(s) or Folder(S)."));
+        QMessageBox::warning(this, tr("EncryptApp"), tr("Slect File(s) or Folder(S)."));
         return;
     }
 
@@ -237,17 +238,17 @@ void SecDialog::on_decrypt_clicked()
         //Check session is open and divice is discovered
         if(discover==false && checkSession==false)
         {
-            QMessageBox::warning(this, tr("The title"), tr("Session is not opened\nand\nDevice is not connected!"));
+            QMessageBox::warning(this, tr("EncryptApp"), tr("Session is not opened\nand\nDevice is not connected!"));
             return;
         }
         else if(discover==true && checkSession==false)
         {
-            QMessageBox::warning(this, tr("The title"), tr("Session is not opened!"));
+            QMessageBox::warning(this, tr("EncryptApp"), tr("Session is not opened!"));
             return;
         }
         else if(discover==false && checkSession==true)
         {
-            QMessageBox::warning(this, tr("The title"), tr("Device is not connected!"));
+            QMessageBox::warning(this, tr("EncryptApp"), tr("Device is not connected!"));
             return;
         }
 
