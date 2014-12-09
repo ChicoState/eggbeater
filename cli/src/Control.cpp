@@ -78,7 +78,7 @@ int getIV(ByteArray &iv){
                           0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
   for(int x = 0; x < hardIV.size(); x++) iv[x] = hardIV[x];
                       
-return 0;
+return iv.size();
 }// End get IV
 
 
@@ -92,7 +92,7 @@ int getKey(ByteArray &key){
                       0x2d, 0x98, 0x10, 0xa3, 0x09, 0x14, 0xdf, 0xf4});
   for(int x = 0; x < hardKey.size(); x++) key[x] = hardKey[x];
 
-return 0;
+return key.size();
 }// end getKey
 
 
@@ -124,7 +124,7 @@ void Control::openSession(){
 }
 
 ////////////////////////////////////////////////////////////
-//
+// Member function to refresh session with micro controller.
 
 void Control::refreshSession(){
 
