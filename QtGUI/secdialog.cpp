@@ -232,7 +232,7 @@ void SecDialog::on_decrypt_clicked()
     else
     {
         QProcess* proc = new QProcess(this);
-        bool discover = invoke->discoverDevice();
+        bool discover = invoke->discoverDevice(proc);
         bool checkSession = invoke->sessionIsOpen();
 
         //Check session is open and divice is discovered

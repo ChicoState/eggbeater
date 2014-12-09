@@ -74,7 +74,7 @@ namespace EggBeater
       proc->close();
   }
 
-  parse InvokeCLI::fileParse(SecDialog* curr)
+  InvokeCLI::parse InvokeCLI::fileParse(SecDialog* curr)
   {
       QString temp =  QDir::tempPath()+"/TempComm.cpp"; ; //"C:\Users\sam\AppData\Local\TempComm.cpp" //System::GetTempPath()
       qint64 i=0;
@@ -84,19 +84,23 @@ namespace EggBeater
       QString curFileCount=0;
       QString maxCount=0;
       QFile file(temp);
+      parse retvals;
+      retvals.progresscount=0;
+      retvals.sessionID=0;
+      retvals.errormessage="\n";
 
       // The file stuff should go in its own function/class
 
       if(!file.open(QFile::ReadOnly))
       {
           QMessageBox::warning(curr, "Application", file.fileName(), "ok"); //"Cant find temp file \n"
-          return -1;
+          retvals.progresscount=-1;
+          retvals.sessionID=-1;
+          retvals.errormessage="Can't find temp file.";
+          return retvals;
       }
       QTextStream in(&file);
-	  parse retvals;
-	  retvals.progresscount=0;
-	  retvals.sessionID=0;
-	  retvals.errormessage=NULL;
+
       while(!in.atEnd())
       {
           QString line=in.readLine();
@@ -125,9 +129,9 @@ namespace EggBeater
 			  retvals.errormessage=(retvals.errormessage)+line.split(" ").at(i);  
 			}
 		  }
-		  else if(firstWord=="sessionID"
+          else if(firstWord=="sessionID")
 		  {
-		    retvals.sessionID=line.split(" ").at(1);
+            retvals.sessionID=(line.split(" ").at(1)).toInt();
 		  }
 		  else if(firstWord=="^!done")
 		  {
@@ -163,8 +167,9 @@ namespace EggBeater
   void InvokeCLI::progressBarPopUp(SecDialog* curr)
   {
       /****Start of progress bar update*******/
-      int progresscount=fileParse(curr);
-      curr->pd->setValue(progresscount);
+      parse retvals;
+      retvals=fileParse(curr);
+      curr->pd->setValue(retvals.progresscount);
 
       //use message box to test values
       //QMessageBox::warning(this, progress, curFileCount, maxCount); //tr("Cant find temp file \n")
