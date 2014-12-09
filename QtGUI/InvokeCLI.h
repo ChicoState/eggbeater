@@ -40,12 +40,12 @@ namespace EggBeater
     /**
       Refresh the current session.
     **/
-    void refreshSession();
+    void refreshSession(QProcess* proc);
 
     /**
       Close the current session.
     **/
-    void closeSession();
+    void closeSession(QProcess* proc);
 
     int fileParse(SecDialog* curr);
 
@@ -55,7 +55,7 @@ namespace EggBeater
     /**
       Check for the connected fingerprint device.
     **/
-    bool discoverDevice();
+    bool discoverDevice(QProcess* proc);
 
     /**
       Encrypt the specified files with the specified cipher mode. Defaults to

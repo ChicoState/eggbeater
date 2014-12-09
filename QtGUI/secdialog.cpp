@@ -163,8 +163,8 @@ void SecDialog::on_encrypt_clicked()
     // If Both of file(s) and destinatind folder are not empty, go into it
     else
     {
-
-        bool discover = invoke->discoverDevice();
+        QProcess* proc = new QProcess(this);
+        bool discover = invoke->discoverDevice(proc);
         bool checkSession = invoke->sessionIsOpen();
 
         // Check session is open and divice is discovered
@@ -194,7 +194,6 @@ void SecDialog::on_encrypt_clicked()
             if(temp>0)
             {
                 cipherMode = SelectCipher.getCipherMode();
-                QProcess* proc = new QProcess(this);
                 invoke->encryptFiles(fileNames, folderName, cipherMode, proc);
                 //invoke->closeSession();
                 pd->setLabelText("Encrypting file(s)...");
@@ -232,6 +231,7 @@ void SecDialog::on_decrypt_clicked()
     // If Both of file(s) and destinatind folder are not empty, go into it
     else
     {
+        QProcess* proc = new QProcess(this);
         bool discover = invoke->discoverDevice();
         bool checkSession = invoke->sessionIsOpen();
 
@@ -262,7 +262,6 @@ void SecDialog::on_decrypt_clicked()
             if(temp>0)
             {
                 cipherMode = SelectCipher.getCipherMode();
-                QProcess* proc = new QProcess(this);
                 invoke->decryptFiles(fileNames, folderName, cipherMode, proc);
                 //invoke->closeSession();
                 pd->setLabelText("Decrypting file(s)...");
