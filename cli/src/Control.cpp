@@ -51,13 +51,13 @@ bool Control::run(void){
     case CLI_Action::Encrypt:
       // call encrypt
       // need to loop through files in list.
-      encryptFiles( cipherMode, fileList.front(), key, iv ); // Need to get key and iv from somewhere..
+      encryptFiles( cipherMode, fileList.front() );
       break;
     
     case CLI_Action::Decrypt:
       // call decrypt.
       // need to loop through files in list.
-      decryptFiles( cipherMode, fileList.front(), key, iv );
+      decryptFiles( cipherMode, fileList.front());
       break;
     
     case CLI_Action::DiscoverDevice:
@@ -99,7 +99,6 @@ String Control::getStatus(){
 
 void Control::newSession(){
 
-  
   addMsg(fileVec, "sessionID ", sessionID );
   
   writeVec(fileVec, tmpFile);
@@ -131,16 +130,18 @@ void Control::closeSession(){
 ////////////////////////////////////////////////////////////
 // Encrypt a file.
 
-int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey, vector<uint8_t> ivec)
+int Control::encryptFiles(string encMode, string oFile)
 {
 
-  if( !getIV( &iv) ){
+  if( !getIV( &iv) )
+  {
     addMsg(fileVec, "sessionID ", sessionID);
     addMsg(fileVec, "^!fatal ", "Could not get valid IV.");
     writeVec( fileVec, tmpFile);
     return 1;
   }
-  if( !getKey( &key) ){
+  if( !getKey( &key) )
+  {
     addMsg(fileVec, "sessionID ", sessionID);
     addMsg(fileVec, "^!fatal ", "Could not get valid Key.");
     writeVec( fileVec, tmpFile);
@@ -165,16 +166,18 @@ int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey
 ////////////////////////////////////////////////////////////
 // Decrypt a file.
 
-int Control::decryptFiles(string decMode, string file, vector<uint8_t> pwordKey, vector<uint8_t> ivec)
+int Control::decryptFiles(string decMode, string file)
 {
 
-  if( !getIV( &iv) ){
+  if( !getIV( &iv) )
+  {
     addMsg(fileVec, "sessionID ", sessionID);
     addMsg(fileVec, "^!fatal ", "Could not get valid IV.");
     writeVec( fileVec, tmpFile);
     return 1;
   }
-  if( !getKey( &key) ){
+  if( !getKey( &key) )
+  {
     addMsg(fileVec, "sessionID ", sessionID);
     addMsg(fileVec, "^!fatal ", "Could not get valid Key.");
     writeVec( fileVec, tmpFile);
