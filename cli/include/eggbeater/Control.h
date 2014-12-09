@@ -80,8 +80,8 @@ namespace EggBeater
     StringList  fileList;        // List of files to operate on.
     StringList devList;          // List of connected devices.
     //Status_t    controlStatus;
-    ByteArray key key[CryptoPP::AES::MAX_KEYLENGTH];
-    ByteArray iv[ CryptoPP::AES::BLOCKSIZE ];
+    ByteArray key;
+    ByteArray iv;
     
     char tmpFilePath[120]={'\0'};
     //! Internal function to start a new session

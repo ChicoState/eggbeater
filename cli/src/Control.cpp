@@ -52,7 +52,6 @@ bool Control::run(void){
       // call encrypt
       // need to loop through files in list.
       encryptFiles( cipherMode, fileList.front(), key, iv ); // Need to get key and iv from somewhere..
-      
       break;
     
     case CLI_Action::Decrypt:
@@ -90,8 +89,8 @@ return 0;
 // Return last status in tmpFile to the gui.
 
 String Control::getStatus(){
-  addMsg(fileVec,sessionID );
-  addMsg(fileVec, "Status=",opt.getCurrentStatus();
+  addMsg(fileVec,"sessionID ", sessionID );
+  addMsg(fileVec, opt.getCurrentStatus();
   Control::writeVec(fileVec, tmpFile);
 }
 
@@ -100,10 +99,10 @@ String Control::getStatus(){
 
 void Control::newSession(){
 
-
-  addMsg(fileVec, "SessionID=", sessionID );
-  addMsg(fileVec, "Action=", cliAction );
-  Control::writeVec(fileVec, tmpFile);
+  
+  addMsg(fileVec, "sessionID ", sessionID );
+  
+  writeVec(fileVec, tmpFile);
 }
 
 ////////////////////////////////////////////////////////////
@@ -134,14 +133,28 @@ void Control::closeSession(){
 
 int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey, vector<uint8_t> ivec)
 {
+
+  if( !getIV( &iv) ){
+    addMsg(fileVec, "sessionID ", sessionID);
+    addMsg(fileVec, "^!fatal ", "Could not get valid IV.");
+    writeVec( fileVec, tmpFile);
+    return 1;
+  }
+  if( !getKey( &key) ){
+    addMsg(fileVec, "sessionID ", sessionID);
+    addMsg(fileVec, "^!fatal ", "Could not get valid Key.");
+    writeVec( fileVec, tmpFile);
+    return 1;
+  }
+
   Crypto myCrypt;
   myCrypt.setCipherMode(CipherMode);
-  myCrypt.setEncryptionKey(pwordKey);
-  myCrypt.setInitialVector(ivec);
+  myCrypt.setEncryptionKey(key);
+  myCrypt.setInitialVector(iv);
   
   myCrypt.encryptFile(ofile, ofile.append(".egg"));
 
-  addMsg(fileVec, sessionID);
+  addMsg(fileVec, "sessionID ", sessionID);
   addMsg( fileVec, currentStatus );
   writeVec( fileVec, tmpFile);
   return 0;
@@ -154,10 +167,24 @@ int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey
 
 int Control::decryptFiles(string decMode, string file, vector<uint8_t> pwordKey, vector<uint8_t> ivec)
 {
+
+  if( !getIV( &iv) ){
+    addMsg(fileVec, "sessionID ", sessionID);
+    addMsg(fileVec, "^!fatal ", "Could not get valid IV.");
+    writeVec( fileVec, tmpFile);
+    return 1;
+  }
+  if( !getKey( &key) ){
+    addMsg(fileVec, "sessionID ", sessionID);
+    addMsg(fileVec, "^!fatal ", "Could not get valid Key.");
+    writeVec( fileVec, tmpFile);
+    return 1;
+  }
+
   Crypto myCrypt;
   myCrypt.setCipherMode(CipherMode);
-  myCrypt.setEncryptionKey(pwordKey);
-  myCrypt.setInitialVector(ivec);
+  myCrypt.setEncryptionKey(key);
+  myCrypt.setInitialVector(iv);
   
   string file2;
   if(file.find(".egg" == file.length() - 4);                      // This may need to be -5.
@@ -166,7 +193,7 @@ int Control::decryptFiles(string decMode, string file, vector<uint8_t> pwordKey,
   myCrypt.decryptFile(file, file2 );
   
   // Need to update status values here somehow.
-  addMsg(fileVec, sessionID);
+  addMsg(fileVec, "sessionID ", sessionID);
   addMsg( fileVec, currentStatus );
   writeVec( fileVec, tmpFile);
   return 0;
