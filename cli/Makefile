@@ -17,6 +17,7 @@ LDFLAGS  += "-Llib" -Wl,-gc-sections -lpthread
 OTHER_SOURCES  = src/Discovery.o               \
                  src/SerialCommunication.o     \
                  src/Options.o                 \
+                 src/Control.o                 \
                  src/packet.o
 CRYPTO_SOURCES = src/Crypto.o
 ALL_SOURCES    = $(OTHER_SOURCES) $(CRYPTO_SOURCES)
