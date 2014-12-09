@@ -15,16 +15,18 @@ Control::Control( Options opt ) {
     
 }  // End Constructor
 
-~Control::Control()               // Destructor
+~Control::Control()                                      // Destructor
 {
 }
 
 bool Control::run(void){
 // case statement for what action to do.
 // Also do error checking on opt data?
-  int pathSize = GetTempPath( sizeof(tmpFilePath),tmpFilePath);  // Get the windows tmp file path.
-  if(pathSize < 1) return FALSE;                                 // Check that it worked.
-  else tmpFilePath[pathSize] = '\0';                             // Make sure last char is a NULL.
+  char tmp[120]={'\0'};
+  int pathSize = GetTempPath( sizeof(tmp),tmp);          // Get the windows tmp file path.
+  if(pathSize < 1) return FALSE;                         // Check that it worked.
+  else tmp[pathSize] = '\0';                             // Make sure last char is a NULL.
+  tmpFile = tmp.c_str();
   
   switch ( cliAction )
   {
@@ -51,14 +53,13 @@ bool Control::run(void){
     case CLI_Action::Encrypt:
       // call encrypt
       // need to loop through files in list.
-      encryptFiles( cipherMode, fileList.front(), key, iv ); // Need to get key and iv from somewhere..
-      
+      encryptFiles( cipherMode, fileList.front() );
       break;
     
     case CLI_Action::Decrypt:
       // call decrypt.
       // need to loop through files in list.
-      decryptFiles( cipherMode, fileList.front(), key, iv );
+      decryptFiles( cipherMode, fileList.front());
       break;
     
     case CLI_Action::DiscoverDevice:
@@ -73,8 +74,11 @@ bool Control::run(void){
 ////////////////////////////////////////////////////////////
 // Internal Function to get initialization vector (IV)
 int getIV(ByteArray &iv){
-
-return 0;
+  ByteArray hardIV      ({0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+                          0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
+  for(int x = 0; x < hardIV.size(); x++) iv[x] = hardIV[x];
+                      
+return iv.size();
 }// End get IV
 
 
@@ -82,7 +86,13 @@ return 0;
 // Internal function to get key value from st board.
 int getKey(ByteArray &key){
 
-return 0;
+  ByteArray hardKey     ({0x60, 0x3d, 0xeb, 0x10, 0x15, 0xca, 0x71, 0xbe,
+                      0x2b, 0x73, 0xae, 0xf0, 0x85, 0x7d, 0x77, 0x81,
+                      0x1f, 0x35, 0x2c, 0x07, 0x3b, 0x61, 0x08, 0xd7,
+                      0x2d, 0x98, 0x10, 0xa3, 0x09, 0x14, 0xdf, 0xf4});
+  for(int x = 0; x < hardKey.size(); x++) key[x] = hardKey[x];
+
+return key.size();
 }// end getKey
 
 
@@ -90,8 +100,8 @@ return 0;
 // Return last status in tmpFile to the gui.
 
 String Control::getStatus(){
-  addMsg(fileVec,sessionID );
-  addMsg(fileVec, "Status=",opt.getCurrentStatus();
+  addMsg(fileVec,"sessionID ", sessionID );
+  addMsg(fileVec, opt.getCurrentStatus();
   Control::writeVec(fileVec, tmpFile);
 }
 
@@ -100,10 +110,9 @@ String Control::getStatus(){
 
 void Control::newSession(){
 
-
-  addMsg(fileVec, "SessionID=", sessionID );
-  addMsg(fileVec, "Action=", cliAction );
-  Control::writeVec(fileVec, tmpFile);
+  addMsg(fileVec, "sessionID ", sessionID );
+  
+  writeVec(fileVec, tmpFile);
 }
 
 ////////////////////////////////////////////////////////////
@@ -115,7 +124,7 @@ void Control::openSession(){
 }
 
 ////////////////////////////////////////////////////////////
-//
+// Member function to refresh session with micro controller.
 
 void Control::refreshSession(){
 
@@ -132,16 +141,32 @@ void Control::closeSession(){
 ////////////////////////////////////////////////////////////
 // Encrypt a file.
 
-int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey, vector<uint8_t> ivec)
+int Control::encryptFiles(string encMode, string oFile)
 {
+
+  if( !getIV( &iv) )
+  {
+    addMsg(fileVec, "sessionID ", sessionID);
+    addMsg(fileVec, "^!fatal ", "Could not get valid IV.");
+    writeVec( fileVec, tmpFile);
+    return 1;
+  }
+  if( !getKey( &key) )
+  {
+    addMsg(fileVec, "sessionID ", sessionID);
+    addMsg(fileVec, "^!fatal ", "Could not get valid Key.");
+    writeVec( fileVec, tmpFile);
+    return 1;
+  }
+
   Crypto myCrypt;
   myCrypt.setCipherMode(CipherMode);
-  myCrypt.setEncryptionKey(pwordKey);
-  myCrypt.setInitialVector(ivec);
+  myCrypt.setEncryptionKey(key);
+  myCrypt.setInitialVector(iv);
   
   myCrypt.encryptFile(ofile, ofile.append(".egg"));
 
-  addMsg(fileVec, sessionID);
+  addMsg(fileVec, "sessionID ", sessionID);
   addMsg( fileVec, currentStatus );
   writeVec( fileVec, tmpFile);
   return 0;
@@ -152,12 +177,28 @@ int Control::encryptFiles(string encMode, string oFile, vector<uint8_t> pwordKey
 ////////////////////////////////////////////////////////////
 // Decrypt a file.
 
-int Control::decryptFiles(string decMode, string file, vector<uint8_t> pwordKey, vector<uint8_t> ivec)
+int Control::decryptFiles(string decMode, string file)
 {
+
+  if( !getIV( &iv) )
+  {
+    addMsg(fileVec, "sessionID ", sessionID);
+    addMsg(fileVec, "^!fatal ", "Could not get valid IV.");
+    writeVec( fileVec, tmpFile);
+    return 1;
+  }
+  if( !getKey( &key) )
+  {
+    addMsg(fileVec, "sessionID ", sessionID);
+    addMsg(fileVec, "^!fatal ", "Could not get valid Key.");
+    writeVec( fileVec, tmpFile);
+    return 1;
+  }
+
   Crypto myCrypt;
   myCrypt.setCipherMode(CipherMode);
-  myCrypt.setEncryptionKey(pwordKey);
-  myCrypt.setInitialVector(ivec);
+  myCrypt.setEncryptionKey(key);
+  myCrypt.setInitialVector(iv);
   
   string file2;
   if(file.find(".egg" == file.length() - 4);                      // This may need to be -5.
@@ -166,7 +207,7 @@ int Control::decryptFiles(string decMode, string file, vector<uint8_t> pwordKey,
   myCrypt.decryptFile(file, file2 );
   
   // Need to update status values here somehow.
-  addMsg(fileVec, sessionID);
+  addMsg(fileVec, "sessionID ", sessionID);
   addMsg( fileVec, currentStatus );
   writeVec( fileVec, tmpFile);
   return 0;
@@ -227,39 +268,9 @@ int Control::addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 )
 }// end add string function.
 
 
-/*
-// Notes on file format from meeting..
-Data Flags used in output file:
-  ^!error
-  ^!fatal
-        File Contents:
-          --start_session (decimal)
-          --refresh_session (1/0)
-          --encrypt -running status 
-                        (everyline)
-                          # overall(files done), # total, current(path, blocks done, blocks total), overall(blocks done, blocks total)
-          --decrypt -running status 
-                        (everyline)
-                          # overall(files done), # total, current(path, blocks done, blocks total), overall(blocks done, blocks total)
-          --discovery (1/0)
-          --Close_session (done)
-EX file-encrypt:   0 ^ 9 ^ C:/programfiles/file.txt ^ 4 ^ 12 ^ 4 ^ 12
-EX file-error:   ^!error ----------------
-EX file-close:   ^!done
-
-// New name tags to use.
-SessionID 3XXXX
-^!error owfeihowed
-^!fatal
-status 7 ^ 10 ^ "blahasdl..."
-
-
-*/
-
-
 ////////////////////////////////////////////////////////////
 // addMsg function to add message to vector<string> to output to file.
-/*
+/* Notes on data to parse.
   struct Status_t
   {
     uint32_t CurrentBlocksDone,
@@ -271,7 +282,6 @@ status 7 ^ 10 ^ "blahasdl..."
     std::string CurrentPath;
   };
 */
-
 
 int Control::addMsg( std::vector<std::string> &vec, Status_t status )
 { 
@@ -310,5 +320,36 @@ int Control::addMsg( std::vector<std::string> &vec, Status_t status )
   return 0;
 }// end add string function.
 
+/*
+// Notes on file format from meeting..
+Data Flags used in output file:
+  ^!error
+  ^!fatal
+        File Contents:
+          --start_session (decimal)
+          --refresh_session (1/0)
+          --encrypt -running status 
+                        (everyline)
+                          # overall(files done), # total, current(path, blocks done, blocks total), overall(blocks done, blocks total)
+          --decrypt -running status 
+                        (everyline)
+                          # overall(files done), # total, current(path, blocks done, blocks total), overall(blocks done, blocks total)
+          --discovery (1/0)
+          --Close_session (done)
+EX file-encrypt:   0 ^ 9 ^ C:/programfiles/file.txt ^ 4 ^ 12 ^ 4 ^ 12
+EX file-error:   ^!error ----------------
+EX file-close:   ^!done
+
+// New name tags to use.
+SessionID 3XXXX
+^!error message
+^!fatal message
+^!done
+status 7 ^ 10 ^ "blahasdl..."
+refresh 1 or 0
+discovered  1 or 0
+close 1 or 0
+
+*/
 
 

@@ -80,10 +80,10 @@ namespace EggBeater
     StringList  fileList;        // List of files to operate on.
     StringList devList;          // List of connected devices.
     //Status_t    controlStatus;
-    ByteArray key key[CryptoPP::AES::MAX_KEYLENGTH];
-    ByteArray iv[ CryptoPP::AES::BLOCKSIZE ];
+    ByteArray key;
+    ByteArray iv;
     
-    char tmpFilePath[120]={'\0'};
+
     //! Internal function to start a new session
     void newSession();
     //! Internal function to open a session with an existing fingerprint
@@ -99,9 +99,9 @@ namespace EggBeater
     
     
     //! Internal function to encrypt the specified files
-    int encryptFiles(std::string, std::string, std::vector<uint8_t>, std::vector<uint8_t>);
+    int encryptFiles(std::string, std::string);
     //! Internal function to decrypt the specified files
-    int decryptFiles(std::string, std::string, std::vector<uint8_t>, std::vector<uint8_t>);
+    int decryptFiles(std::string, std::string);
 	
 	  int writeVec( std::vector<std::string> &lines, std::string targetFile);
     int addMsg(std::vector<std::string> &vec, std::string arg1, std::string arg2 = "\0" );
