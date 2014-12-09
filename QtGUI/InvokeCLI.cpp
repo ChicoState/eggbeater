@@ -27,7 +27,7 @@ namespace EggBeater
     //needs to get session ID
       QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
       QStringList attributes;
-      attributes << "--start_session";
+      attributes << "--start-session";
       proc->start(program, attributes);
       if(!proc->waitForFinished())
           qDebug() << "Fail:\n"<< proc->errorString();
@@ -40,14 +40,38 @@ namespace EggBeater
       proc->close();
   }
 
-  void InvokeCLI::refreshSession()
+  void InvokeCLI::refreshSession(QProcess* proc)
   {
+      QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
+      QStringList attributes;
+      attributes << "--refresh-session";
+      proc->start(program, attributes);
+      if(!proc->waitForFinished())
+          qDebug() << "Fail:\n"<< proc->errorString();
+      else
+      {
+          qDebug() << "Success:\n" << proc->readAll();
+          qDebug("Done!\n");
+      }
 
+      proc->close();
   }
 
-  void InvokeCLI::closeSession()
+  void InvokeCLI::closeSession(QProcess* proc)
   {
-    //process->close();
+      QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
+      QStringList attributes;
+      attributes << "--close-session";
+      proc->start(program, attributes);
+      if(!proc->waitForFinished())
+          qDebug() << "Fail:\n"<< proc->errorString();
+      else
+      {
+          qDebug() << "Success:\n" << proc->readAll();
+          qDebug("Done!\n");
+      }
+
+      proc->close();
   }
 
   int InvokeCLI::fileParse(SecDialog* curr)
@@ -231,12 +255,22 @@ namespace EggBeater
       //QMessageBox::warning(this, progress, curFileCount, maxCount); //tr("Cant find temp file \n")
   }
 
-  bool InvokeCLI::discoverDevice()
+  bool InvokeCLI::discoverDevice(QProcess* proc)
   {
-    //if()
-     //   return true;
+      QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
+      QStringList attributes;
+      attributes << "--close-session";
+      proc->start(program, attributes);
+      if(!proc->waitForFinished())
+          qDebug() << "Fail:\n"<< proc->errorString();
+      else
+      {
+          qDebug() << "Success:\n" << proc->readAll();
+          qDebug("Done!\n");
+      }
 
-    return true;
+      proc->close();
+      return true;
   }
 
   void InvokeCLI::encryptFiles(QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc)
