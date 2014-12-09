@@ -38,7 +38,7 @@ using CryptoPP::CBC_Mode;
 #include <gcm.h>
 using CryptoPP::GCM;
  
-#include <cryptopp/aes.h>
+#include <aes.h>
 using CryptoPP::AES;
  
 #include <modes.h>
@@ -48,7 +48,10 @@ using CryptoPP::Exception;
 //-------------------------------------------
 #include <eggbeater/Options.h>
 #include <eggbeater/Crypto.h>
+/*
   struct Status_t
+  {
+  }; // */
 
 
 /*******************************************************************************
@@ -59,14 +62,15 @@ namespace EggBeater
   class Control
   {
   public:
-    Control(Options opt); // or whatever the class is named
+    Control(Options& opt); // or whatever the class is named
+    ~Control();
     
     bool run(void);
     
     String getStatus();
   private:
   
-    vector<string> fileVec; // Hold the lines to write to the output file. Sending data to GUI.
+    std::vector<std::string> fileVec; // Hold the lines to write to the output file. Sending data to GUI.
     String      sessionID;
     String      tmpFile;
     CLI_Action  cliAction;
