@@ -23,6 +23,7 @@ namespace EggBeater
 
   class InvokeCLI
   {
+  struct parse{int progresscount; int sessionID; QString errormessage;};
   public:
     InvokeCLI();
     ~InvokeCLI();
@@ -47,7 +48,7 @@ namespace EggBeater
     **/
     void closeSession(QProcess* proc);
 
-    int fileParse(SecDialog* curr);
+    parse fileParse(SecDialog* curr);
 
     //function to update the progressbar
     void progressBarPopUp(SecDialog* curr);

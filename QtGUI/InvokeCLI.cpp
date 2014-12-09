@@ -74,7 +74,7 @@ namespace EggBeater
       proc->close();
   }
 
-  int InvokeCLI::fileParse(SecDialog* curr)
+  parse InvokeCLI::fileParse(SecDialog* curr)
   {
       QString temp =  QDir::tempPath()+"/TempComm.cpp"; ; //"C:\Users\sam\AppData\Local\TempComm.cpp" //System::GetTempPath()
       qint64 i=0;
@@ -93,156 +93,71 @@ namespace EggBeater
           return -1;
       }
       QTextStream in(&file);
+	  parse retvals;
+	  retvals.progresscount=0;
+	  retvals.sessionID=0;
+	  retvals.errormessage=NULL;
       while(!in.atEnd())
       {
           QString line=in.readLine();
           QString::iterator it= line.begin();
           QVector<char> curFileName;
           QString word=" ";
-          QString firstWord = line.split(" ").at(0);
-          if(firstWord=="--encrypt")
-          {
-              QString curFile = line.split(" ").at(1);
-             // QString upCarrot = line.split(" ").at(2);
-              QString totalFile = line.split(" ").at(3);
-              if(it->isDigit()==true)
-              {
-                  int linePos=0;
-                  for(it=line.begin(); linePos<line.length(); linePos++)
-                  {
-                      if(*it== "\"")
-                      {
-                          i=0;
-                          while(*it+1!="\"")
-                          {
-                              QByteArray temparray = (*it+1).toUtf8();
-                              curFileName[i] = temparray.at(i);
-                              i++;
-                          }
-                      }
-                      switch(positionTrack)
-                      {
-                          case 0:
-                              i=0;
-                              while(it->isDigit()==true)
-                              {
-                                  if(i=0)
-                                      curFileCount=*it;
-                                  else
-                                      curFileCount=curFileCount.append(*it);
-                                  i++;
-                                  it++;
-                              }
-                              positionTrack++;
-                          case 1:
-                              i=0;
-                              if(it->isDigit()==false)
-                                  it++;
-                              while(it->isDigit()==true)
-                              {
-                                  if(i=0)
-                                  {
-                                      maxCount=*it;
-                                  }
-                                  else
-                                      maxCount=maxCount.append(*it);
-                                  i++;
-                                  it++;
-                                  positionTrack++;
-                              }
-                          case 2:
-                              while(it->isDigit()==true)
-                              {
-                                  it++;
-                                  positionTrack++;
-                              }
-                          case 3:
-                              while(it->isDigit()==true)
-                              {
-                                  it++;
-                                  positionTrack++;
-                              }
-                      }
-                  }
-              }
-              file.close();
-              int curC=curFile.toInt();
-              int maxC=totalFile.toInt();
-              progresscount=100*curC/maxC;
-              return progresscount;
-          }
-          if(firstWord=="--decrypt")
-          {
-              QString curFile = line.split(" ").at(1);
-             // QString upCarrot = line.split(" ").at(2);
-              QString totalFile = line.split(" ").at(3);
-              if(it->isDigit()==true)
-              {
-                  int linePos=0;
-                  for(it=line.begin(); linePos<line.length(); linePos++)
-                  {
-                      if(*it== "\"")
-                      {
-                          i=0;
-                          while(*it+1!="\"")
-                          {
-                              QByteArray temparray = (*it+1).toUtf8();
-                              curFileName[i] = temparray.at(i);
-                              i++;
-                          }
-                      }
-                      switch(positionTrack)
-                      {
-                          case 0:
-                              i=0;
-                              while(it->isDigit()==true)
-                              {
-                                  if(i=0)
-                                      curFileCount=*it;
-                                  else
-                                      curFileCount=curFileCount.append(*it);
-                                  i++;
-                                  it++;
-                              }
-                              positionTrack++;
-                          case 1:
-                              i=0;
-                              if(it->isDigit()==false)
-                                  it++;
-                              while(it->isDigit()==true)
-                              {
-                                  if(i=0)
-                                  {
-                                      maxCount=*it;
-                                  }
-                                  else
-                                      maxCount=maxCount.append(*it);
-                                  i++;
-                                  it++;
-                                  positionTrack++;
-                              }
-                          case 2:
-                              while(it->isDigit()==true)
-                              {
-                                  it++;
-                                  positionTrack++;
-                              }
-                          case 3:
-                              while(it->isDigit()==true)
-                              {
-                                  it++;
-                                  positionTrack++;
-                              }
-                      }
-                  }
-              }
-              file.close();
-              int curC=curFile.toInt();
-              int maxC=totalFile.toInt();
-              progresscount=100*curC/maxC;
-              return progresscount;
-          }
+		  QString firstWord = line.split(" ").at(0);
+		  if(firstWord=="^!error")
+		  {
+		    //read error message
+			for(int i=1; i<line.size(); i++)
+			{
+  			  if(retvals.errormessage==NULL)
+			    retvals.errormessage=line.split(" ").at(1);
+			  retvals.errormessage=(retvals.errormessage)+line.split(" ").at(i);  
+			}
+			
+		  }
+		  else if(firstWord=="^!fatal")
+		  {
+		    //read error message and stop
+			for(int i=1; i<line.size(); i++)
+			{
+			  if(retvals.errormessage==NULL)
+			    retvals.errormessage=line.split(" ").at(1);
+			  retvals.errormessage=(retvals.errormessage)+line.split(" ").at(i);  
+			}
+		  }
+		  else if(firstWord=="sessionID"
+		  {
+		    retvals.sessionID=line.split(" ").at(1);
+		  }
+		  else if(firstWord=="^!done")
+		  {
+		    //done with task ack
+		  }
+		  else if(firstWord=="refresh")
+		  {
+		    //retval.refresh=line.split(" ").at(1);
+		  }
+		  else if(firstWord=="discovered")
+		  {
+		    //retval.discover=line.split(" ").at(1);
+		  }
+		  else if(firstWord=="close")
+		  {
+		    //retval.close=line.split(" ").at(1);
+		  }
+		  else if(firstWord=="status")
+		  {
+			  QString curFile = line.split(" ").at(1);
+			 // QString upCarrot = line.split(" ").at(2);
+			  QString totalFile = line.split(" ").at(3);
+
+			  int curC=curFile.toInt();
+			  int maxC=totalFile.toInt();
+			  retvals.progresscount=100*curC/maxC;
+		  }          
       }
+	  file.close();
+	  return retvals;
   }
 
   void InvokeCLI::progressBarPopUp(SecDialog* curr)
