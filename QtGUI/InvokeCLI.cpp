@@ -87,7 +87,7 @@ namespace EggBeater
       parse retvals;
       retvals.progresscount=0;
       retvals.sessionID=0;
-      retvals.errormessage="\n";
+      retvals.errormessage="";
 
       // The file stuff should go in its own function/class
 
@@ -111,23 +111,25 @@ namespace EggBeater
 		  if(firstWord=="^!error")
 		  {
 		    //read error message
-			for(int i=1; i<line.size(); i++)
+            for(int i=1; i<line.split(" ").size(); i++)
 			{
-  			  if(retvals.errormessage==NULL)
-			    retvals.errormessage=line.split(" ").at(1);
-			  retvals.errormessage=(retvals.errormessage)+line.split(" ").at(i);  
+              if(retvals.errormessage=="")
+                retvals.errormessage=line.split(" ").at(i);
+              else
+                retvals.errormessage=(retvals.errormessage)+" "+line.split(" ").at(i);
 			}
 			
 		  }
 		  else if(firstWord=="^!fatal")
 		  {
 		    //read error message and stop
-			for(int i=1; i<line.size(); i++)
+            for(int i=1; i<line.split(" ").size(); i++)
 			{
 			  if(retvals.errormessage==NULL)
 			    retvals.errormessage=line.split(" ").at(1);
 			  retvals.errormessage=(retvals.errormessage)+line.split(" ").at(i);  
 			}
+            retvals.sessionID=-1;
 		  }
           else if(firstWord=="sessionID")
 		  {
