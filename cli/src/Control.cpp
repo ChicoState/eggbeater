@@ -254,39 +254,11 @@ int Control::addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 )
 }// end add string function.
 
 
-/*
-// Notes on file format from meeting..
-Data Flags used in output file:
-  ^!error
-  ^!fatal
-        File Contents:
-          --start_session (decimal)
-          --refresh_session (1/0)
-          --encrypt -running status 
-                        (everyline)
-                          # overall(files done), # total, current(path, blocks done, blocks total), overall(blocks done, blocks total)
-          --decrypt -running status 
-                        (everyline)
-                          # overall(files done), # total, current(path, blocks done, blocks total), overall(blocks done, blocks total)
-          --discovery (1/0)
-          --Close_session (done)
-EX file-encrypt:   0 ^ 9 ^ C:/programfiles/file.txt ^ 4 ^ 12 ^ 4 ^ 12
-EX file-error:   ^!error ----------------
-EX file-close:   ^!done
-
-// New name tags to use.
-SessionID 3XXXX
-^!error owfeihowed
-^!fatal
-status 7 ^ 10 ^ "blahasdl..."
-
-
-*/
 
 
 ////////////////////////////////////////////////////////////
 // addMsg function to add message to vector<string> to output to file.
-/*
+/* Notes on data to parse.
   struct Status_t
   {
     uint32_t CurrentBlocksDone,
@@ -337,5 +309,36 @@ int Control::addMsg( std::vector<std::string> &vec, Status_t status )
   return 0;
 }// end add string function.
 
+/*
+// Notes on file format from meeting..
+Data Flags used in output file:
+  ^!error
+  ^!fatal
+        File Contents:
+          --start_session (decimal)
+          --refresh_session (1/0)
+          --encrypt -running status 
+                        (everyline)
+                          # overall(files done), # total, current(path, blocks done, blocks total), overall(blocks done, blocks total)
+          --decrypt -running status 
+                        (everyline)
+                          # overall(files done), # total, current(path, blocks done, blocks total), overall(blocks done, blocks total)
+          --discovery (1/0)
+          --Close_session (done)
+EX file-encrypt:   0 ^ 9 ^ C:/programfiles/file.txt ^ 4 ^ 12 ^ 4 ^ 12
+EX file-error:   ^!error ----------------
+EX file-close:   ^!done
+
+// New name tags to use.
+SessionID 3XXXX
+^!error message
+^!fatal message
+^!done
+status 7 ^ 10 ^ "blahasdl..."
+refresh 1 or 0
+discovered  1 or 0
+close 1 or 0
+
+*/
 
 
