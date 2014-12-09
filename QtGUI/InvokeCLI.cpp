@@ -77,10 +77,10 @@ namespace EggBeater
   InvokeCLI::parse InvokeCLI::fileParse(SecDialog* curr)
   {
       QString temp =  QDir::tempPath()+"/TempComm.cpp"; ; //"C:\Users\sam\AppData\Local\TempComm.cpp" //System::GetTempPath()
-      qint64 i=0;
-      qint64 progresscount=0;
+//      qint64 i=0;
+      //qint64 progresscount=0;
       // qint64 curBlock=0;
-      qint64 positionTrack=0;
+      //qint64 positionTrack=0;
       QString curFileCount=0;
       QString maxCount=0;
       QFile file(temp);
@@ -105,7 +105,7 @@ namespace EggBeater
       while(!in.atEnd())
       {
           QString line=in.readLine();
-          QString::iterator it= line.begin();
+          //QString::iterator it= line.begin();
           QVector<char> curFileName;
           QString word=" ";
 		  QString firstWord = line.split(" ").at(0);
@@ -168,7 +168,7 @@ namespace EggBeater
 	  return retvals;
   }
 
-  void InvokeCLI::progressBarPopUp(SecDialog* curr)
+  void InvokeCLI::progressBarPopUp(SecDialog* curr, QTimer * t)
   {
       /****Start of progress bar update*******/
       parse retvals;
@@ -184,6 +184,7 @@ namespace EggBeater
           if(retvals.done==1)
           {
             retvals.progresscount=100;
+            t->stop();
           }
       }
       curr->pd->setValue(retvals.progresscount);

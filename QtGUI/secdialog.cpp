@@ -278,5 +278,5 @@ void SecDialog::cancel()
 
 void SecDialog::perform()
 {
-    invoke->progressBarPopUp(this);
+    invoke->progressBarPopUp(this, t);
 }

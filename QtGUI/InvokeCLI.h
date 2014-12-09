@@ -56,7 +56,7 @@ namespace EggBeater
     parse fileParse(SecDialog* curr);
 
     //function to update the progressbar
-    void progressBarPopUp(SecDialog* curr);
+    void progressBarPopUp(SecDialog* curr, QTimer * t);
 
     /**
       Check for the connected fingerprint device.
