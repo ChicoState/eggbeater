@@ -13,7 +13,7 @@ Control::Control( Options opt ) {
     errorList = opt.getErrors();
     fileList = opt.getFileList();
     
-}  // Constructor
+}  // End Constructor
 
 ~Control::Control()               // Destructor
 {
@@ -56,7 +56,7 @@ bool Control::run(void){
       break;
     
     case CLI_Action::Decrypt:
-      // call decrypt
+      // call decrypt.
       // need to loop through files in list.
       decryptFiles( cipherMode, fileList.front(), key, iv );
       break;
@@ -69,6 +69,22 @@ bool Control::run(void){
   }// end case.
 
 }// end run.
+
+////////////////////////////////////////////////////////////
+// Internal Function to get initialization vector (IV)
+int getIV(ByteArray &iv){
+
+return 0;
+}// End get IV
+
+
+////////////////////////////////////////////////////////////  
+// Internal function to get key value from st board.
+int getKey(ByteArray &key){
+
+return 0;
+}// end getKey
+
 
 ////////////////////////////////////////////////////////////
 // Return last status in tmpFile to the gui.
@@ -231,6 +247,13 @@ EX file-encrypt:   0 ^ 9 ^ C:/programfiles/file.txt ^ 4 ^ 12 ^ 4 ^ 12
 EX file-error:   ^!error ----------------
 EX file-close:   ^!done
 
+// New name tags to use.
+SessionID 3XXXX
+^!error owfeihowed
+^!fatal
+status 7 ^ 10 ^ "blahasdl..."
+
+
 */
 
 
@@ -255,7 +278,7 @@ int Control::addMsg( std::vector<std::string> &vec, Status_t status )
 
   if(vec == NULL) return 1;
   const int tmpSize=16;
-  string ans="\0";
+  string ans="status ";
   char tmp[tmpSize]={'\0'};
   
   sprintf(tmp,"%i",status.OverallFilesDone);

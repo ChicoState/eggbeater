@@ -80,8 +80,8 @@ namespace EggBeater
     StringList  fileList;        // List of files to operate on.
     StringList devList;          // List of connected devices.
     //Status_t    controlStatus;
-    byte key[CryptoPP::AES::MAX_KEYLENGTH];
-    byte iv[ CryptoPP::AES::BLOCKSIZE ];
+    ByteArray key key[CryptoPP::AES::MAX_KEYLENGTH];
+    ByteArray iv[ CryptoPP::AES::BLOCKSIZE ];
     
     char tmpFilePath[120]={'\0'};
     //! Internal function to start a new session
@@ -92,6 +92,11 @@ namespace EggBeater
     void refreshSession();
     //! Internal function to close the session
     void closeSession();
+    //! Internal Function to get initialization vector (IV)
+    int getIV(ByteArray &iv);
+    //! Internal function to get key value from st board.
+    int getKey(ByteArray &key);
+    
     
     //! Internal function to encrypt the specified files
     int encryptFiles(std::string, std::string, std::vector<uint8_t>, std::vector<uint8_t>);
