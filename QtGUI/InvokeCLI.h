@@ -23,7 +23,12 @@ namespace EggBeater
 
   class InvokeCLI
   {
-  struct parse{int progresscount; int sessionID; QString errormessage;};
+  struct parse{
+      int progresscount;
+      int sessionID;
+      QString errormessage;
+      int done;
+  };
   public:
     InvokeCLI();
     ~InvokeCLI();

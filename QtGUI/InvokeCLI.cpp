@@ -88,6 +88,7 @@ namespace EggBeater
       retvals.progresscount=0;
       retvals.sessionID=0;
       retvals.errormessage="";
+      retvals.done=0;
 
       // The file stuff should go in its own function/class
 
@@ -138,6 +139,7 @@ namespace EggBeater
 		  else if(firstWord=="^!done")
 		  {
 		    //done with task ack
+              retvals.done=1;
 		  }
 		  else if(firstWord=="refresh")
 		  {
@@ -171,6 +173,19 @@ namespace EggBeater
       /****Start of progress bar update*******/
       parse retvals;
       retvals=fileParse(curr);
+      if(retvals.progresscount==0)
+      {
+          retvals.progresscount=1;
+      }
+
+      if(retvals.progresscount==100)
+      {
+          retvals.progresscount=99;
+          if(retvals.done==1)
+          {
+            retvals.progresscount=100;
+          }
+      }
       curr->pd->setValue(retvals.progresscount);
 
       //use message box to test values
