@@ -119,18 +119,20 @@ namespace EggBeater
               else
                 retvals.errormessage=(retvals.errormessage)+" "+line.split(" ").at(i);
 			}
-			
+            retvals.errormessage=retvals.errormessage+"\n";
 		  }
 		  else if(firstWord=="^!fatal")
 		  {
 		    //read error message and stop
             for(int i=1; i<line.split(" ").size(); i++)
 			{
-			  if(retvals.errormessage==NULL)
-			    retvals.errormessage=line.split(" ").at(1);
-			  retvals.errormessage=(retvals.errormessage)+line.split(" ").at(i);  
+              if(retvals.errormessage=="" || i==1)
+                retvals.errormessage="fatal: "+line.split(" ").at(1);
+              else
+                retvals.errormessage=(retvals.errormessage)+" "+line.split(" ").at(i);
 			}
-            retvals.sessionID=-1;
+            retvals.errormessage=retvals.errormessage+"\n";
+            retvals.done=-1;
 		  }
           else if(firstWord=="sessionID")
 		  {
@@ -165,6 +167,10 @@ namespace EggBeater
 		  }          
       }
 	  file.close();
+      if(retvals.done==1)
+        QMessageBox::warning(curr, "Error Report", retvals.errormessage, "OK");
+      if(retvals.done==-1)
+        QMessageBox::critical(curr, "Error Report", retvals.errormessage, "OK");
 	  return retvals;
   }
 
@@ -182,6 +188,11 @@ namespace EggBeater
       {
           retvals.progresscount=99;
           if(retvals.done==1)
+          {
+            retvals.progresscount=100;
+            t->stop();
+          }
+          if(retvals.done==-1)
           {
             retvals.progresscount=100;
             t->stop();
