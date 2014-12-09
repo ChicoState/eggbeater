@@ -36,7 +36,6 @@ namespace EggBeater
           qDebug() << "Success:\n" << proc->readAll();
           qDebug("Done!\n");
       }
-
       proc->close();
   }
 
