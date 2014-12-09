@@ -15,16 +15,18 @@ Control::Control( Options opt ) {
     
 }  // End Constructor
 
-~Control::Control()               // Destructor
+~Control::Control()                                      // Destructor
 {
 }
 
 bool Control::run(void){
 // case statement for what action to do.
 // Also do error checking on opt data?
-  int pathSize = GetTempPath( sizeof(tmpFilePath),tmpFilePath);  // Get the windows tmp file path.
-  if(pathSize < 1) return FALSE;                                 // Check that it worked.
-  else tmpFilePath[pathSize] = '\0';                             // Make sure last char is a NULL.
+  char tmp[120]={'\0'};
+  int pathSize = GetTempPath( sizeof(tmp),tmp);          // Get the windows tmp file path.
+  if(pathSize < 1) return FALSE;                         // Check that it worked.
+  else tmp[pathSize] = '\0';                             // Make sure last char is a NULL.
+  tmpFile = tmp.c_str();
   
   switch ( cliAction )
   {
@@ -72,7 +74,10 @@ bool Control::run(void){
 ////////////////////////////////////////////////////////////
 // Internal Function to get initialization vector (IV)
 int getIV(ByteArray &iv){
-
+  ByteArray hardIV      ({0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+                          0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
+  for(int x = 0; x < hardIV.size(); x++) iv[x] = hardIV[x];
+                      
 return 0;
 }// End get IV
 
@@ -80,6 +85,12 @@ return 0;
 ////////////////////////////////////////////////////////////  
 // Internal function to get key value from st board.
 int getKey(ByteArray &key){
+
+  ByteArray hardKey     ({0x60, 0x3d, 0xeb, 0x10, 0x15, 0xca, 0x71, 0xbe,
+                      0x2b, 0x73, 0xae, 0xf0, 0x85, 0x7d, 0x77, 0x81,
+                      0x1f, 0x35, 0x2c, 0x07, 0x3b, 0x61, 0x08, 0xd7,
+                      0x2d, 0x98, 0x10, 0xa3, 0x09, 0x14, 0xdf, 0xf4});
+  for(int x = 0; x < hardKey.size(); x++) iv[x] = hardKey[x];
 
 return 0;
 }// end getKey
@@ -257,8 +268,6 @@ int Control::addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 )
 }// end add string function.
 
 
-
-
 ////////////////////////////////////////////////////////////
 // addMsg function to add message to vector<string> to output to file.
 /* Notes on data to parse.
@@ -273,7 +282,6 @@ int Control::addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 )
     std::string CurrentPath;
   };
 */
-
 
 int Control::addMsg( std::vector<std::string> &vec, Status_t status )
 { 

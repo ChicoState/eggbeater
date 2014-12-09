@@ -83,7 +83,7 @@ namespace EggBeater
     ByteArray key;
     ByteArray iv;
     
-    char tmpFilePath[120]={'\0'};
+
     //! Internal function to start a new session
     void newSession();
     //! Internal function to open a session with an existing fingerprint
