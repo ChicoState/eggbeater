@@ -173,46 +173,46 @@ namespace EggBeater
   
   void Crypto::encrypt(CryptoPP::Source* source, CryptoPP::Sink* sink)
   {
-    MeterFilter meter(sink, true);
-    std::function<void(const ByteArray& key, const ByteArray& iv)> cipherFunction;
+    MeterFilter sinkMeter(sink, true);
+    std::function<void(const ByteArray& key, const ByteArray& iv, CryptoPP::Source* source, CryptoPP::Sink* sink)> cipherFunction;
     
     // Because Crypto++ doesn't fucking take pointers for StreamTransformationFilter
     switch (this->cipherMode)
     {
       case CipherMode::CFB:
-        cipherFunction = [source, &meter](const ByteArray& key, const ByteArray& iv)
+        cipherFunction = [](const ByteArray& key, const ByteArray& iv, CryptoPP::Source* source, CryptoPP::Sink* sink)
         {
           CFB_Mode<AES>::Encryption enc;
           
           enc.SetKeyWithIV(key.data(), key.size(), iv.data(), iv.size());
           
-          source->Attach(new StreamTransformationFilter(enc, new Redirector(meter)));
+          source->Attach(new StreamTransformationFilter(enc, sink));
           
           source->PumpAll();
         };
         break;
       
       case CipherMode::OFB:
-        cipherFunction = [source, &meter](const ByteArray& key, const ByteArray& iv)
+        cipherFunction = [](const ByteArray& key, const ByteArray& iv, CryptoPP::Source* source, CryptoPP::Sink* sink)
         {
           OFB_Mode<AES>::Encryption enc;
           
           enc.SetKeyWithIV(key.data(), key.size(), iv.data(), iv.size());
           
-          source->Attach(new StreamTransformationFilter(enc, new Redirector(meter)));
+          source->Attach(new StreamTransformationFilter(enc, sink));
           
           source->PumpAll();
         };
         break;
       default:
       case CipherMode::GCM:
-        cipherFunction = [source, &meter](const ByteArray& key, const ByteArray& iv)
+        cipherFunction = [](const ByteArray& key, const ByteArray& iv, CryptoPP::Source* source, CryptoPP::Sink* sink)
         {
           GCM<AES>::Encryption enc;
           
           enc.SetKeyWithIV(key.data(), key.size(), iv.data(), iv.size());
           
-          source->Attach(new AuthenticatedEncryptionFilter(enc, new Redirector(meter)));
+          source->Attach(new AuthenticatedEncryptionFilter(enc, sink));
           
           source->PumpAll();
         };
@@ -222,7 +222,11 @@ namespace EggBeater
     if (!cipherFunction)
       return;
     
-    cipherFunction(key, iv);
+    cipherFunction(key, iv, source, new Redirector(sinkMeter));
+    
+    #if _EGGBEATER_TESTS_
+    std::cout << "encrypt #sink bytes: " << sinkMeter.GetTotalBytes() << std::endl;
+    #endif
   }
   
   void Crypto::decrypt(CryptoPP::Source* source, CryptoPP::Sink* sink)
@@ -277,6 +281,10 @@ namespace EggBeater
       return;
     
     cipherFunction(key, iv);
+    
+    #if _EGGBEATER_TESTS_
+    std::cout << "decrypt #sink bytes: " << meter.GetTotalBytes() << std::endl;
+    #endif
   }
   
   #if 0

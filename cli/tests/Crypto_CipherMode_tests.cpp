@@ -191,6 +191,7 @@ TEST_F(NoOpFixture, AES_256_OFB_4)
   
   EXPECT_EQ(expected, actual);
 }
+
 /*
   Test vectors from: http://www.inconteam.com/software-development/41-encryption/55-aes-test-vectors#aes-cfb-256
   
@@ -204,6 +205,7 @@ TEST_F(NoOpFixture, AES_256_OFB_4)
   E1C656305ED1A7A6563805746FE03EDC	30c81c46a35ce411e5fbc1191a0a52ef	71ab47a086e86eedf39d1c5bba97c408
   41635BE625B48AFC1666DD42A09D96E7	f69f2445df4f9b17ad2b417be66c3710	0126141d67f37be8538f5a8be740e484
 */
+
 TEST_F(NoOpFixture, AES_256_GCM_1)
 {
   ByteArray iv      ({0x0d, 0x18, 0xe0, 0x6c, 0x7c, 0x72, 0x5a, 0xc9, 

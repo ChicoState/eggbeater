@@ -5,6 +5,7 @@ CRYPTOPP_DIR  = deps/cryptopp562
 #CRYPTOPP_DIR  = /cygdrive/d/cryptopp562
 
 CXXFLAGS += -O0                      \
+            -D_EGGBEATER_TESTS_      \
             -g                       \
             -std=gnu++11             \
             "-I$(GTEST_DIR)"         \
@@ -19,8 +20,8 @@ LDFLAGS  += "-Llib" -Wl,-gc-sections -lpthread
 OTHER_SOURCES  = src/Discovery.o               \
                  src/SerialCommunication.o     \
                  src/Options.o                 \
-                 src/Control.o                 \
                  src/packet.o
+#                 src/Control.o                 \ 
 CRYPTO_SOURCES = src/Crypto.o
 ALL_SOURCES    = $(OTHER_SOURCES) $(CRYPTO_SOURCES)
 
