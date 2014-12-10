@@ -62,6 +62,7 @@ namespace EggBeater
     bool hasSessionID() const;
     //! Get the specified session ID
     String getSessionID() const;
+
     //! Check if a cipher mode was specified
     bool hasCipherMode() const;
     //! Get the specified cipher mode

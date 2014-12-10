@@ -56,6 +56,8 @@ namespace EggBeater
     return sessionID;
   }
   
+  
+  
   bool Options::hasCipherMode() const
   {
     return CipherMode_IsValid(cipherMode);

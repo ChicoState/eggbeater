@@ -1,8 +1,8 @@
-GTEST_DIR     = deps/gtest-1.7.0
-CRYPTOPP_DIR  = deps/cryptopp562
+GTEST_DIR		 = deps/gtest-1.7.0
+CRYPTOPP_DIR	= deps/cryptopp562
 
-#GTEST_DIR    = /cygdrive/d/gtest-1.7.0/gtest-1.7.0
-#CRYPTOPP_DIR  = /cygdrive/d/cryptopp562
+#GTEST_DIR		= /cygdrive/d/gtest-1.7.0/gtest-1.7.0
+#CRYPTOPP_DIR	= /cygdrive/d/cryptopp562
 
 CXXFLAGS += -O0                      \
             -D_EGGBEATER_TESTS_      \
@@ -23,7 +23,7 @@ OTHER_SOURCES  = src/Discovery.o               \
                  src/getTempPath.o             \
                  src/packet.o
 #                 src/Control.o                 \ 
-CRYPTO_SOURCES = src/Crypto.o
+CRYPTO_SOURCES = src/Crypto.o src/Control.o
 ALL_SOURCES    = $(OTHER_SOURCES) $(CRYPTO_SOURCES)
 
 CRYPTO_TESTS = tests/Crypto_tests.crypto.elf     \
