@@ -191,11 +191,11 @@ namespace EggBeater
             retvals.progresscount=100;
             t->stop();
           }
-          if(retvals.done==-1)
-          {
-            retvals.progresscount=100;
-            t->stop();
-          }
+      }
+      if(retvals.done==-1)
+      {
+        retvals.progresscount=100;
+        t->stop();
       }
       curr->pd->setValue(retvals.progresscount);
 
