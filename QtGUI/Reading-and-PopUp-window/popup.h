@@ -6,5 +6,5 @@
 #	include "gtkpopup.c"
 #endif
 
-void open_Popup(const char *message_box, const char *message_title);
+void open_Popup(const char *Error message, const char *message_title);
 

@@ -35,7 +35,7 @@ void destroy( GtkWidget *widget,
 }
 
 
-void open_Popup( const char *message_box,const char *message_title)
+void open_Popup( const char *Error message,const char *message_title)
 {
 	/* GtkWidget is the storage type for widgets */
 	GtkWidget *window;
@@ -61,7 +61,7 @@ void open_Popup( const char *message_box,const char *message_title)
 	gtk_widget_set_size_request(window, 150, 70);
 	gtk_window_set_resizable (GTK_WINDOW(window), FALSE);
 	/* This packs the lable into the windows.*/
-	label = gtk_label_new (message_box);
+	label = gtk_label_new (Error message);
 	gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_CENTER);
 	gtk_container_add (GTK_CONTAINER(box), label);
 	/* When the window is given the "delete_event" signal (this is given

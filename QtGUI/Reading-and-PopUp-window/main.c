@@ -21,7 +21,7 @@ int is_substring(const char *p_string, const char *c_string)
 int main(void)
 {
 	FILE *fp;
-	char *line = NULL, message_box[BUFSIZ], *message_title;
+	char *line = NULL, Error message[BUFSIZ], *message_title;
 	size_t len = 0;
 	int line_n = 0;
 	char error_str[12] = "Fatal", warning_str[12] = "simple";
@@ -35,15 +35,15 @@ int main(void)
 		if(is_substring(line,error_str) == 1)
 		{
 			message_title = "Error";
-			sprintf(message_box, "At %d line", line_n);
-			open_Popup(message_box, message_title);
+			sprintf(Error message, "At %d line", line_n);
+			open_Popup(Error message, message_title);
 			break;
 		}
 		else if (is_substring(line,warning_str) == 1) 
 		{
 			message_title = "Warning";
-			sprintf(message_box, "At %d line", line_n);
-			open_Popup(message_box, message_title);
+			sprintf(Error message, "At %d line", line_n);
+			open_Popup(Error message, message_title);
 		}
 		printf("Line - %d: %s", line_n, line);
 	}

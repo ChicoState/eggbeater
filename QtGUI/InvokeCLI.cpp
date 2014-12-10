@@ -166,7 +166,7 @@ namespace EggBeater
 		  }          
       }
 	  file.close();
-      if(retvals.done==1)
+      if(retvals.done==1 && retvals.errormessage!="")
         QMessageBox::warning(curr, "Error Report", retvals.errormessage, "OK");
       if(retvals.done==-1)
         QMessageBox::critical(curr, "Error Report", retvals.errormessage, "OK");
