@@ -20,6 +20,7 @@ LDFLAGS  += "-Llib" -Wl,-gc-sections -lpthread
 OTHER_SOURCES  = src/Discovery.o               \
                  src/SerialCommunication.o     \
                  src/Options.o                 \
+                 src/getTempPath.o             \
                  src/packet.o
 #                 src/Control.o                 \ 
 CRYPTO_SOURCES = src/Crypto.o

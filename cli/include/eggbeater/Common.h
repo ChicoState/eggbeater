@@ -24,6 +24,8 @@ namespace EggBeater
     
     String msg() const { return String(this->what()); };
   };
+  
+  String getTempPath();
 }
 
 #endif // _EGGBEATER_COMMON_H_
