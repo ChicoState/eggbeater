@@ -1,40 +1,40 @@
-GTEST_DIR     = deps/gtest-1.7.0
-CRYPTOPP_DIR  = deps/cryptopp562
+#GTEST_DIR		 = deps/gtest-1.7.0
+#CRYPTOPP_DIR	= deps/cryptopp562
 
-#GTEST_DIR    = /cygdrive/d/gtest-1.7.0/gtest-1.7.0
-#CRYPTOPP_DIR  = /cygdrive/d/cryptopp562
+GTEST_DIR		= /cygdrive/d/gtest-1.7.0/gtest-1.7.0
+CRYPTOPP_DIR	= /cygdrive/d/cryptopp562
 
-CXXFLAGS += -O0                      \
-            -D_EGGBEATER_TESTS_      \
-            -g                       \
-            -std=gnu++11             \
-            "-I$(GTEST_DIR)"         \
-            "-I$(GTEST_DIR)/include" \
-            "-I$(CRYPTOPP_DIR)"      \
-            "-Iinclude"              \
-            "-Ideps"                 \
-            -ffunction-sections      \
-            -fdata-sections
-LDFLAGS  += "-Llib" -Wl,-gc-sections -lpthread
+CXXFLAGS += -O0											\
+						-D_EGGBEATER_TESTS_			\
+						-g											 \
+						-std=gnu++11						 \
+						"-I$(GTEST_DIR)"				 \
+						"-I$(GTEST_DIR)/include" \
+						"-I$(CRYPTOPP_DIR)"			\
+						"-Iinclude"							\
+						"-Ideps"								 \
+						-ffunction-sections			\
+						-fdata-sections
+LDFLAGS	+= "-Llib" -Wl,-gc-sections -lpthread
 
-OTHER_SOURCES  = src/Discovery.o               \
-                 src/SerialCommunication.o     \
-                 src/Options.o                 \
-                 src/packet.o
-#                 src/Control.o                 \ 
+OTHER_SOURCES	= src/Discovery.o							 \
+								 src/SerialCommunication.o		 \
+								 src/Options.o								 \
+								 src/packet.o								 \
+								src/Control.o								  
 CRYPTO_SOURCES = src/Crypto.o
-ALL_SOURCES    = $(OTHER_SOURCES) $(CRYPTO_SOURCES)
+ALL_SOURCES		= $(OTHER_SOURCES) $(CRYPTO_SOURCES)
 
-CRYPTO_TESTS = tests/Crypto_tests.crypto.elf     \
-               tests/CryptoPP_tests.crypto.elf   \
-               tests/Crypto_CipherMode_tests.crypto.elf
-OTHER_TESTS  = tests/Discovery_test_present.elf  \
-               tests/Discovery_test_absent.elf   \
-               tests/Discovery_tests.elf         \
-               tests/SerialComm_tests.elf        \
-               tests/SerialComm_test_port.elf    \
-               tests/Options_tests.elf           \
-               tests/Packet_tests.elf
+CRYPTO_TESTS = tests/Crypto_tests.crypto.elf		 \
+							 tests/CryptoPP_tests.crypto.elf	 \
+							 tests/Crypto_CipherMode_tests.crypto.elf
+OTHER_TESTS	= tests/Discovery_test_present.elf	\
+							 tests/Discovery_test_absent.elf	 \
+							 tests/Discovery_tests.elf				 \
+							 tests/SerialComm_tests.elf				\
+							 tests/SerialComm_test_port.elf		\
+							 tests/Options_tests.elf					 \
+							 tests/Packet_tests.elf
 
 all: lib/libcryptopp.a lib/gtest.a testsuite $(ALL_SOURCES) eggbeater.elf
 
@@ -73,7 +73,7 @@ eggbeater.elf: src/main.o $(ALL_SOURCES) lib/libcryptopp.a
 
 .PHONY: clean
 clean:
-	rm -rf lib                                \
-	$(shell find src -type f -name "*.o")     \
-	$(shell find tests -type f -name "*.o")   \
+	rm -rf lib																\
+	$(shell find src -type f -name "*.o")		 \
+	$(shell find tests -type f -name "*.o")	 \
 	$(shell find tests -type f -name "*.elf")

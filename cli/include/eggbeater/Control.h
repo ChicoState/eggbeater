@@ -40,7 +40,7 @@ using CryptoPP::GCM;
  
 #include <aes.h>
 using CryptoPP::AES;
- 
+#include <windows.h>
 #include <modes.h>
 using CryptoPP::OFB_Mode;
 using CryptoPP::CFB_Mode;
@@ -62,7 +62,7 @@ namespace EggBeater
   class Control
   {
   public:
-    Control(Options& opt); // or whatever the class is named
+    Control(Options opt); // or whatever the class is named
     ~Control();
     
     bool run(void);
@@ -78,7 +78,7 @@ namespace EggBeater
     Status_t    currentStatus;   
     ErrorList   errorList;       // List of current errors.
     StringList  fileList;        // List of files to operate on.
-    StringList devList;          // List of connected devices.
+    StringList  devList;          // List of connected devices.
     //Status_t    controlStatus;
     ByteArray key;
     ByteArray iv;
@@ -99,9 +99,9 @@ namespace EggBeater
     
     
     //! Internal function to encrypt the specified files
-    int encryptFiles(std::string, std::string);
+    int encryptFiles(CipherMode, std::string );
     //! Internal function to decrypt the specified files
-    int decryptFiles(std::string, std::string);
+    int decryptFiles(CipherMode, std::string );
 	
 	  int writeVec( std::vector<std::string> &lines, std::string targetFile);
     int addMsg(std::vector<std::string> &vec, std::string arg1, std::string arg2 = "\0" );

@@ -1,3 +1,7 @@
+#include <eggbeater/Control.h>
+
+using namespace EggBeater;
+
 ////////////////////////////////////////////////////////////
 // Control functions for taking data parsed by "options" 
 // and calling other functions, 
@@ -9,30 +13,30 @@ Control::Control( Options opt ) {
     sessionID = opt.getSessionID();
     cliAction = opt.getAction();
     cipherMode = opt.getCipherMode();
-    currentStatus = opt.getStatus();
+    currentStatus = opt.getCurrentStatus();
     errorList = opt.getErrors();
     fileList = opt.getFileList();
     
 }  // End Constructor
 
-~Control::Control()                                      // Destructor
+Control::~Control()                                      // Destructor
 {
 }
 
 bool Control::run(void){
-// case statement for what action to do.
-// Also do error checking on opt data?
+ // case statement for what action to do.
+ // Also do error checking on opt data?
   char tmp[120]={'\0'};
   int pathSize = GetTempPath( sizeof(tmp),tmp);          // Get the windows tmp file path.
-  if(pathSize < 1) return FALSE;                         // Check that it worked.
+  if(pathSize < 1) return false;                         // Check that it worked.
   else tmp[pathSize] = '\0';                             // Make sure last char is a NULL.
-  tmpFile = tmp.c_str();
+  tmpFile = tmp;
   
   switch ( cliAction )
   {
     default:
     case CLI_Action::None:
-      return False;
+      return false;
       break;
     
     case CLI_Action::StartSession:
@@ -73,7 +77,7 @@ bool Control::run(void){
 
 ////////////////////////////////////////////////////////////
 // Internal Function to get initialization vector (IV)
-int getIV(ByteArray &iv){
+int Control::getIV(ByteArray &iv){
   ByteArray hardIV      ({0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
                           0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
   for(int x = 0; x < hardIV.size(); x++) iv[x] = hardIV[x];
@@ -84,7 +88,7 @@ return iv.size();
 
 ////////////////////////////////////////////////////////////  
 // Internal function to get key value from st board.
-int getKey(ByteArray &key){
+int Control::getKey(ByteArray &key){
 
   ByteArray hardKey     ({0x60, 0x3d, 0xeb, 0x10, 0x15, 0xca, 0x71, 0xbe,
                       0x2b, 0x73, 0xae, 0xf0, 0x85, 0x7d, 0x77, 0x81,
@@ -101,7 +105,7 @@ return key.size();
 
 String Control::getStatus(){
   addMsg(fileVec,"sessionID ", sessionID );
-  addMsg(fileVec, opt.getCurrentStatus();
+  addMsg(fileVec, currentStatus);
   Control::writeVec(fileVec, tmpFile);
 }
 
@@ -141,17 +145,17 @@ void Control::closeSession(){
 ////////////////////////////////////////////////////////////
 // Encrypt a file.
 
-int Control::encryptFiles(string encMode, string oFile)
+int Control::encryptFiles(CipherMode encMode, String oFile)
 {
 
-  if( !getIV( &iv) )
+  if( !getIV( iv) )
   {
     addMsg(fileVec, "sessionID ", sessionID);
     addMsg(fileVec, "^!fatal ", "Could not get valid IV.");
     writeVec( fileVec, tmpFile);
     return 1;
   }
-  if( !getKey( &key) )
+  if( !getKey( key) )
   {
     addMsg(fileVec, "sessionID ", sessionID);
     addMsg(fileVec, "^!fatal ", "Could not get valid Key.");
@@ -160,11 +164,11 @@ int Control::encryptFiles(string encMode, string oFile)
   }
 
   Crypto myCrypt;
-  myCrypt.setCipherMode(CipherMode);
+  myCrypt.setCipherMode(encMode);
   myCrypt.setEncryptionKey(key);
   myCrypt.setInitialVector(iv);
   
-  myCrypt.encryptFile(ofile, ofile.append(".egg"));
+  myCrypt.encryptFile(oFile, oFile.append(".egg"));
 
   addMsg(fileVec, "sessionID ", sessionID);
   addMsg( fileVec, currentStatus );
@@ -177,17 +181,17 @@ int Control::encryptFiles(string encMode, string oFile)
 ////////////////////////////////////////////////////////////
 // Decrypt a file.
 
-int Control::decryptFiles(string decMode, string file)
+int Control::decryptFiles(CipherMode decMode, String file)
 {
 
-  if( !getIV( &iv) )
+  if( !getIV( iv) )
   {
     addMsg(fileVec, "sessionID ", sessionID);
     addMsg(fileVec, "^!fatal ", "Could not get valid IV.");
     writeVec( fileVec, tmpFile);
     return 1;
   }
-  if( !getKey( &key) )
+  if( !getKey( key) )
   {
     addMsg(fileVec, "sessionID ", sessionID);
     addMsg(fileVec, "^!fatal ", "Could not get valid Key.");
@@ -196,13 +200,13 @@ int Control::decryptFiles(string decMode, string file)
   }
 
   Crypto myCrypt;
-  myCrypt.setCipherMode(CipherMode);
+  myCrypt.setCipherMode(decMode);
   myCrypt.setEncryptionKey(key);
   myCrypt.setInitialVector(iv);
   
-  string file2;
-  if(file.find(".egg" == file.length() - 4);                      // This may need to be -5.
-    for(int k=0;k<file.length() - 4;k++) file2.append(file[k]);
+  String file2;
+  if(file.find(".egg") == file.length() - 4)                      // This may need to be -5.
+    for(int k=0; k < file.length() - 4; k++) file2.append(file[k],1);
   else return 0;
   myCrypt.decryptFile(file, file2 );
   
@@ -223,7 +227,7 @@ int Control::decryptFiles(string decMode, string file)
 
 int Control::writeVec(std::vector<std::string> &lines, std::string targetFile)
 {
-  if(vec == NULL) return 1;
+  if(&lines == NULL) return 1;
   std::ofstream outfile;
   int i=0;
 	
@@ -247,7 +251,7 @@ int Control::writeVec(std::vector<std::string> &lines, std::string targetFile)
 
 int Control::addMsg(std::vector<std::string> &vec, std::string arg1, std::string arg2 )
 {
-  if(vec == NULL) return 1;
+  if(&vec == NULL) return 1;
   arg1.append(arg2);
   vec.push_back(arg1);
   return 0;
@@ -259,7 +263,7 @@ int Control::addMsg(std::vector<std::string> &vec, std::string arg1, std::string
 
 int Control::addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 )
 {
-  if(vec == NULL) return 1;
+  if(&vec == NULL) return 1;
   char tmp[16]={'\0'};
   sprintf(tmp,"%i",arg2);
   arg1.append(tmp);
@@ -286,19 +290,19 @@ int Control::addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 )
 int Control::addMsg( std::vector<std::string> &vec, Status_t status )
 { 
 
-  if(vec == NULL) return 1;
+  if(&vec == NULL) return 1;
   const int tmpSize=16;
-  string ans="status ";
+  String ans="status ";
   char tmp[tmpSize]={'\0'};
   
   sprintf(tmp,"%i",status.OverallFilesDone);
   ans.append(tmp);
   
   memset(tmp,0,tmpSize);
-  sprintf(tmp," ^ %i ^ ",stutus.OverallFilesTotal);
+  sprintf(tmp," ^ %i ^ ",status.OverallFilesTotal);
   ans.append(tmp);
   
-  ans.append(path);
+  ans.append(status.CurrentPath);
   
   memset(tmp,0,tmpSize);
   sprintf(tmp," ^ %i ",status.CurrentBlocksDone);
