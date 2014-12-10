@@ -136,6 +136,7 @@ namespace EggBeater
           else if(firstWord=="sessionID")
 		  {
             retvals.sessionID=(line.split(" ").at(1)).toInt();
+            sessionID = retvals.sessionID;
 		  }
 		  else if(firstWord=="^!done")
 		  {
@@ -163,7 +164,7 @@ namespace EggBeater
 			  int curC=curFile.toInt();
 			  int maxC=totalFile.toInt();
 			  retvals.progresscount=100*curC/maxC;
-		  }          
+		  }
       }
 	  file.close();
       if(retvals.done==1 && retvals.errormessage!="")
@@ -231,7 +232,8 @@ namespace EggBeater
     attributes << "--encrypt";
     for(int i=0; i<fileNames.size(); i++)
         attributes << "-f" << fileNames.at(i);
-    attributes << "--session-id" << "70056";
+    QString ID = QString::number(sessionID);
+    attributes << "--session-id" << ID;
     attributes << "-fd" << folderName;
     if(cipherMode!="cfb" && cipherMode!="ofb" && cipherMode!="gcm")
         cipherMode = "cfb";
@@ -259,7 +261,8 @@ namespace EggBeater
     attributes << "--decrypt";
     for(int i=0; i<fileNames.size(); i++)
         attributes << "-f" << fileNames.at(i);
-    attributes << "--session-id" << "70056";
+    QString ID = QString::number(sessionID);
+    attributes << "--session-id" << ID;
     attributes << "-fd" << folderName;
     if(cipherMode!="cfb" && cipherMode!="ofb" && cipherMode!="gcm")
         cipherMode = "cfb";
