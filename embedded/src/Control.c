@@ -5,6 +5,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
+    Conditions:
+      1
+    Exit points:
+      2
+    M = 1 - 2 + 2 = 1
+    Cyclomatic complexity
+      1
+ */
 uint32_t control_init(Control_t* c)
 {
   if (c == NULL)
@@ -22,7 +31,15 @@ uint32_t control_init(Control_t* c)
 
   return CtrlError_Success;
 }
-
+/*
+    Conditions:
+      14
+    Exit points:
+      4
+    M = 14 - 4 + 2 = 12
+    Cyclomatic complexity
+      12
+  */
 uint32_t control_should_handle_packet(Control_t* c, Packet_t* p)
 {
   PacketHeader_t* head;
@@ -58,7 +75,15 @@ uint32_t control_should_handle_packet(Control_t* c, Packet_t* p)
 
   return errCode;
 }
-
+/*
+    Conditions:
+      12
+    Exit points:
+      4
+    M = 12 - 4 + 2 = 3
+    Cyclomatic complexity
+      10
+  */
 uint32_t control_handle_packet(Control_t* c, Packet_t* p)
 {
   uint32_t errCode = 0;
@@ -112,7 +137,15 @@ uint32_t control_handle_packet(Control_t* c, Packet_t* p)
 
   return errCode;
 }
-
+/*
+    Conditions:
+      7
+    Exit points:
+      5
+    M = 7 - 5 + 2 = 4
+    Cyclomatic complexity
+      4
+  */
 uint32_t control_is_packet_ready(Control_t* c, Packet_t* p)
 {
   Packet_t resp;
@@ -139,7 +172,15 @@ uint32_t control_is_packet_ready(Control_t* c, Packet_t* p)
   else
     return CtrlError_No;
 }
-
+/*
+    Conditions:
+      4
+    Exit points:
+      4
+    M = 4 - 4 + 2 = 2
+    Cyclomatic complexity
+      3
+  */
 uint32_t control_get_resp_packet(Control_t* c, Packet_t* d)
 {
   if (c == NULL)
@@ -164,7 +205,15 @@ uint32_t control_get_resp_packet(Control_t* c, Packet_t* d)
 
   return CtrlError_Success;
 }
-
+/*
+    Conditions:
+      3
+    Exit points:
+      2
+    M = 3 - 2 + 2 = 3
+    Cyclomatic complexity
+      3
+  */
 uint32_t control_start_session(Control_t* c, Packet_t* p)
 {
   Packet_t packet;
@@ -180,13 +229,29 @@ uint32_t control_start_session(Control_t* c, Packet_t* p)
 
   return CtrlError_Fail;
 }
-
+/*
+    Conditions:
+      0
+    Exit points:
+      1
+    M = 0 - 1 + 2 = 1
+    Cyclomatic complexity
+      1
+  */
 uint32_t control_refresh_session(Control_t* c, Packet_t* p)
 {
   // Place p on the control_task->fingerprint_task message queue
   return CtrlError_Fail;
 }
-
+/*
+    Conditions:
+      3
+    Exit points:
+      2
+    M = 3 - 2 + 2 = 3
+    Cyclomatic complexity
+      3
+  */
 uint32_t control_close_session(Control_t* c, Packet_t* p)
 {
   Packet_t packet;
@@ -207,7 +272,15 @@ uint32_t control_close_session(Control_t* c, Packet_t* p)
   // Return success
   return CtrlError_Success;
 }
-
+/*
+    Conditions:
+      3
+    Exit points:
+      2
+    M = 3 - 2 + 2 = 3
+    Cyclomatic complexity
+      3
+  */
 uint32_t control_get_file_key(Control_t* c, Packet_t* p)
 {
   Packet_t packet;
@@ -223,7 +296,15 @@ uint32_t control_get_file_key(Control_t* c, Packet_t* p)
 
   return CtrlError_Success;
 }
-
+/*
+    Conditions:
+      3
+    Exit points:
+      2
+    M = 3 - 2 + 2 = 3
+    Cyclomatic complexity
+      3
+  */
 uint32_t control_cancel_current_command(Control_t* c, Packet_t* p)
 {
   Packet_t packet;
@@ -239,7 +320,15 @@ uint32_t control_cancel_current_command(Control_t* c, Packet_t* p)
 
   return CtrlError_Success;
 }
-
+/*
+    Conditions:
+      2
+    Exit points:
+      2
+    M = 2 - 2 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 uint32_t control_keep_alive(Control_t* c, Packet_t* p)
 {
   Packet_t packet;

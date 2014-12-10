@@ -42,7 +42,15 @@ uint32_t Session_ActivityStamps[20] = {0};
 
 uint32_t fp_session_start(void);
 void fp_test(void);
-
+/*
+    Conditions:
+      0
+    Exit points:
+      1
+    M = 0 - 1 + 2 = 1
+    Cyclomatic complexity
+      1
+  */
 uint8_t* format_string(char* fmt, ...)
 {
   static char buffer[65] = {0};
@@ -57,7 +65,15 @@ uint8_t* format_string(char* fmt, ...)
 
   return (uint8_t*)buffer;
 }
-
+/*
+    Conditions:
+      2
+    Exit points:
+      2
+    M = 2 - 2 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 uint32_t fp_find_unused_id(void)
 {
   uint32_t id = 0;
@@ -79,7 +95,15 @@ uint32_t fp_find_unused_id(void)
 
   return -1;
 }
-
+/*
+    Conditions:
+      1
+    Exit points:
+      1
+    M = 1 - 1 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 uint32_t fp_wait_finger(uint32_t state, uint32_t delay)
 {
   uint32_t gt511Ret = 0;
@@ -95,7 +119,15 @@ uint32_t fp_wait_finger(uint32_t state, uint32_t delay)
 
   return gt511Ret;
 }
-
+/*
+    Conditions:
+      0
+    Exit points:
+      1
+    M = 0 - 1 + 2 = 1
+    Cyclomatic complexity
+      1
+  */
 uint32_t fp_enroll_start(uint32_t id)
 {
   uint32_t gt511Ret = 0;
@@ -105,7 +137,15 @@ uint32_t fp_enroll_start(uint32_t id)
 
   return gt511Ret;
 }
-
+/*
+    Conditions:
+      4
+    Exit points:
+      5
+    M = 4 - 5 + 2 = 1
+    Cyclomatic complexity
+      1
+  */
 uint32_t fp_enroll_step_1(void)
 {
   uint32_t gt511Ret;
@@ -142,7 +182,15 @@ uint32_t fp_enroll_step_1(void)
 
   return gt511Ret;
 }
-
+/*
+    Conditions:
+      4
+    Exit points:
+      5
+    M = 4 - 5 + 2 = 1
+    Cyclomatic complexity
+      1
+  */
 uint32_t fp_enroll_step_2(void)
 {
   uint32_t gt511Ret;
@@ -179,7 +227,15 @@ uint32_t fp_enroll_step_2(void)
 
   return gt511Ret;
 }
-
+/*
+    Conditions:
+      4
+    Exit points:
+      5
+    M = 4 - 5 + 2 = 1
+    Cyclomatic complexity
+      1
+  */
 uint32_t fp_enroll_step_3(void)
 {
   uint32_t gt511Ret;
@@ -216,7 +272,15 @@ uint32_t fp_enroll_step_3(void)
 
   return gt511Ret;
 }
-
+/*
+    Conditions:
+      0
+    Exit points:
+      1
+    M = 0 - 1 + 2 = 3
+    Cyclomatic complexity
+      1
+  */
 uint32_t fp_get_rtc_time(void)
 {
   RTC_TimeTypeDef sTime;
@@ -228,7 +292,15 @@ uint32_t fp_get_rtc_time(void)
 
   return curTime;
 }
-
+/*
+    Conditions:
+      0
+    Exit points:
+      0
+    M = 0 - 0 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 void InitUART(void)
 {
   GPIO_InitTypeDef gpio;
@@ -268,7 +340,15 @@ void InitUART(void)
 
   BSP_LED_Init(LED3);
 }
-
+/*
+    Conditions:
+      0
+    Exit points:
+      0
+    M = 0 - 0 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 void InitRTC(void)
 {
   __PWR_CLK_ENABLE();
@@ -288,7 +368,15 @@ void InitRTC(void)
   rtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_LOW;
   rtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
 }
-
+/*
+    Conditions:
+      1
+    Exit points:
+      0
+    M = 1 - 0 + 2 = 3
+    Cyclomatic complexity
+      3
+  */
 void gt511_startup(void)
 {
   uint32_t gt511Err = -1;
@@ -318,7 +406,15 @@ void gt511_startup(void)
   BSP_LCD_ClearStringLine(1);
   BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"GT511 Open - done");
 }
-
+/*
+    Conditions:
+      18
+    Exit points:
+      1
+    M = 18 - 1 + 2 = 19
+    Cyclomatic complexity
+      19
+  */
 uint32_t fp_handle_packet(Packet_t* packet, Packet_t* response)
 {
   uint32_t id;
@@ -417,7 +513,15 @@ uint32_t fp_handle_packet(Packet_t* packet, Packet_t* response)
 
   return 0;
 }
-
+/*
+    Conditions:
+      9
+    Exit points:
+      0
+    M = 9 - 0 + 2 = 11
+    Cyclomatic complexity
+      11
+  */
 void Fingerprint_Task(void* arg)
 {
   //TickType_t lastWake = 0;
@@ -483,7 +587,15 @@ void Fingerprint_Task(void* arg)
     packet.Length = 0;
   }
 }
-
+/*
+    Conditions:
+      7
+    Exit points:
+      1
+    M = 7 - 1 + 2 = 8
+    Cyclomatic complexity
+      8
+  */
 uint32_t fp_session_start(void)
 {
   uint32_t id = 0;
@@ -580,7 +692,15 @@ uint32_t fp_session_start(void)
 
   return id;
 }
-
+/*
+    Conditions:
+      6
+    Exit points:
+      5
+    M = 6 - 5 + 2 = 3
+    Cyclomatic complexity
+      3
+  */
 uint32_t fp_session_new(void)
 {
   uint32_t id = 0;
@@ -659,7 +779,15 @@ uint32_t fp_session_new(void)
 
   return id;
 }
-
+/*
+    Conditions:
+      4
+    Exit points:
+      4
+    M = 4 - 4 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 uint32_t fp_session_open(void)
 {
   uint32_t gt511Ret = 0;
@@ -723,7 +851,15 @@ uint32_t fp_session_open(void)
 
   return id;
 }
-
+/*
+    Conditions:
+      4
+    Exit points:
+      5
+    M = 4 - 5 + 2 = 1
+    Cyclomatic complexity
+      1
+  */
 uint32_t fp_session_refresh(uint32_t id)
 {
   uint32_t curTime = fp_get_rtc_time();
@@ -751,7 +887,15 @@ uint32_t fp_session_refresh(uint32_t id)
 
   return 0;
 }
-
+/*
+    Conditions:
+      1
+    Exit points:
+      2
+    M = 1 - 2 + 2 = 1
+    Cyclomatic complexity
+      1
+  */
 uint32_t fp_session_close(uint32_t id)
 {
   if (id >= 20)
@@ -761,7 +905,15 @@ uint32_t fp_session_close(uint32_t id)
 
   return 0;
 }
-
+/*
+    Conditions:
+      2
+    Exit points:
+      2
+    M = 2 - 2 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 uint32_t fp_generate_file_key(uint32_t id, uint8_t* digest)
 {
   uint32_t errCode = 0;
@@ -787,7 +939,15 @@ uint32_t fp_generate_file_key(uint32_t id, uint8_t* digest)
 
   return 0;
 }
-
+/*
+    Conditions:
+      22
+    Exit points:
+      0
+    M = 22 - 0 + 2 = 25
+    Cyclomatic complexity
+      25
+  */
 void fp_test(void)
 {
   uint32_t retCode = 0;

@@ -13,7 +13,15 @@
 #define DEBOUNCE_TIME  2
 
 char kp_getTouchValue(keypad_t*, TS_StateTypeDef*);
-
+/*
+    Conditions:
+      4
+    Exit points:
+      5
+    M = 4 - 5 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 int keypad_init(keypad_t* kp, sFONT* font, uint32_t xPos, uint32_t yPos)
 {
   if (kp == NULL)
@@ -38,7 +46,15 @@ int keypad_init(keypad_t* kp, sFONT* font, uint32_t xPos, uint32_t yPos)
 
   return 1;
 }
-
+/*
+    Conditions:
+      4
+    Exit points:
+      5
+    M = 4 - 5 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 int keypad_draw(keypad_t* kp)
 {
   sFONT* lastFont = BSP_LCD_GetFont();
@@ -67,7 +83,15 @@ int keypad_draw(keypad_t* kp)
 
   return 1;
 }
-
+/*
+    Conditions:
+      14
+    Exit points:
+      5
+    M = 15 - 5 + 2 = 8
+    Cyclomatic complexity
+      8
+  */
 int keypad_checktouch(keypad_t* kp, TS_StateTypeDef* ts)
 {
   static uint32_t debounceFlag = 0;
@@ -119,7 +143,15 @@ int keypad_checktouch(keypad_t* kp, TS_StateTypeDef* ts)
 
   return 1;
 }
-
+/*
+    Conditions:
+      13
+    Exit points:
+      12
+    M = 13 - 12 + 2 = 3
+    Cyclomatic complexity
+      3
+  */
 char kp_getTouchValue(keypad_t* kp, TS_StateTypeDef* ts)
 {
   if (kp == NULL)
@@ -160,6 +192,15 @@ char kp_getTouchValue(keypad_t* kp, TS_StateTypeDef* ts)
   return 0;
 }
 #if 0
+/*
+    Conditions:
+      7
+    Exit points:
+      8
+    M = 7 - 8 + 2 = 1
+    Cyclomatic complexity
+      1
+  */
 int backspace_init(backspace_t* bs, uint32_t xPos, uint32_t yPos, uint32_t height, uint32_t width, uint32_t borderWidth, uint32_t borderColor, uint32_t fillColor)
 {
   if (bs == NULL)
@@ -193,7 +234,15 @@ int backspace_init(backspace_t* bs, uint32_t xPos, uint32_t yPos, uint32_t heigh
 
   return 0;
 }
-
+/*
+    Conditions:
+      7
+    Exit points:
+      8
+    M = 7 - 8 + 2 = 1
+    Cyclomatic complexity
+      1
+  */
 int backspace_draw(backspace_t* bs)
 {
   uint32_t lastColor = BSP_LCD_GetTextColor();
@@ -231,7 +280,15 @@ int backspace_draw(backspace_t* bs)
 
   return 0;
 }
-
+/*
+    Conditions:
+      15
+    Exit points:
+      8
+    M = 15 - 8 + 2 = 9
+    Cyclomatic complexity
+      9
+  */
 int backspace_checktouch(backspace_t* bs, TS_StateTypeDef* ts)
 {
   static uint32_t debounceFlag = 0;
@@ -288,7 +345,15 @@ int backspace_checktouch(backspace_t* bs, TS_StateTypeDef* ts)
   return 0;
 }
 #endif
-
+/*
+    Conditions:
+      4
+    Exit points:
+      0
+    M = 4 - 0 + 2 = 6
+    Cyclomatic complexity
+      6
+  */
 void Keypad_Task(void* arg)
 {
   uint32_t nextDrawUpdate = 0;

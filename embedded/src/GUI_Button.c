@@ -2,7 +2,15 @@
 #include <string.h>
 
 #define DEBOUNCE_TIME  2
-
+/*
+    Conditions:
+      1
+    Exit points:
+      2
+    M = 1 - 2 + 2 = 1
+    Cyclomatic complexity
+      1
+  */
 uint32_t gui_button_init(GUI_Button_t* b)
 {
   if (b == NULL)
@@ -20,7 +28,15 @@ uint32_t gui_button_init(GUI_Button_t* b)
 
   return GUI_Button_Error_Success;
 }
-
+/*
+    Conditions:
+      8
+    Exit points:
+      8
+    M = 8 - 8 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 uint32_t gui_button_draw(GUI_Button_t* b)
 {
   uint32_t lastTextColor = BSP_LCD_GetTextColor();
@@ -72,7 +88,15 @@ uint32_t gui_button_draw(GUI_Button_t* b)
 
   return GUI_Button_Error_Success;
 }
-
+/*
+    Conditions:
+      12
+    Exit points:
+      8
+    M = 12 - 8 + 2 = 6
+    Cyclomatic complexity
+      6
+  */
 uint32_t gui_button_check_touch(GUI_Button_t* b, TS_StateTypeDef* ts)
 {
   static uint32_t debounceFlag = 0;

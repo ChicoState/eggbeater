@@ -27,7 +27,15 @@ void Control_Task(void*);
 void xPortSysTickHandler(void);
 
 extern BaseType_t OTG_ShouldYield;
-
+/*
+    Conditions:
+      1
+    Exit points:
+      0
+    M = 1 - 0 + 2 = 3
+    Cyclomatic complexity
+      3
+  */
 int main(void)
 {
   HAL_Init();
@@ -74,7 +82,15 @@ int main(void)
 
   while (1);
 }
-
+/*
+    Conditions:
+      0
+    Exit points:
+      0
+    M = 0 - 0 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 void InitClocks(void)
 {
   RCC_ClkInitTypeDef clk;
@@ -102,7 +118,15 @@ void InitClocks(void)
 
   HAL_RCC_ClockConfig(&clk, FLASH_LATENCY_5);
 }
-
+/*
+    Conditions:
+      0
+    Exit points:
+      0
+    M = 0 - 0 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 void InitLCD()
 {
   /* Initialize the LCD */
@@ -133,7 +157,15 @@ void InitLCD()
 
   BSP_TS_Init(BSP_LCD_GetXSize(), BSP_LCD_GetYSize());
 }
-
+/*
+    Conditions:
+      7
+    Exit points:
+      0
+    M = 7 - 0 + 2 = 9
+    Cyclomatic complexity
+      9
+  */
 void Control_Task(void* arg)
 {
   Packet_t packet, resp;
@@ -171,7 +203,15 @@ void Control_Task(void* arg)
     packet_free(&packet);
   }
 }
-
+/*
+    Conditions:
+      0
+    Exit points:
+      0
+    M = 0 - 0 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 void USB_OnReceivePacket(uint8_t* buffer, uint32_t length)
 {
   Packet_t packet;
@@ -186,14 +226,30 @@ void USB_OnReceivePacket(uint8_t* buffer, uint32_t length)
 
   xQueueSendToBackFromISR(usbWriteData.Rx, &packet, &OTG_ShouldYield);
 }
-
+/*
+    Conditions:
+      0
+    Exit points:
+      0
+    M = 0 - 0 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 void SysTick_Handler(void)
 {
   HAL_IncTick();
 
   xPortSysTickHandler();
 }
-
+/*
+    Conditions:
+      1
+    Exit points:
+      0
+    M = 1 - 0 + 2 = 3
+    Cyclomatic complexity
+      3
+  */
 void _exit(int status)
 {
   UNUSED_ARG(status);

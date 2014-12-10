@@ -14,7 +14,15 @@
                            || ( ( cmd ) == CtrlCommand_CloseSession ) \
                            || ( ( cmd ) == CtrlCommand_GetFileKey ) \
                             )
-
+/*
+    Conditions:
+      7
+    Exit points:
+      8
+    M = 7 - 8 + 2 = 1
+    Cyclomatic complexity
+      1
+  */
 uint32_t packet_validate(Packet_t* p)
 {
   PacketHeader_t* header = NULL;
@@ -48,7 +56,15 @@ uint32_t packet_validate(Packet_t* p)
 
   return 0;
 }
-
+/*
+    Conditions:
+      3
+    Exit points:
+      3
+    M = 3 - 3 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 uint32_t packet_get_header(Packet_t* p, PacketHeader_t** h)
 {
   if (p == NULL)
@@ -62,7 +78,15 @@ uint32_t packet_get_header(Packet_t* p, PacketHeader_t** h)
 
   return 0;
 }
-
+/*
+    Conditions:
+      3
+    Exit points:
+      3
+    M = 3 - 3 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 uint32_t packet_get_data(Packet_t* p, uint8_t** d)
 {
   if (p == NULL)
@@ -76,7 +100,15 @@ uint32_t packet_get_data(Packet_t* p, uint8_t** d)
 
   return 0;
 }
-
+/*
+    Conditions:
+      3
+    Exit points:
+      3
+    M = 3 - 3 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 uint32_t packet_get_data_length(Packet_t* p, uint16_t* l)
 {
   PacketHeader_t* header;
@@ -94,7 +126,15 @@ uint32_t packet_get_data_length(Packet_t* p, uint16_t* l)
 
   return 0;
 }
-
+/*
+    Conditions:
+      7
+    Exit points:
+      5
+    M = 7 - 5 + 2 = 4
+    Cyclomatic complexity
+      4
+  */
 uint32_t packet_create(Packet_t* p, uint8_t cmd, uint8_t* data, uint32_t dataLen)
 {
   PacketHeader_t* head;
@@ -135,7 +175,15 @@ uint32_t packet_create(Packet_t* p, uint8_t cmd, uint8_t* data, uint32_t dataLen
 
   return 0;
 }
-
+/*
+    Conditions:
+      2
+    Exit points:
+      2
+    M = 2 - 2 + 2 = 2
+    Cyclomatic complexity
+      2
+  */
 uint32_t packet_free(Packet_t* p)
 {
   if (p == NULL)
