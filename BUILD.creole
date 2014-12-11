@@ -30,9 +30,7 @@ Required software
 === Windows ===
 On windows, you have several options available:
 # Install Cygwin and GCC
-# Install MSys and MinGW64
-# Install Clang, binutils and GNU make
-** Binutils on Windows doesn't seem to include a linker (ld)
+# Install Visual Studio and CMake
 
 ==== Cygwin option ===
 # Download "setup-x86_64.exe" from [[https://www.cygwin.com/]].
@@ -43,6 +41,10 @@ On windows, you have several options available:
 ## make
 # This should install a GNU compatible make and several other required packages.
 
+==== Visual Studio option ====
+# Download & install Visual Studio 2013 (or newer)
+# Download & install CMake 2.8 (or newer, even 3.x)
+
 === Mac OS X & linux ===
 # Install gcc and g++
 # Install binutils
@@ -50,6 +52,7 @@ On windows, you have several options available:
 * These packages may already be installed. Check your package manager.
 
 == How to build ==
+= Cygwin/Unix/Linux =
 # Clone the repo from [[https://github.com/CSUChicoSoftwareEngineering/eggbeater|GitHub]]
 # Make a folder names "deps" in the cli folder.
 # Install crypto++ to cli/deps
@@ -59,3 +62,23 @@ On windows, you have several options available:
 # Open your build terminal
 ## Navigate to the cli folder
 # Run make
+
+= Visual Studio & CMake =
+# Clone the repo from [[https://github.com/CSUChicoSoftwareEngineering/eggbeater|GitHub]]
+# Download & extract Crypto++ and GoogleTest
+## Uncomment line 19 of config.h in the crypto++ library.
+# Open the Visual Studio Command Prompt
+# Navigate to your cloned repo
+# Run cmake-gui from the command prompt
+# Specify your the cli folder in your cloned repo as the source directory
+# Specify another folder (not the cli folder within the repo) as the build/binary directory
+# Click the "Configure" button
+## Select your toolset (this tutorial is for NMake makefiles)
+## Once the system configure
+### Make sure the EGGBEATER_CRYPTOPP_PATH variable points to the extracted directory of the Crypto++ library
+### Make sure the EGGBEATER_GTEST_PATH variable points to the extracted directory of the GoogleTest library
+# Click the "Configure" button again
+# Click the "Generate" button
+# Move back to the command prompt
+## Navigate to the build directory
+## Run "nmake" from the command prompt
