@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <sstream>
+#include <iomanip>
 
 #include <iostream>
 
@@ -76,15 +77,23 @@ namespace EggBeater
       }
       else
       {
+        std::stringstream str;
+        
+        str << "reg_open: Could not open key at " << subKey << ": " << GetLastError();
+        
+        throw Exception(str.str());
+        /*
         char msgBuffer[129];
         
-        snprintf(msgBuffer,
+        
+        _snprintf(msgBuffer,
                  sizeof(msgBuffer),
                  "reg_open: Could not open key at %s: %d",
                  subKey,
                  GetLastError());
         
         throw Exception(msgBuffer);
+        // */
       }
     }
     else
@@ -110,9 +119,15 @@ namespace EggBeater
       }
       else
       {
+        std::stringstream str;
+        
+        str << "reg_exist: Could not query value at " << subKey << "\\" << valueName << ": " << GetLastError();
+        
+        throw Exception(str.str());
+        /*
         char msgBuffer[129];
         
-        snprintf(msgBuffer,
+        _snprintf(msgBuffer,
                  sizeof(msgBuffer),
                  "reg_exist: Could not query value at %s\\%s: %d",
                  subKey,
@@ -120,6 +135,7 @@ namespace EggBeater
                  GetLastError());
         
         throw Exception(msgBuffer);
+        // */
       }
     }
     else
@@ -170,9 +186,15 @@ namespace EggBeater
       }
       else if (retValue != ERROR_SUCCESS)
       {
+        std::stringstream str;
+        
+        str << "reg_read_multi_sz: Could not get value at " << subKey << "\\" << valueName << ": " << GetLastError();
+        
+        throw Exception(str.str());
+        /*
         char msgBuffer[129];
         
-        snprintf(msgBuffer,
+        _snprintf(msgBuffer,
                  sizeof(msgBuffer),
                  "Could not get value at %s\\%s: %d",
                  subKey,
@@ -180,6 +202,7 @@ namespace EggBeater
                  GetLastError());
         
         throw Exception(msgBuffer);
+        // */
       }
       
     } while (retValue != ERROR_SUCCESS);
@@ -222,9 +245,15 @@ namespace EggBeater
       // Some other error
       else if (retValue != ERROR_SUCCESS)
       {
+        std::stringstream str;
+        
+        str << "reg_read_string: Could not get value at " << subKey << "\\" << valueName << ": " << GetLastError();
+        
+        throw Exception(str.str());
+        /*
         char msgBuffer[129];
         
-        snprintf(msgBuffer,
+        _snprintf(msgBuffer,
                  sizeof(msgBuffer),
                  "Could not get value at %s\\%s: %d/%d",
                  subKey,
@@ -233,6 +262,7 @@ namespace EggBeater
                  retValue);
         
         throw Exception(msgBuffer);
+        // */
       }
     } while (retValue != ERROR_SUCCESS);
     
@@ -255,15 +285,21 @@ namespace EggBeater
   */
   bool check_hardware_id(const String& hwID, uint16_t vid, uint16_t pid)
   {
-    char buffer[65] = {0};
+    //char buffer[65] = {0};
     String hwIDlower;
     String ref;
     
     for (auto c : hwID)
       hwIDlower.append(1, (char)tolower(c));
     
-    snprintf(buffer, sizeof(buffer), "usb\\vid_%04x&pid_%04x", vid, pid);
-    ref.assign(buffer);
+    std::stringstream str;
+    
+    str << "usb\\vid_" << std::hex << std::setfill('0') <<  std::setw(4) << vid << "&pid_" << std::hex << std::setfill('0') << std::setw(4) << pid;
+    
+    ref = str.str();
+    
+    //_snprintf(buffer, sizeof(buffer), "usb\\vid_%04x&pid_%04x", vid, pid);
+    //ref.assign(buffer);
     
     return ref == hwIDlower;
   }
@@ -323,7 +359,7 @@ namespace EggBeater
       if (
       char msgBuffer[129];
       
-      snprintf(msgBuffer,
+      _snprintf(msgBuffer,
                sizeof(msgBuffer),
                "Could not open key at HKEY_LOCAL_MACHINE\\%s: %d",
                SERIAL_LOOKUP_PATH,
@@ -348,9 +384,15 @@ namespace EggBeater
     }
     else if (retValue != ERROR_SUCCESS)
     {
+        std::stringstream str;
+        
+        str << "discover_devices: Could not open key at HKEY_LOCAL_MACHINE\\" << SERIAL_LOOKUP_PATH << "\\Count: " << GetLastError();
+        
+        throw Exception(str.str());
+        /*
       char msgBuffer[129];
       
-      snprintf(msgBuffer,
+      _snprintf(msgBuffer,
                sizeof(msgBuffer),
                "Could not get value at HKEY_LOCAL_MACHINE\\%s\\%s: %d",
                SERIAL_LOOKUP_PATH,
@@ -360,6 +402,7 @@ namespace EggBeater
       RegCloseKey(serialEntries);
       
       throw Exception(msgBuffer);
+      // */
     }
     
     deviceEntry = reg_open(HKEY_LOCAL_MACHINE,
@@ -384,7 +427,7 @@ namespace EggBeater
     {
       char msgBuffer[129];
       
-      snprintf(msgBuffer,
+      _snprintf(msgBuffer,
                sizeof(msgBuffer),
                "Could not get value at HKEY_LOCAL_MACHINE\\%s: %d",
                DEVICE_LOOKUP_PATH,
@@ -396,13 +439,18 @@ namespace EggBeater
     }
     */
     
+    std::stringstream str;
     for (uint32_t i = 0; i < countData; i++)
     {
-      sprintf(buffer, "%d", i);
+      str.str("");
+      str << i;
+      
+      //sprintf(buffer, "%d", i);
       
       path = reg_read_string(serialEntries,
                              NULL,
-                             buffer,
+                             str.str().c_str(),
+                             //buffer,
                              30);
       
       // Trim NULL terminators

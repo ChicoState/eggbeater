@@ -68,6 +68,11 @@ namespace EggBeater
     //! Get the specified cipher mode
     CipherMode getCipherMode() const;
     
+    //! Check if we have a specified GUI output file
+    bool hasGUIFile() const;
+    //! Get the specified GUI output file
+    String getGUIFile() const;
+    
     //! @todo This should go in the control class
     //! Check if any errors have occurred.
     bool haveErrors() const;
@@ -89,16 +94,19 @@ namespace EggBeater
     static int  ParseDecrypt(Options*, int, int, const char**);
     static int  ParseSessionID(Options*, int, int, const char**);
     static int  ParseCipherMode(Options*, int, int, const char**);
+    static int  ParseGUIOutputFile(Options*, int, int, const char**);
     static int  ParseFileEntry(Options*, int, int, const char**);
     static int  ParseDiscoverDevice(Options*, int, int, const char**);
+    static int  ParseDestFolder(Options*, int, int, const char**);
     
     String      sessionID;
+    String      guiFile;
     CLI_Action  cliAction;
     CipherMode  cipherMode;
     Status_t    currentStatus;
     ErrorList   errorList;
     StringList  fileList;
-    char tmpFilePath[120]={'\0'};
+    char tmpFilePath[120];
   };
 }
 

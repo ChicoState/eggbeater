@@ -1,6 +1,15 @@
 #include <eggbeater/Control.h>
+#include <sstream>
+
+using namespace std;
 
 using namespace EggBeater;
+
+#if defined(_EGGBEATER_DEBUG_) && (_EGGBEATER_DEBUG_ > 0)
+  #define DEBUG_PRINT(expr) { expr; }
+#else
+  #define DEBUG_PRINT(...)
+#endif
 
 ////////////////////////////////////////////////////////////
 // Control functions for taking data parsed by "options" 
@@ -8,7 +17,8 @@ using namespace EggBeater;
 // then writing status updates to output file.
 
 
-Control::Control( Options opt ) {
+Control::Control( Options opt )
+{
 // copy all data into opt so that Control object and member functions have access to it.
     sessionID = opt.getSessionID();
     cliAction = opt.getAction();
@@ -16,6 +26,15 @@ Control::Control( Options opt ) {
     currentStatus = opt.getCurrentStatus();
     errorList = opt.getErrors();
     fileList = opt.getFileList();
+    if (opt.hasGUIFile())
+    {
+      tmpFile = opt.getGUIFile();
+    }
+    else
+    {
+      // Sentinel to output via std::cout
+      tmpFile = "-";
+    }
     
 }  // End Constructor
 
@@ -23,64 +42,77 @@ Control::~Control()                                      // Destructor
 {
 }
 
-bool Control::run(void){
+bool Control::run(void)
+{
  // case statement for what action to do.
  // Also do error checking on opt data?
+  //tmpFile = getTempPath();
+  /*
   char tmp[120]={'\0'};
-  int pathSize = GetTempPath( sizeof(tmp),tmp);          // Get the windows tmp file path.
+  int pathSize = getTempPath( sizeof(tmp),tmp);          // Get the windows tmp file path.
   if(pathSize < 1) return false;                         // Check that it worked.
   else tmp[pathSize] = '\0';                             // Make sure last char is a NULL.
-  tmpFile = tmp;
+  tmpFile = tmp; // */
   
   switch ( cliAction )
   {
     default:
     case CLI_Action::None:
+      DEBUG_PRINT(std::cout << "No action set" << std::endl);
       return false;
       break;
     
     case CLI_Action::StartSession:
       // call start session
+      DEBUG_PRINT(std::cout << "Start session" << std::endl);
       newSession();
       break;
     
     case CLI_Action::RefreshSession:
       // call refresh session
+      DEBUG_PRINT(std::cout << "Refresh session" << std::endl);
       refreshSession();
       break;
     
     case CLI_Action::CloseSession:
       //call close session
+      DEBUG_PRINT(std::cout << "Close session" << std::endl);
       closeSession();
       break;
     
     case CLI_Action::Encrypt:
       // call encrypt
       // need to loop through files in list.
-      encryptFiles( cipherMode, fileList.front() );
+      DEBUG_PRINT(std::cout << "Encrypt files" << std::endl);
+      encryptFiles();
       break;
     
     case CLI_Action::Decrypt:
       // call decrypt.
       // need to loop through files in list.
-      decryptFiles( cipherMode, fileList.front());
+      DEBUG_PRINT(std::cout << "Decrypt files" << std::endl);
+      decryptFiles();
       break;
     
     case CLI_Action::DiscoverDevice:
+      DEBUG_PRINT(std::cout << "Discover device" << std::endl);
       // call discover
       
 //      devList = discover_devices(uint16_t vid, uint16_t pid); 
       break;
   }// end case.
-
+  
+  return true;
 }// end run.
 
 ////////////////////////////////////////////////////////////
 // Internal Function to get initialization vector (IV)
-int Control::getIV(ByteArray &iv){
+int Control::getIV(ByteArray &iv)
+{
   ByteArray hardIV      ({0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
                           0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
-  for(int x = 0; x < hardIV.size(); x++) iv[x] = hardIV[x];
+  iv.resize(hardIV.size());
+  for(unsigned int x = 0; x < hardIV.size(); x++) iv[x] = hardIV[x];
                       
 return iv.size();
 }// End get IV
@@ -88,13 +120,15 @@ return iv.size();
 
 ////////////////////////////////////////////////////////////  
 // Internal function to get key value from st board.
-int Control::getKey(ByteArray &key){
+int Control::getKey(ByteArray &key)
+{
 
   ByteArray hardKey     ({0x60, 0x3d, 0xeb, 0x10, 0x15, 0xca, 0x71, 0xbe,
-                      0x2b, 0x73, 0xae, 0xf0, 0x85, 0x7d, 0x77, 0x81,
-                      0x1f, 0x35, 0x2c, 0x07, 0x3b, 0x61, 0x08, 0xd7,
-                      0x2d, 0x98, 0x10, 0xa3, 0x09, 0x14, 0xdf, 0xf4});
-  for(int x = 0; x < hardKey.size(); x++) key[x] = hardKey[x];
+                          0x2b, 0x73, 0xae, 0xf0, 0x85, 0x7d, 0x77, 0x81,
+                          0x1f, 0x35, 0x2c, 0x07, 0x3b, 0x61, 0x08, 0xd7,
+                          0x2d, 0x98, 0x10, 0xa3, 0x09, 0x14, 0xdf, 0xf4});
+  key.resize(hardKey.size());
+  for(unsigned int x = 0; x < hardKey.size(); x++) key[x] = hardKey[x];
 
 return key.size();
 }// end getKey
@@ -103,16 +137,20 @@ return key.size();
 ////////////////////////////////////////////////////////////
 // Return last status in tmpFile to the gui.
 
-String Control::getStatus(){
+String Control::getStatus()
+{
   addMsg(fileVec,"sessionID ", sessionID );
   addMsg(fileVec, currentStatus);
   Control::writeVec(fileVec, tmpFile);
+  
+  return "";
 }
 
 ////////////////////////////////////////////////////////////
 // Start a new session with the micro controller.
 
-void Control::newSession(){
+void Control::newSession()
+{
 
   addMsg(fileVec, "sessionID ", sessionID );
   
@@ -122,7 +160,8 @@ void Control::newSession(){
 ////////////////////////////////////////////////////////////
 // Open a previously existing session with the micro controller.
 
-void Control::openSession(){
+void Control::openSession()
+{
   // Get session ID from board.
   // Authenticate.
 }
@@ -130,14 +169,16 @@ void Control::openSession(){
 ////////////////////////////////////////////////////////////
 // Member function to refresh session with micro controller.
 
-void Control::refreshSession(){
+void Control::refreshSession()
+{
 
 }
 
 ////////////////////////////////////////////////////////////
 // Close the current session.
 
-void Control::closeSession(){
+void Control::closeSession()
+{
 
 }
 
@@ -145,9 +186,9 @@ void Control::closeSession(){
 ////////////////////////////////////////////////////////////
 // Encrypt a file.
 
-int Control::encryptFiles(CipherMode encMode, String oFile)
+int Control::encryptFiles()
 {
-
+  DEBUG_PRINT(std::cout << "GetIV" << std::endl);
   if( !getIV( iv) )
   {
     addMsg(fileVec, "sessionID ", sessionID);
@@ -155,6 +196,7 @@ int Control::encryptFiles(CipherMode encMode, String oFile)
     writeVec( fileVec, tmpFile);
     return 1;
   }
+  DEBUG_PRINT(std::cout << "GetKey" << std::endl);
   if( !getKey( key) )
   {
     addMsg(fileVec, "sessionID ", sessionID);
@@ -163,13 +205,25 @@ int Control::encryptFiles(CipherMode encMode, String oFile)
     return 1;
   }
 
+  DEBUG_PRINT(std::cout << "Start crypto" << std::endl);
   Crypto myCrypt;
-  myCrypt.setCipherMode(encMode);
+  DEBUG_PRINT(std::cout << "set cipher mode" << std::endl);
+  myCrypt.setCipherMode(cipherMode);
+  DEBUG_PRINT(std::cout << "set key" << std::endl);
   myCrypt.setEncryptionKey(key);
+  DEBUG_PRINT(std::cout << "set IV" << std::endl);
   myCrypt.setInitialVector(iv);
   
-  myCrypt.encryptFile(oFile, oFile.append(".egg"));
+  for (auto iter : fileList)
+  {
+    DEBUG_PRINT(std::cout << ".encryptFile(" << iter << ")" << std::endl);
+    myCrypt.encryptFile(iter, iter + ".egg");
+  }
+  
+  //DEBUG_PRINT(std::cout << ".encryptFile(" << oFile << ")" << std::endl);
+  //myCrypt.encryptFile(oFile, oFile.append(".egg"));
 
+  DEBUG_PRINT(std::cout << "write message" << std::endl);
   addMsg(fileVec, "sessionID ", sessionID);
   addMsg( fileVec, currentStatus );
   writeVec( fileVec, tmpFile);
@@ -181,8 +235,9 @@ int Control::encryptFiles(CipherMode encMode, String oFile)
 ////////////////////////////////////////////////////////////
 // Decrypt a file.
 
-int Control::decryptFiles(CipherMode decMode, String file)
+int Control::decryptFiles()
 {
+#if 0
 
   if( !getIV( iv) )
   {
@@ -214,6 +269,7 @@ int Control::decryptFiles(CipherMode decMode, String file)
   addMsg(fileVec, "sessionID ", sessionID);
   addMsg( fileVec, currentStatus );
   writeVec( fileVec, tmpFile);
+#endif
   return 0;
 }// End decryption function.
 
@@ -229,17 +285,32 @@ int Control::writeVec(std::vector<std::string> &lines, std::string targetFile)
 {
   if(&lines == NULL) return 1;
   std::ofstream outfile;
-  int i=0;
-	
-	struct stat buf;                                          // If there is already a file of this name, delete it.
-  if( stat( targetFile.c_str(), &buf ) != -1) remove( targetFile.c_str() );
-	
-  outfile.open(targetFile.c_str(),std::ios::app);         // Open the file and write contents of vector to it.
-	if(!outfile) return 1;	
+  unsigned int i=0;
+  
+  if (targetFile == "" || targetFile == "-")
+  {
+    for (auto line : lines)
+      std::cout << line << std::endl;
+    
+    lines.clear();
+  }
+  else
+  {
+    struct stat buf;                                          // If there is already a file of this name, delete it.
+    if( stat( targetFile.c_str(), &buf ) != -1) remove( targetFile.c_str() );
+    
+    outfile.open(targetFile.c_str(),std::ios::app);         // Open the file and write contents of vector to it.
+    if(!outfile)
+    {
+      std::cout << "Could not open temporary file at: " << tmpFile << std::endl;
+      return 1;  
+    }
     for (i=0; i < lines.size(); i++ ) outfile << lines[i] << std::endl;
-	lines.clear();                                            // Clear the vector.
-  outfile.close();
-	return 0;
+    lines.clear();                                            // Clear the vector.
+    outfile.close();
+  }
+  
+  return 0;
 }//end funct write.
 
 
@@ -264,10 +335,16 @@ int Control::addMsg(std::vector<std::string> &vec, std::string arg1, std::string
 int Control::addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 )
 {
   if(&vec == NULL) return 1;
+  std::stringstream s;
+  
+  s << arg1 << arg2;
+  
+  vec.push_back(s.str());
+  /*
   char tmp[16]={'\0'};
   sprintf(tmp,"%i",arg2);
   arg1.append(tmp);
-  vec.push_back(arg1);
+  vec.push_back(arg1); // */
   return 0;
 }// end add string function.
 
@@ -292,6 +369,7 @@ int Control::addMsg( std::vector<std::string> &vec, Status_t status )
 
   if(&vec == NULL) return 1;
   const int tmpSize=16;
+  /*
   String ans="status ";
   char tmp[tmpSize]={'\0'};
   
@@ -318,9 +396,19 @@ int Control::addMsg( std::vector<std::string> &vec, Status_t status )
   
   memset(tmp,0,tmpSize);
   sprintf(tmp," ^ %i ",status.OverallBlocksTotal);
-  ans.append(tmp);
+  ans.append(tmp); // */
   
-  vec.push_back(ans);
+  std::stringstream ans;
+  
+  ans << "status " << status.OverallFilesDone
+      << " ^ "  << status.OverallFilesTotal
+      << " ^ "  << status.CurrentBlocksDone
+      << " ^ "  << status.CurrentPath
+      << " ^ "  << status.CurrentBlocksTotal
+      << " ^ "  << status.OverallBlocksDone
+      << " ^ "  << status.OverallBlocksTotal;
+  
+  vec.push_back(ans.str());
   return 0;
 }// end add string function.
 

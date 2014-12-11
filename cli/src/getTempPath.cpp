@@ -11,7 +11,7 @@ using namespace EggBeater;
 
   #include <Windows.h>
   
-  String getTempPath()
+  String EggBeater::getTempPath()
   {
     char tempPath[MAX_PATH];
     
@@ -39,7 +39,7 @@ using namespace EggBeater;
 #else
   // Unix or Linux
   
-  String getTempPath()
+  String EggBeater::getTempPath()
   {
     String path;
     

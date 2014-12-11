@@ -1,4 +1,7 @@
 #include <eggbeater/Crypto.h>
+
+#include <functional>
+
 /* Crypto++ includes */
 #include <sha3.h>
 #include <gcm.h>
@@ -158,7 +161,7 @@ namespace EggBeater
   void Crypto::encryptFile(const String& inputFile, const String& outputFile)
   {
     Sink* sink = new CryptoPP::FileSink(outputFile.c_str());
-    std::shared_ptr<CryptoPP::Source> source(new CryptoPP::FileSource(inputFile.c_str(), true));
+    std::shared_ptr<CryptoPP::Source> source(new CryptoPP::FileSource(inputFile.c_str(), false));
   
     encrypt(source.get(), sink);
   }
@@ -166,7 +169,7 @@ namespace EggBeater
   void Crypto::decryptFile(const String& inputFile, const String& outputFile)
   {
     Sink* sink = new CryptoPP::FileSink(outputFile.c_str());
-    std::shared_ptr<CryptoPP::Source> source(new CryptoPP::FileSource(inputFile.c_str(), true));
+    std::shared_ptr<CryptoPP::Source> source(new CryptoPP::FileSource(inputFile.c_str(), false));
   
     decrypt(source.get(), sink);
   }

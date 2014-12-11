@@ -7,6 +7,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#if 0
 //---------------------------
 #include <stdint.h>
 #include <string>
@@ -46,13 +47,9 @@ using CryptoPP::OFB_Mode;
 using CryptoPP::CFB_Mode;
 using CryptoPP::Exception;
 //-------------------------------------------
+#endif
 #include <eggbeater/Options.h>
 #include <eggbeater/Crypto.h>
-/*
-  struct Status_t
-  {
-  }; // */
-
 
 /*******************************************************************************
                      This class is not yet finalized
@@ -99,9 +96,9 @@ namespace EggBeater
     
     
     //! Internal function to encrypt the specified files
-    int encryptFiles(CipherMode, std::string );
+    int encryptFiles();
     //! Internal function to decrypt the specified files
-    int decryptFiles(CipherMode, std::string );
+    int decryptFiles();
 	
 	  int writeVec( std::vector<std::string> &lines, std::string targetFile);
     int addMsg(std::vector<std::string> &vec, std::string arg1, std::string arg2 = "\0" );

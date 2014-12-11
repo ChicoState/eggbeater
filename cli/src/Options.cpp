@@ -21,7 +21,9 @@ namespace EggBeater
   }
 
   Options::Options() : cliAction(CLI_Action::None),
-                       cipherMode(CipherMode::None)
+                       cipherMode(CipherMode::None),
+                       sessionID(""),
+                       guiFile("")
   {
     // No-op
   }
@@ -56,7 +58,15 @@ namespace EggBeater
     return sessionID;
   }
   
+  bool Options::hasGUIFile() const
+  {
+    return guiFile != "";
+  }
   
+  String Options::getGUIFile() const
+  {
+    return guiFile;
+  }
   
   bool Options::hasCipherMode() const
   {
@@ -116,6 +126,9 @@ namespace EggBeater
     lut["--session-id"] = &ParseSessionID;
     lut["--cipher-mode"] = &ParseCipherMode;
     lut["--discover-device"] = &ParseDiscoverDevice;
+    lut["-gui"] = &ParseGUIOutputFile;
+    lut["-f"] = &ParseFileEntry;
+    lut["-fd"] = &ParseDestFolder;
     
     for (int i = 1; i < argc; i++)
     {
@@ -123,6 +136,7 @@ namespace EggBeater
       
       if (iter != lut.end())
       {
+        std::cout << "Found: " << argv[i] << std::endl;
         int stride = iter->second(_this, i, argc, argv);
         
         if (stride < 0)
@@ -259,10 +273,44 @@ namespace EggBeater
     return 1;
   }
   
+  int Options::ParseGUIOutputFile(Options* _this, int i, int argc, const char** argv)
+  {
+    String cipherMode;
+    
+    if ((i + 1) >= argc)
+    {
+      _this->addError(ErrorClass::FatalError, "--gui: missing argument");
+      return -1;
+    }
+    
+    _this->guiFile = argv[i + 1];
+    
+    return 1;
+  }
+  
   int Options::ParseFileEntry(Options* _this, int i, int argc, const char** argv)
   {
-    _this->fileList.push_back(argv[i]);
-    
-    return 0;
+    std::cout << "Found file: " << argv[i] << std::endl;
+    if (strcmp(argv[i], "-f") == 0)
+    {
+      if ((i + 1) >= argc)
+      {
+        _this->addError(ErrorClass::FatalError, "-f: missing argument");
+        return -1;
+      }
+      _this->fileList.push_back(argv[i+1]);
+      return 1;
+    }
+    else
+    {
+      _this->fileList.push_back(argv[i]);
+      return 0;
+    }
+  }
+  
+  int Options::ParseDestFolder(Options* _this, int i, int argc, const char** argv)
+  {
+    // Not yet implemented
+    return 1;
   }
 }

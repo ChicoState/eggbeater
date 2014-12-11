@@ -4,6 +4,10 @@
 #include <eggbeater/Discovery.h>
 #include <eggbeater/Options.h>
 
+#ifndef _EGGBEATER_DEBUG_
+  #define _EGGBEATER_DEBUG_ 0
+#endif
+
 using namespace EggBeater;
 
 int main(int argc, const char** argv)
@@ -50,6 +54,7 @@ int main(int argc, const char** argv)
   
   Control ctrl(opt);                                  // This must be instantiated after options have been parsed.
   
+#if defined(_EGGBEATER_DEBUG_) && (_EGGBEATER_DEBUG_ > 0)
   switch (opt.getAction())                            // This switch is just to display what the CLI parsed from the GUI. 
   {
     default:
@@ -99,8 +104,9 @@ int main(int argc, const char** argv)
     std::cout << "  " << f << std::endl;
   }
   
-  
   std::cout << "Calling ctrl.run()" << std::endl;
+#endif
+
   ctrl.run();                                          // Call run to do error checking and call relevant functions, then write to output file.
   
   return 0;

@@ -2,6 +2,9 @@
 
 using namespace EggBeater;
 
+#define CLI_PATH "C:\\Stuff\\CSCI 430\\eggbeater\\cli\\build\\bin\\eggbeater.exe"
+#define TEMP_FILE_NAME "/TempComm.cpp"
+
 namespace EggBeater
 {
   InvokeCLI::InvokeCLI()
@@ -25,7 +28,7 @@ namespace EggBeater
   void InvokeCLI::startSession(QProcess* proc)
   {
     //needs to get session ID
-      QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
+      QString program = CLI_PATH;
       QStringList attributes;
       attributes << "--start-session";
       proc->start(program, attributes);
@@ -41,7 +44,7 @@ namespace EggBeater
 
   void InvokeCLI::refreshSession(QProcess* proc)
   {
-      QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
+      QString program = CLI_PATH;
       QStringList attributes;
       attributes << "--refresh-session";
       proc->start(program, attributes);
@@ -58,7 +61,7 @@ namespace EggBeater
 
   void InvokeCLI::closeSession(QProcess* proc)
   {
-      QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
+      QString program = CLI_PATH;
       QStringList attributes;
       attributes << "--close-session";
       proc->start(program, attributes);
@@ -75,7 +78,7 @@ namespace EggBeater
 
   InvokeCLI::parse InvokeCLI::fileParse(SecDialog* curr)
   {
-      QString temp =  QDir::tempPath()+"/TempComm.cpp"; ; //"C:\Users\sam\AppData\Local\TempComm.cpp" //System::GetTempPath()
+      QString temp =  QDir::tempPath() + TEMP_FILE_NAME; ; //"C:\Users\sam\AppData\Local\TempComm.cpp" //System::GetTempPath()
 //      qint64 i=0;
       //qint64 progresscount=0;
       // qint64 curBlock=0;
@@ -206,7 +209,7 @@ namespace EggBeater
 
   bool InvokeCLI::discoverDevice(QProcess* proc)
   {
-      QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
+      QString program = CLI_PATH;
       QStringList attributes;
       attributes << "--close-session";
       proc->start(program, attributes);
@@ -227,7 +230,7 @@ namespace EggBeater
     /*
      * getOpt.exe --encrypt -f file1 -f file2 -f file3 --session-id 70056 -fd someDrive/someFolder1/ -o option1 --cipher-mode ofb
      */
-    QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
+    QString program = CLI_PATH;
     QStringList attributes;
     attributes << "--encrypt";
     for(int i=0; i<fileNames.size(); i++)
@@ -235,14 +238,19 @@ namespace EggBeater
     QString ID = QString::number(sessionID);
     attributes << "--session-id" << ID;
     attributes << "-fd" << folderName;
+    attributes << "-gui" << "-"; //(QDir::tempPath() + TEMP_FILE_NAME);
     if(cipherMode!="cfb" && cipherMode!="ofb" && cipherMode!="gcm")
         cipherMode = "cfb";
     attributes  << "--cipher-mode" << cipherMode;
     //attributes << "-o" << "option1";
     //attributes  << "-o" << "option2";
     proc->start(program, attributes);
-    if(!proc->waitForFinished())
-        qDebug() << "Fail:\n"<< proc->errorString();
+    int exitCode = 0;
+    if(!proc->waitForFinished() || ((exitCode = proc->exitCode()) != 0))
+        qDebug() << "Fail: " << exitCode
+                 << "\n"<< proc->errorString()
+                 << "\nSTDOUT: " << proc->readAllStandardOutput()
+                 << "\nSTDERR: " << proc->readAllStandardError();
     else
     {
         qDebug() << "Success:\n" << proc->readAll();
@@ -256,7 +264,7 @@ namespace EggBeater
    /*
     * getOpt.exe --decrypt -f file1 -f file2 -f file3 --session-id 70056 -fd someDrive/someFolder1/ -o option1 --cipher-mode ofb
     */
-    QString program = "C:/Qt/Tools/QtCreator/bin/EncryptApp/GetOptV2/getOpt.exe";
+    QString program = CLI_PATH;
     QStringList attributes;
     attributes << "--decrypt";
     for(int i=0; i<fileNames.size(); i++)

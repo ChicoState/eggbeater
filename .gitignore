@@ -7,3 +7,5 @@ cli/deps/*
 *.exe
 *.elf
 */Thumbs.db
+/cli/build
+/QtGUI/*.user

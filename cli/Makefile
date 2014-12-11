@@ -6,6 +6,7 @@ CRYPTOPP_DIR	= deps/cryptopp562
 
 CXXFLAGS += -O0                      \
             -D_EGGBEATER_TESTS_      \
+            -D_EGGBEATER_DEBUG_=1    \
             -g                       \
             -std=gnu++11             \
             "-I$(GTEST_DIR)"         \
@@ -22,9 +23,8 @@ OTHER_SOURCES  = src/Discovery.o               \
                  src/Options.o                 \
                  src/getTempPath.o             \
                  src/packet.o
-#                 src/Control.o                 \ 
 CRYPTO_SOURCES = src/Crypto.o src/Control.o
-ALL_SOURCES    = $(OTHER_SOURCES) $(CRYPTO_SOURCES)
+ALL_SOURCES    = $(CRYPTO_SOURCES) $(OTHER_SOURCES)
 
 CRYPTO_TESTS = tests/Crypto_tests.crypto.elf     \
                tests/CryptoPP_tests.crypto.elf   \
@@ -75,6 +75,7 @@ eggbeater.elf: src/main.o $(ALL_SOURCES) lib/libcryptopp.a
 .PHONY: clean
 clean:
 	rm -rf lib                                \
+	$(shell find . -type f -name "*.elf")     \
 	$(shell find src -type f -name "*.o")     \
 	$(shell find tests -type f -name "*.o")   \
 	$(shell find tests -type f -name "*.elf")
