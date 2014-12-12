@@ -10,8 +10,8 @@ extern "C" {
 typedef enum fp_error_t
 {
   fp_error_session_not_started  = 0x0900,
-  fp_error_id_invalid           = 0x9001,
-  fp_session_expired            = 0x9002
+  fp_error_id_invalid           = 0x0901,
+  fp_session_expired            = 0x0902
 } fp_error_t;
 
 // Initialize the UART transceiver hardware

@@ -227,7 +227,7 @@ uint32_t control_start_session(Control_t* c, Packet_t* p)
   // Place p on the control_task->fingerprint_task message queue
   while (xQueueSendToBack(ctrlDataQueue.Rx, &packet, -1) != pdTRUE);
 
-  return CtrlError_Fail;
+  return CtrlError_Success;
 }
 /*
     Conditions:

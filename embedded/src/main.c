@@ -187,7 +187,6 @@ void Control_Task(void* arg)
         // Check if a response packet is expected
         if (control_is_packet_ready(&ctrlState, &packet) != CtrlError_NotReady)
         {
-
           while (control_is_packet_ready(&ctrlState, &packet) != CtrlError_Yes)
           {
             vTaskDelay(5);

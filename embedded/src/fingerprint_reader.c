@@ -492,7 +492,7 @@ uint32_t fp_handle_packet(Packet_t* packet, Packet_t* response)
         id = *(uint32_t*)data;
         fp_generate_file_key(id, digest);
 
-        if (packet_create(response, head->Command, (uint8_t*)&digest, sizeof(id)))
+        if (packet_create(response, head->Command, (uint8_t*)&digest, sizeof(digest)))
         {
           // Error
         }
@@ -538,6 +538,11 @@ void Fingerprint_Task(void* arg)
   BSP_LCD_SetBackColor(LCD_COLOR_WHITE);
 
   gt511_startup();
+
+  response.Data = NULL;
+  response.Length = 0;
+  packet.Data = NULL;
+  packet.Length = 0;
 
   //*
   //fp_test();
@@ -585,6 +590,8 @@ void Fingerprint_Task(void* arg)
     response.Length = 0;
     packet.Data = NULL;
     packet.Length = 0;
+
+    BSP_LCD_Clear(LCD_COLOR_WHITE);
   }
 }
 /*
@@ -931,7 +938,9 @@ uint32_t fp_generate_file_key(uint32_t id, uint8_t* digest)
 
   // Read fingerprint template from GT511
   if ((errCode = GT511C1R_GetStoredTemplate(&gt511, id, t)))
+  {
     // Error
+  }
 
   sha256(t->Data, sizeof(GT511C1R_Template_t), digest, 0);
 
