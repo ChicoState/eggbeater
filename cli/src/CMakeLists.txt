@@ -28,4 +28,4 @@ add_executable(eggbeater "${CMAKE_SOURCE_DIR}/src/main")
 
 target_link_libraries(eggbeater lib_EggBeater)
 
-set_property(TARGET eggbeater PROPERTY COMPILE_DEFINITIONS "_EGGBEATER_DEBUG_=0" "SERIAL_DEFAULT_OVERLAPPED")
+set_property(TARGET eggbeater PROPERTY COMPILE_DEFINITIONS "_EGGBEATER_DEBUG_=1" "SERIAL_DEFAULT_OVERLAPPED")

@@ -366,15 +366,6 @@ void Control::newSession()
 }
 
 ////////////////////////////////////////////////////////////
-// Open a previously existing session with the micro controller.
-
-void Control::openSession()
-{
-  // Get session ID from board.
-  // Authenticate.
-}
-
-////////////////////////////////////////////////////////////
 // Member function to refresh session with micro controller.
 
 void Control::refreshSession()

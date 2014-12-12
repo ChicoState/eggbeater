@@ -7,47 +7,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
-#if 0
-//---------------------------
-#include <stdint.h>
-#include <string>
-#include <algorithm>
 
-#include <cryptlib.h>
-using CryptoPP::Exception;
- 
-#include <files.h>
-using CryptoPP::FileSink;
-using CryptoPP::FileSource;
- 
-#include <hex.h>
-using CryptoPP::HexEncoder;
-using CryptoPP::HexDecoder; 
- 
-#include <filters.h>
-using CryptoPP::StringSink;
-using CryptoPP::StringSource;
-using CryptoPP::FileSink;
-using CryptoPP::FileSource;
-using CryptoPP::StreamTransformationFilter;
-using CryptoPP::AuthenticatedEncryptionFilter;
-using CryptoPP::AuthenticatedDecryptionFilter;
- 
-#include <modes.h>
-using CryptoPP::CBC_Mode;
- 
-#include <gcm.h>
-using CryptoPP::GCM;
- 
-#include <aes.h>
-using CryptoPP::AES;
-#include <windows.h>
-#include <modes.h>
-using CryptoPP::OFB_Mode;
-using CryptoPP::CFB_Mode;
-using CryptoPP::Exception;
-//-------------------------------------------
-#endif
 #include <eggbeater/Options.h>
 #include <eggbeater/Crypto.h>
 #include <eggbeater/Serial.h>
@@ -86,10 +46,8 @@ namespace EggBeater
     bool sendPacket(String device, Packet& in);
     //! Send and receive a packet from the comm device at @param device
     bool sendPacket(String device, Packet& in, Packet& out);
-    //! Internal function to start a new session
+    //! Internal function to start a new/existing session
     void newSession();
-    //! Internal function to open a session with an existing fingerprint
-    void openSession();
     //! Internal function to refresh the session timer
     void refreshSession();
     //! Internal function to close the session
@@ -98,7 +56,6 @@ namespace EggBeater
     int getIV();
     //! Internal function to get key value from st board.
     int getKey();
-    
     
     //! Internal function to encrypt the specified files
     int encryptFiles();
