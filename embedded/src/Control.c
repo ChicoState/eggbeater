@@ -240,8 +240,18 @@ uint32_t control_start_session(Control_t* c, Packet_t* p)
   */
 uint32_t control_refresh_session(Control_t* c, Packet_t* p)
 {
+  Packet_t packet;
+
+  if (c == NULL || p == NULL)
+    return CtrlError_NullArgument;
+
+  packet.Data   = p->Data;
+  packet.Length = p->Length;
+
   // Place p on the control_task->fingerprint_task message queue
-  return CtrlError_Fail;
+  while (xQueueSendToBack(ctrlDataQueue.Rx, &packet, -1) != pdTRUE);
+
+  return CtrlError_Success;
 }
 /*
     Conditions:
