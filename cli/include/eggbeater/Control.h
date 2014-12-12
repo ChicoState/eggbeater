@@ -50,6 +50,7 @@ using CryptoPP::Exception;
 #endif
 #include <eggbeater/Options.h>
 #include <eggbeater/Crypto.h>
+#include <eggbeater/Serial.h>
 
 /*******************************************************************************
                      This class is not yet finalized
@@ -80,7 +81,11 @@ namespace EggBeater
     ByteArray key;
     ByteArray iv;
     
-
+    //! Send a packet to the comm device at @param device
+    //! @note This function does not read a response packet from the device
+    bool sendPacket(String device, Packet& in);
+    //! Send and receive a packet from the comm device at @param device
+    bool sendPacket(String device, Packet& in, Packet& out);
     //! Internal function to start a new session
     void newSession();
     //! Internal function to open a session with an existing fingerprint
@@ -90,9 +95,9 @@ namespace EggBeater
     //! Internal function to close the session
     void closeSession();
     //! Internal Function to get initialization vector (IV)
-    int getIV(ByteArray &iv);
+    int getIV();
     //! Internal function to get key value from st board.
-    int getKey(ByteArray &key);
+    int getKey();
     
     
     //! Internal function to encrypt the specified files

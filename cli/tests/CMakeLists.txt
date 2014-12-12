@@ -14,7 +14,7 @@ set(GTEST_SOURCE "${GTEST_DIR}/gtest/gtest-all")
 
 add_library(GoogleTest ${GTEST_SOURCE})
 
-set(COMMON_SRCS ${EGGBEATER_SOURCES})
+set(COMMON_SRCS)# ${EGGBEATER_SOURCES})
 
 include_directories("${GTEST_DIR}")
 
@@ -33,7 +33,7 @@ add_executable(SerialComm_tests SerialComm_tests ${COMMON_SRCS})
 
 target_link_libraries(Crypto_CipherMode_tests CryptoPP GoogleTest lib_EggBeater)
 target_link_libraries(Crypto_tests CryptoPP GoogleTest lib_EggBeater)
-target_link_libraries(CryptoPP_tests CryptoPP GoogleTest lib_EggBeater)
+target_link_libraries(CryptoPP_tests lib_EggBeater CryptoPP GoogleTest)
 target_link_libraries(Discovery_test_absent CryptoPP GoogleTest lib_EggBeater)
 target_link_libraries(Discovery_test_present CryptoPP GoogleTest lib_EggBeater)
 target_link_libraries(Discovery_tests CryptoPP GoogleTest lib_EggBeater)

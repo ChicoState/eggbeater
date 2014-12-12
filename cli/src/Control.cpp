@@ -1,5 +1,32 @@
 #include <eggbeater/Control.h>
+#include <eggbeater/Discovery.h>
+#include <eggbeater/Serial.h>
+
 #include <sstream>
+#include <iostream>
+#include <iomanip>
+
+#if defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__)
+
+  #ifndef WIN32_LEAN_AND_MEAN
+    #define WIN32_LEAN_AND_MEAN
+  #endif
+
+  #include <Windows.h>
+
+  #define EGGBEATER_SLEEP(x) Sleep( x )
+
+#else
+
+  #include <unistd.h>
+
+  #define EGGBEATER_SLEEP(x) usleep( ( x ) * 1000 )
+
+#endif
+
+#define PACKET_TIMEOUT 1000
+#define DEVICE_VID ( 0x0483 )
+#define DEVICE_PID ( 0x5740 )
 
 using namespace std;
 
@@ -107,30 +134,87 @@ bool Control::run(void)
 
 ////////////////////////////////////////////////////////////
 // Internal Function to get initialization vector (IV)
-int Control::getIV(ByteArray &iv)
+int Control::getIV()
 {
   ByteArray hardIV      ({0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
                           0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F});
   iv.resize(hardIV.size());
-  for(unsigned int x = 0; x < hardIV.size(); x++) iv[x] = hardIV[x];
+  
+  for (unsigned int x = 0; x < hardIV.size(); x++)
+    iv[x] = hardIV[x];
                       
-return iv.size();
+  return iv.size();
 }// End get IV
 
 
 ////////////////////////////////////////////////////////////  
 // Internal function to get key value from st board.
-int Control::getKey(ByteArray &key)
+int Control::getKey()
 {
-
-  ByteArray hardKey     ({0x60, 0x3d, 0xeb, 0x10, 0x15, 0xca, 0x71, 0xbe,
-                          0x2b, 0x73, 0xae, 0xf0, 0x85, 0x7d, 0x77, 0x81,
-                          0x1f, 0x35, 0x2c, 0x07, 0x3b, 0x61, 0x08, 0xd7,
-                          0x2d, 0x98, 0x10, 0xa3, 0x09, 0x14, 0xdf, 0xf4});
-  key.resize(hardKey.size());
-  for(unsigned int x = 0; x < hardKey.size(); x++) key[x] = hardKey[x];
-
-return key.size();
+  // Try to discover device
+  StringList devs = discover_devices(DEVICE_VID, DEVICE_PID);
+  
+  if (devs.empty())
+  {
+    addMsg(fileVec, "^!fatal", "Could not find attached device");
+    writeVec(fileVec, tmpFile);
+    return 0;
+  }
+  
+  uint32_t id = 0;
+  
+  std::stringstream str(sessionID);
+  str >> id;
+  
+  ByteArray buffer(4);
+  *((uint32_t*)buffer.data()) = id;
+  
+  Packet pIn(CommandType::GetFileKey, buffer);
+  Packet pOut;
+  
+  if (!sendPacket(devs.front(), pIn, pOut))
+  {
+    writeVec(fileVec, tmpFile);
+    return 0;
+  }
+  
+  if (pOut.isValid() != PacketError::None)
+  {
+    addMsg(fileVec, "^!fatal", "Serial device did not return a valid packet");
+    writeVec(fileVec, tmpFile);
+    return 0;
+  }
+  
+  if (pOut.getDataLength() == 4)
+  {
+    uint32_t id = *(uint32_t*)pOut.getPacketData();
+    
+    std::stringstream str;
+    str << "Error encountered: " << std::hex << id;
+    
+    addMsg(fileVec, "^!fatal", str.str());
+    writeVec(fileVec, tmpFile);
+    return 0;
+  }
+  
+  if (pOut.getDataLength() < 32)
+  {
+    addMsg(fileVec, "^!fatal", "Serial device did not return enough data");
+    writeVec(fileVec, tmpFile);
+    return 0;
+  }
+  
+  key.clear();
+  
+  const uint8_t* data = pOut.getPacketData();
+  uint16_t index, limit = pOut.getDataLength();
+  
+  for (index = 0; index < limit; index++)
+  {
+    this->key.push_back(data[index]);
+  }
+  
+  return this->key.size();
 }// end getKey
 
 
@@ -146,13 +230,137 @@ String Control::getStatus()
   return "";
 }
 
+bool Control::sendPacket(String device, Packet& in)
+{
+  SerialCommunication comm(device);
+  
+  if (!comm.isOpen())
+  {
+    addMsg(fileVec, "^!fatal", "Could not connect to serial device");
+    return false;
+  }
+  
+  if (!comm.sendPacket(in))
+  {
+    addMsg(fileVec, "^!fatal", "Could not send packet to serial device");
+    return false;
+  }
+  
+  return true;
+}
+
+bool Control::sendPacket(String device, Packet& in, Packet& out)
+{
+  int ticks = 0;
+  SerialCommunication comm(device);
+  
+  if (!comm.isOpen())
+  {
+    addMsg(fileVec, "^!fatal", "Could not connect to serial device");
+    return false;
+  }
+  
+  if (!comm.sendPacket(in))
+  {
+    addMsg(fileVec, "^!fatal", "Could not send packet to serial device");
+    return false;
+  }
+  
+  EGGBEATER_SLEEP(1000);
+  
+  while (ticks < PACKET_TIMEOUT)
+  { 
+    if (comm.haveData())
+    {
+      DEBUG_PRINT(std::cout << "have data" << std::endl);
+      if (comm.receivePacket(out))
+      {
+        DEBUG_PRINT(std::cout << "Have packet" << std::endl);
+        
+        std::shared_ptr<ByteArray> ptr = out.getRawPacket();
+        
+        DEBUG_PRINT(std::cout << "packet.size: " << ptr->size() << std::endl);
+        
+        if (out.isValid() == PacketError::None)
+        {
+          DEBUG_PRINT(std::cout << "Packet is valid" << std::endl);
+          break;
+        }
+        else
+        {
+          DEBUG_PRINT(std::cout << "Packet is valid - false (" << (uint32_t)(out.isValid()) << ")" << std::endl);
+          
+          auto d = out.getRawPacket();
+          for (uint32_t i = 0; i < d->size(); i++)
+          {
+            DEBUG_PRINT(std::cout << std::hex << std::setw(2) << std::setfill('0') << (int)d->at(i) << std::endl);
+          }
+        }
+      }
+    }
+    else
+    {
+      DEBUG_PRINT(std::cout << "have data - false" << std::endl);
+    }
+    
+    EGGBEATER_SLEEP(1000);
+    ticks++;
+  }
+  
+  if (out.isValid() != PacketError::None)
+  {
+    addMsg(fileVec, "^!fatal", "Serial device did not return a valid packet");
+    writeVec(fileVec, tmpFile);
+    return false;
+  }
+  
+  return true;
+}
+
+
 ////////////////////////////////////////////////////////////
 // Start a new session with the micro controller.
 
 void Control::newSession()
 {
+  // Try to discover device
+  StringList devs = discover_devices(DEVICE_VID, DEVICE_PID);
+  
+  if (devs.empty())
+  {
+    addMsg(fileVec, "^!fatal", "Could not find attached device");
+    writeVec(fileVec, tmpFile);
+    return;
+  }
+  
+  String device = devs.front();
+  DEBUG_PRINT(std::cout << "COM device: " << device << std::endl);
+  ByteArray buffer;
+  Packet in(CommandType::NewSession, buffer);
+  Packet out;
+  
+  if (!this->sendPacket(device, in, out))
+  {
+    //addMsg(fileVec, "^!fatal", "Could not transmit packet to
+    return;
+  }
+  
+  if (out.getDataLength() < 4)
+  {
+    addMsg(fileVec, "^!fatal", "Serial device did not return enough data");
+    writeVec(fileVec, tmpFile);
+    return;
+  }
+  
+  uint32_t id = *(uint32_t*)(out.getPacketData());
+  
+  std::stringstream str;
+  str << id;
+  
+  sessionID = str.str();
 
   addMsg(fileVec, "sessionID ", sessionID );
+  addMsg(fileVec, "^!done ");
   
   writeVec(fileVec, tmpFile);
 }
@@ -171,7 +379,50 @@ void Control::openSession()
 
 void Control::refreshSession()
 {
-
+  // Try to discover device
+  StringList devs = discover_devices(DEVICE_VID, DEVICE_PID);
+  
+  if (devs.empty())
+  {
+    addMsg(fileVec, "^!fatal", "Could not find attached device");
+    writeVec(fileVec, tmpFile);
+    return;
+  }
+  
+  uint32_t id = 0;
+  if (sessionID == "")
+  {
+    addMsg(fileVec, "^!fatal", "You did not specify a session ID");
+    writeVec(fileVec, tmpFile);
+    return;
+  }
+  
+  std::stringstream str(sessionID);
+  str >> id;
+  
+  ByteArray buffer(4);
+  *((uint32_t*)buffer.data()) = id;
+  
+  Packet pIn(CommandType::RefreshSession, buffer);
+  Packet pOut;
+  
+  if (!sendPacket(devs.front(), pIn, pOut))
+  {
+    writeVec(fileVec, tmpFile);
+    return;
+  }
+  
+  if (pOut.isValid() != PacketError::None)
+  {
+    addMsg(fileVec, "^!fatal", "Serial device did not return a valid packet");
+    writeVec(fileVec, tmpFile);
+    return;
+  }
+  
+  addMsg(fileVec, "sessionID ", sessionID );
+  addMsg(fileVec, "^!done ");
+  
+  writeVec(fileVec, tmpFile);
 }
 
 ////////////////////////////////////////////////////////////
@@ -179,7 +430,42 @@ void Control::refreshSession()
 
 void Control::closeSession()
 {
+  // Try to discover device
+  StringList devs = discover_devices(DEVICE_VID, DEVICE_PID);
+  
+  if (devs.empty())
+  {
+    addMsg(fileVec, "^!fatal", "Could not find attached device");
+    writeVec(fileVec, tmpFile);
+    return;
+  }
+  
+  uint32_t id = 0;
+  if (sessionID == "")
+  {
+    addMsg(fileVec, "^!fatal", "You did not specify a session ID");
+    writeVec(fileVec, tmpFile);
+    return;
+  }
+  
+  std::stringstream str(sessionID);
+  str >> id;
+  
+  ByteArray buffer(4);
+  *((uint32_t*)buffer.data()) = id;
+  
+  Packet pIn(CommandType::CloseSession, buffer);
+  
+  if (!sendPacket(devs.front(), pIn))
+  {
+    writeVec(fileVec, tmpFile);
+    return;
+  }
 
+  addMsg(fileVec, "sessionID ", sessionID );
+  addMsg(fileVec, "^!done ");
+  
+  writeVec(fileVec, tmpFile);
 }
 
 
@@ -189,18 +475,18 @@ void Control::closeSession()
 int Control::encryptFiles()
 {
   DEBUG_PRINT(std::cout << "GetIV" << std::endl);
-  if( !getIV( iv) )
+  if( !getIV() )
   {
     addMsg(fileVec, "sessionID ", sessionID);
-    addMsg(fileVec, "^!fatal ", "Could not get valid IV.");
+    addMsg(fileVec, "^!fatal", "Could not get valid IV.");
     writeVec( fileVec, tmpFile);
     return 1;
   }
   DEBUG_PRINT(std::cout << "GetKey" << std::endl);
-  if( !getKey( key) )
+  if( !getKey() )
   {
     addMsg(fileVec, "sessionID ", sessionID);
-    addMsg(fileVec, "^!fatal ", "Could not get valid Key.");
+    addMsg(fileVec, "^!fatal", "Could not get valid Key.");
     writeVec( fileVec, tmpFile);
     return 1;
   }
@@ -237,39 +523,45 @@ int Control::encryptFiles()
 
 int Control::decryptFiles()
 {
-#if 0
-
-  if( !getIV( iv) )
+  DEBUG_PRINT(std::cout << "GetIV" << std::endl);
+  if( !getIV() )
   {
     addMsg(fileVec, "sessionID ", sessionID);
-    addMsg(fileVec, "^!fatal ", "Could not get valid IV.");
+    addMsg(fileVec, "^!fatal", "Could not get valid IV.");
     writeVec( fileVec, tmpFile);
     return 1;
   }
-  if( !getKey( key) )
+  DEBUG_PRINT(std::cout << "GetKey" << std::endl);
+  if( !getKey() )
   {
     addMsg(fileVec, "sessionID ", sessionID);
-    addMsg(fileVec, "^!fatal ", "Could not get valid Key.");
+    addMsg(fileVec, "^!fatal", "Could not get valid Key.");
     writeVec( fileVec, tmpFile);
     return 1;
   }
 
+  DEBUG_PRINT(std::cout << "Start crypto" << std::endl);
   Crypto myCrypt;
-  myCrypt.setCipherMode(decMode);
+  DEBUG_PRINT(std::cout << "set cipher mode" << std::endl);
+  myCrypt.setCipherMode(cipherMode);
+  DEBUG_PRINT(std::cout << "set key" << std::endl);
   myCrypt.setEncryptionKey(key);
+  DEBUG_PRINT(std::cout << "set IV" << std::endl);
   myCrypt.setInitialVector(iv);
   
-  String file2;
-  if(file.find(".egg") == file.length() - 4)                      // This may need to be -5.
-    for(int k=0; k < file.length() - 4; k++) file2.append(file[k],1);
-  else return 0;
-  myCrypt.decryptFile(file, file2 );
+  for (auto iter : fileList)
+  {
+    DEBUG_PRINT(std::cout << ".decryptFile(" << iter << ")" << std::endl);
+    myCrypt.decryptFile(iter, iter.substr(iter.length() - 4));
+  }
   
-  // Need to update status values here somehow.
+  //DEBUG_PRINT(std::cout << ".encryptFile(" << oFile << ")" << std::endl);
+  //myCrypt.encryptFile(oFile, oFile.append(".egg"));
+
+  DEBUG_PRINT(std::cout << "write message" << std::endl);
   addMsg(fileVec, "sessionID ", sessionID);
   addMsg( fileVec, currentStatus );
   writeVec( fileVec, tmpFile);
-#endif
   return 0;
 }// End decryption function.
 
@@ -323,6 +615,7 @@ int Control::writeVec(std::vector<std::string> &lines, std::string targetFile)
 int Control::addMsg(std::vector<std::string> &vec, std::string arg1, std::string arg2 )
 {
   if(&vec == NULL) return 1;
+  arg1.append(" ");
   arg1.append(arg2);
   vec.push_back(arg1);
   return 0;
@@ -337,7 +630,7 @@ int Control::addMsg(std::vector<std::string> &vec, std::string arg1, int arg2 )
   if(&vec == NULL) return 1;
   std::stringstream s;
   
-  s << arg1 << arg2;
+  s << arg1 << " " << arg2;
   
   vec.push_back(s.str());
   /*

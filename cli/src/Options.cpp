@@ -136,7 +136,7 @@ namespace EggBeater
       
       if (iter != lut.end())
       {
-        std::cout << "Found: " << argv[i] << std::endl;
+        //std::cout << "Found: " << argv[i] << std::endl;
         int stride = iter->second(_this, i, argc, argv);
         
         if (stride < 0)
@@ -290,7 +290,7 @@ namespace EggBeater
   
   int Options::ParseFileEntry(Options* _this, int i, int argc, const char** argv)
   {
-    std::cout << "Found file: " << argv[i] << std::endl;
+    //std::cout << "Found file: " << argv[i] << std::endl;
     if (strcmp(argv[i], "-f") == 0)
     {
       if ((i + 1) >= argc)

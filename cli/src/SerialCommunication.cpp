@@ -1,8 +1,9 @@
 #include <eggbeater/Serial.h>
 
 #include <stdio.h>
+#include <iostream>
 
-#if defined(__linux__) && !defined(__CYGWIN__)
+#if defined(__linux__)  && !defined(__CYGWIN__)
 #include <string.h>
 #include <termios.h>
 #include <errno.h>
@@ -114,6 +115,7 @@ namespace EggBeater
   
   bool SerialCommunication::sendPacket(Packet& packet)
   {
+    char c = 0;
     if (!this->isOpen())
       return false;
     
@@ -126,19 +128,33 @@ namespace EggBeater
   
   bool SerialCommunication::receivePacket(Packet& packet)
   {
+    char c = 0;
     if (!this->haveData())
+    {
+      std::cout << "Don't have data" << std::endl;
       return false;
+    }
     
     Packet::ValueType data = packet.getRawPacket();
     
     data->resize(sizeof(PacketHeader));
+    
+    while ((c = this->commPort.peek()) != EGGBEATER_SOF_BYTE)
+    {
+      if (c == -1)
+        return false;
+      this->commPort.ignore(1);
+    }
     
     PacketHeader* header = (PacketHeader*)data->data();
     
     this->commPort.read((char*)data->data(), sizeof(PacketHeader) - 1);
     
     if (!this->commPort.good())
+    {
+      std::cout << "COM port failure: could not read header" << std::endl;
       return false;
+    }
     
     data->resize(packet.getDataLength() + sizeof(PacketHeader));
     
@@ -147,6 +163,7 @@ namespace EggBeater
     
     this->commPort.read((char*)&(header->data), packet.getDataLength() + 1);
     
-    return this->commPort.good();
+    // EOF isn't a real error
+    return (this->commPort.good() || this->commPort.eof());
   }
 }

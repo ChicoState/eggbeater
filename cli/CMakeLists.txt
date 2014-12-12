@@ -16,6 +16,14 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 set(EGGBEATER_CRYPTOPP_PATH "${CMAKE_SOURCE_DIR}/deps/cryptopp562" CACHE FILEPATH "Absolute path to the CryptoPP library files.")
 set(EGGBEATER_GTEST_PATH "${CMAKE_SOURCE_DIR}/deps/gtest-1.7.0" CACHE FILEPATH "Absolute path to the root of the GoogleTest directory.")
+set(EGGBEATER_LIBSERIAL_PATH "${CMAKE_SOURCE_DIR}/deps/libserialport" CACHE FILEPATH "Absolute path to the root of the libserialport directory.")
+
+string(TOLOWER ${CMAKE_SYSTEM_NAME} CMAKE_SYSTEM_NAME_LOWER)
+if(CMAKE_SYSTEM_NAME_LOWER STREQUAL "windows")
+  set(EGGBEATER_OS "win")
+else()
+  set(EGGBEATER_OS "posix")
+endif()
 
 include_directories("${CMAKE_SOURCE_DIR}/include" "${EGGBEATER_CRYPTOPP_PATH}")
 link_directories("${CMAKE_BINARY_DIR}/lib")

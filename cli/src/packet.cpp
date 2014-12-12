@@ -3,12 +3,10 @@
 #include <memory>
 #include <bitset>
 #include <string.h>
+#include <iomanip>
 
 #include <eggbeater/Common.h>
 #include <eggbeater/Serial.h>
-
-#define EGGBEATER_SOF_BYTE  0x55
-#define EGGBEATER_EOF_BYTE  0xff
 
 #define COMMAND_VALID(cmd)  ( ( ( cmd ) == CommandType::NoOp ) \
                            || ( ( cmd ) == CommandType::Echo ) \
@@ -92,31 +90,38 @@ namespace EggBeater
     return *header;
   }
 
-  bool Packet::isValid() const
+  PacketError Packet::isValid() const
   {
     PacketHeader header = getPacketHeader();
     
     if (header.magicNum != EGGBEATER_SOF_BYTE)
     {
-      return false;
+      //std::cout << "Bad magic number" << std::endl;
+      return PacketError::BadSOF;
     }
     
     if (!COMMAND_VALID(header.cmd))
     {
-      return false;
+      //std::cout << "Bad command" << std::endl;
+      return PacketError::BadCommand;
     }
     
     if (data->size() != (sizeof(PacketHeader) + ((header.lenHigh << 8) | (header.lenLow))))
     {
-      return false;
+      //std::cout << "Bad packet size" << std::endl;
+      //std::cout << "data->size(): " << data->size() << std::endl;
+      //std::cout << "calc  size  : " << (sizeof(PacketHeader) + ((header.lenHigh << 8) | (header.lenLow))) << std::endl;
+      return PacketError::BadSize;
     }
     
     if (data->back() != EGGBEATER_EOF_BYTE)
     {
-      return false;
+      //std::cout << "Bad EOF number" << std::endl;
+      //std::cout << "Found unexpected byte: " << std::hex << std::setw(2) << std::setfill('0') << (((int)data->back()) & 0xff) << std::endl;
+      return PacketError::BadEOF;
     }
     
-    return true;
+    return PacketError::Success;
   }
 
   CommandType Packet::getCommandType() const

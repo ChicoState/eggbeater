@@ -7,6 +7,9 @@
 #include <string>
 #include <stdexcept>
 
+#define EGGBEATER_SOF_BYTE  0x55
+#define EGGBEATER_EOF_BYTE  0xff
+
 namespace EggBeater
 {
   typedef std::vector<uint8_t> ByteArray;

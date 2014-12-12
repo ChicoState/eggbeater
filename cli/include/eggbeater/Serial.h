@@ -9,6 +9,8 @@
 
 #include <eggbeater/Common.h>
 
+class CSerial;
+
 namespace EggBeater
 {
   //! @todo Add to as needed
@@ -33,6 +35,16 @@ namespace EggBeater
     uint8_t     lenHigh;
     uint8_t     lenLow;
     uint8_t     data;
+  };
+  
+  enum class PacketError : uint8_t
+  {
+    None        = 0,
+    Success     = 0,
+    BadSOF      = 1,
+    BadCommand  = 2,
+    BadSize     = 3,
+    BadEOF      = 4
   };
   
   class Packet
@@ -64,7 +76,7 @@ namespace EggBeater
     /**
       Validate the packet header.
     **/
-    bool            isValid() const;
+    PacketError     isValid() const;
     /**
       Extract only the command type from the packet header
     **/
@@ -109,7 +121,7 @@ namespace EggBeater
     //! Read a packet from the serial port
     bool receivePacket(Packet&);
   private:
-    std::fstream commPort;
+    std::shared_ptr<CSerial> dev;
   };
 }
 
