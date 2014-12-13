@@ -79,10 +79,6 @@ namespace EggBeater
   InvokeCLI::parse InvokeCLI::fileParse(SecDialog* curr)
   {
       QString temp =  QDir::tempPath() + TEMP_FILE_NAME; ; //"C:\Users\sam\AppData\Local\TempComm.cpp" //System::GetTempPath()
-//      qint64 i=0;
-      //qint64 progresscount=0;
-      // qint64 curBlock=0;
-      //qint64 positionTrack=0;
       QString curFileCount=0;
       QString maxCount=0;
       QFile file(temp);
@@ -107,7 +103,6 @@ namespace EggBeater
       while(!in.atEnd())
       {
           QString line=in.readLine();
-          //QString::iterator it= line.begin();
           QVector<char> curFileName;
           QString word=" ";
 		  QString firstWord = line.split(" ").at(0);

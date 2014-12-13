@@ -156,7 +156,7 @@ void SecDialog::on_encrypt_clicked()
 
     else if(fileNames.isEmpty() && folderName.isEmpty())
     {
-        QMessageBox::warning(this, tr("EncryptApp"), tr("Slect File(s) or Folder(s)\nand Destination Folder."));
+        QMessageBox::warning(this, tr("EncryptApp"), tr("Select File(s) or Folder(s)\nand Destination Folder."));
         return;
     }
 
