@@ -206,7 +206,7 @@ namespace EggBeater
   {
       QString program = CLI_PATH;
       QStringList attributes;
-      attributes << "--close-session";
+      attributes << "--discover";
       proc->start(program, attributes);
       if(!proc->waitForFinished())
           qDebug() << "Fail:\n"<< proc->errorString();
