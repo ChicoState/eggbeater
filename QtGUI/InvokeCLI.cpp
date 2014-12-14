@@ -44,8 +44,11 @@ namespace EggBeater
       proc->close();
   }
 
-  void InvokeCLI::refreshSession(QProcess* proc)
+  void InvokeCLI::refreshSession(SecDialog* curr, QProcess* proc)
   {
+      parse retvals;
+      retvals=fileParse(curr);
+
       QString program = CLI_PATH;
       QStringList attributes;
       attributes << "--refresh-session";
@@ -61,8 +64,11 @@ namespace EggBeater
       proc->close();
   }
 
-  void InvokeCLI::closeSession(QProcess* proc)
+  void InvokeCLI::closeSession(SecDialog* curr, QProcess* proc)
   {
+      parse retvals;
+      retvals=fileParse(curr);
+
       QString program = CLI_PATH;
       QStringList attributes;
       attributes << "--close-session";
@@ -204,8 +210,11 @@ namespace EggBeater
       //QMessageBox::warning(this, progress, curFileCount, maxCount); //tr("Cant find temp file \n")
   }
 
-  bool InvokeCLI::discoverDevice(QProcess* proc)
+  bool InvokeCLI::discoverDevice(SecDialog* curr, QProcess* proc)
   {
+      parse retvals;
+      retvals=fileParse(curr);
+
       QString program = CLI_PATH;
       QStringList attributes;
       attributes << "--discover";

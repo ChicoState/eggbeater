@@ -65,7 +65,7 @@ void SecDialog::on_refresh_button_clicked()
     QString time_text = time.toString("hh : mm : ss");
     ui->Digital_clock->setText(time_text);
     QProcess* proc = new QProcess(this);
-    invoke->refreshSession(proc);
+    invoke->refreshSession(this, proc);
 }
 
 void SecDialog::on_choose_input_files_clicked()
@@ -166,7 +166,7 @@ void SecDialog::on_encrypt_clicked()
     else
     {
         QProcess* proc = new QProcess(this);
-        bool discover = invoke->discoverDevice(proc);
+        bool discover = invoke->discoverDevice(this, proc);
         bool checkSession = invoke->sessionIsOpen();
 
         // Check session is open and divice is discovered
@@ -231,7 +231,7 @@ void SecDialog::on_decrypt_clicked()
     else
     {
         QProcess* proc = new QProcess(this);
-        bool discover = invoke->discoverDevice(proc);
+        bool discover = invoke->discoverDevice(this, proc);
         bool checkSession = invoke->sessionIsOpen();
 
         //Check session is open and divice is discovered
