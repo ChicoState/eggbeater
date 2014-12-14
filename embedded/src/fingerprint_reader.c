@@ -418,6 +418,7 @@ void gt511_startup(void)
 uint32_t fp_handle_packet(Packet_t* packet, Packet_t* response)
 {
   uint32_t id;
+  uint32_t retVal = 0;
   PacketHeader_t* head = NULL;
   uint16_t len = 0;
   uint8_t* data = NULL;
@@ -490,11 +491,20 @@ uint32_t fp_handle_packet(Packet_t* packet, Packet_t* response)
       if (len >= 4)
       {
         id = *(uint32_t*)data;
-        fp_generate_file_key(id, digest);
-
-        if (packet_create(response, head->Command, (uint8_t*)&digest, sizeof(digest)))
+        if ((retVal = fp_generate_file_key(id, digest)) < 20)
         {
-          // Error
+          if (packet_create(response, head->Command, (uint8_t*)&digest, sizeof(digest)))
+          {
+            // Error
+          }
+        }
+        else
+        {
+          // Error message
+          if (packet_create(response, head->Command, (uint8_t*)&retVal, sizeof(retVal)))
+          {
+            // Error
+          }
         }
       }
       else
@@ -925,8 +935,14 @@ uint32_t fp_generate_file_key(uint32_t id, uint8_t* digest)
 {
   uint32_t errCode = 0;
   uint32_t curTime = fp_get_rtc_time();
-  uint32_t sessionTime = Session_ActivityStamps[id];
+  uint32_t sessionTime; // = Session_ActivityStamps[id];
   GT511C1R_Template_t* t = NULL;
+
+  if (id >= 20)
+  {
+    return fp_error_id_invalid;
+  }
+  sessionTime = Session_ActivityStamps[id];
 
   if ((curTime - sessionTime) > SESSION_TIMEOUT)
   {

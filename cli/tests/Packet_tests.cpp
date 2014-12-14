@@ -38,7 +38,8 @@ TEST_F(NoOpFixture, Packet_create_empty)
     
     EXPECT_EQ(packet->getDataLength(), 0);
     
-    EXPECT_FALSE(packet->isValid());
+    EXPECT_NE(packet->isValid(), PacketError::None);
+    //EXPECT_FALSE(packet->isValid());
   );
 }
 
@@ -59,10 +60,11 @@ TEST_F(NoOpFixture, Packet_create_nop)
     
     ASSERT_NE(packetData, nullptr);
     
-    for (auto i = 0; i < data.size(); i++)
+    for (auto i = 0u; i < data.size(); i++)
       EXPECT_EQ(packetData[i], data[i]);
     
-    EXPECT_TRUE(packet->isValid());
+    EXPECT_EQ(packet->isValid(), PacketError::None);
+    //EXPECT_TRUE(packet->isValid());
   );
 }
 
@@ -83,10 +85,11 @@ TEST_F(NoOpFixture, Packet_create_echo)
     
     ASSERT_NE(packetData, nullptr);
     
-    for (auto i = 0; i < data.size(); i++)
+    for (auto i = 0u; i < data.size(); i++)
       EXPECT_EQ(packetData[i], data[i]);
     
-    EXPECT_TRUE(packet->isValid());
+    EXPECT_EQ(packet->isValid(), PacketError::None);
+    //EXPECT_TRUE(packet->isValid());
   );
 }
 
@@ -100,7 +103,8 @@ TEST_F(NoOpFixture, Packet_create_buffer)
   EXPECT_NO_THROW(
     std::shared_ptr<Packet> packet(new Packet(buffer));
     
-    EXPECT_TRUE(packet->isValid());
+    EXPECT_EQ(packet->isValid(), PacketError::None);
+    //EXPECT_TRUE(packet->isValid());
   
     EXPECT_EQ(packet->getCommandType(), cmd);
     
@@ -110,7 +114,7 @@ TEST_F(NoOpFixture, Packet_create_buffer)
     
     ASSERT_NE(packetData, nullptr);
     
-    for (auto i = 0; i < data.size(); i++)
+    for (auto i = 0u; i < data.size(); i++)
       EXPECT_EQ(packetData[i], data[i]);
   );
 }
@@ -125,7 +129,8 @@ TEST_F(NoOpFixture, Packet_create_buffer_bad1)
   EXPECT_NO_THROW(
     std::shared_ptr<Packet> packet(new Packet(buffer));
     
-    EXPECT_FALSE(packet->isValid());
+    EXPECT_EQ(packet->isValid(), PacketError::BadSOF);
+    //EXPECT_FALSE(packet->isValid());
   );
 }
 
@@ -139,7 +144,8 @@ TEST_F(NoOpFixture, Packet_create_buffer_bad2)
   EXPECT_NO_THROW(
     std::shared_ptr<Packet> packet(new Packet(buffer));
     
-    EXPECT_FALSE(packet->isValid());
+    EXPECT_EQ(packet->isValid(), PacketError::BadCommand);
+    //EXPECT_FALSE(packet->isValid());
   );
 }
 
@@ -153,7 +159,8 @@ TEST_F(NoOpFixture, Packet_create_buffer_bad3)
   EXPECT_NO_THROW(
     std::shared_ptr<Packet> packet(new Packet(buffer));
     
-    EXPECT_FALSE(packet->isValid());
+    EXPECT_EQ(packet->isValid(), PacketError::BadSize);
+    //EXPECT_FALSE(packet->isValid());
   );
 }
 
@@ -167,7 +174,8 @@ TEST_F(NoOpFixture, Packet_create_buffer_bad4)
   EXPECT_NO_THROW(
     std::shared_ptr<Packet> packet(new Packet(buffer));
     
-    EXPECT_FALSE(packet->isValid());
+    EXPECT_EQ(packet->isValid(), PacketError::BadEOF);
+    //EXPECT_FALSE(packet->isValid());
   );
 }
 

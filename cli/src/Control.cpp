@@ -123,9 +123,10 @@ bool Control::run(void)
     
     case CLI_Action::DiscoverDevice:
       DEBUG_PRINT(std::cout << "Discover device" << std::endl);
-      // call discover
+      auto devs = discover_devices(DEVICE_VID, DEVICE_PID);
       
-//      devList = discover_devices(uint16_t vid, uint16_t pid); 
+      addMsg(fileVec, "discover", !(devs.empty()));
+      writeVec(fileVec, tmpFile);
       break;
   }// end case.
   
@@ -191,6 +192,7 @@ int Control::getKey()
     
     std::stringstream str;
     str << "Error encountered: " << std::hex << id;
+    DEBUG_PRINT(std::cout << "Error encountered: " << std::hex << id << std::endl);
     
     addMsg(fileVec, "^!fatal", str.str());
     writeVec(fileVec, tmpFile);
@@ -490,11 +492,30 @@ int Control::encryptFiles()
   myCrypt.setEncryptionKey(key);
   DEBUG_PRINT(std::cout << "set IV" << std::endl);
   myCrypt.setInitialVector(iv);
+
+  currentStatus.CurrentBlocksDone = 0;
+  currentStatus.CurrentBlocksTotal = 1;
+  currentStatus.OverallFilesDone = 0;
+  currentStatus.OverallFilesTotal = fileList.size();
+  currentStatus.OverallBlocksDone = 0;
+  currentStatus.OverallBlocksTotal = 0;
+  currentStatus.CurrentPath = "";
+  
+  addMsg(fileVec, "sessionID ", sessionID);
+  addMsg( fileVec, currentStatus );
+  writeVec( fileVec, tmpFile);
   
   for (auto iter : fileList)
   {
+    currentStatus.CurrentPath = iter;
+    currentStatus.OverallFilesDone++;
+    
     DEBUG_PRINT(std::cout << ".encryptFile(" << iter << ")" << std::endl);
     myCrypt.encryptFile(iter, iter + ".egg");
+    
+    addMsg(fileVec, "sessionID ", sessionID);
+    addMsg( fileVec, currentStatus );
+    writeVec( fileVec, tmpFile);
   }
   
   //DEBUG_PRINT(std::cout << ".encryptFile(" << oFile << ")" << std::endl);
@@ -503,6 +524,7 @@ int Control::encryptFiles()
   DEBUG_PRINT(std::cout << "write message" << std::endl);
   addMsg(fileVec, "sessionID ", sessionID);
   addMsg( fileVec, currentStatus );
+  addMsg(fileVec, "^!done");
   writeVec( fileVec, tmpFile);
   return 0;
 }// end Encrypt files.
@@ -539,6 +561,41 @@ int Control::decryptFiles()
   myCrypt.setEncryptionKey(key);
   DEBUG_PRINT(std::cout << "set IV" << std::endl);
   myCrypt.setInitialVector(iv);
+
+  currentStatus.CurrentBlocksDone = 0;
+  currentStatus.CurrentBlocksTotal = 1;
+  currentStatus.OverallFilesDone = 0;
+  currentStatus.OverallFilesTotal = fileList.size();
+  currentStatus.OverallBlocksDone = 0;
+  currentStatus.OverallBlocksTotal = 0;
+  currentStatus.CurrentPath = "";
+  
+  addMsg(fileVec, "sessionID ", sessionID);
+  addMsg( fileVec, currentStatus );
+  writeVec( fileVec, tmpFile);
+  
+  for (auto iter : fileList)
+  {
+    currentStatus.CurrentPath = iter;
+    currentStatus.OverallFilesDone++;
+    
+    DEBUG_PRINT(std::cout << ".decryptFile(" << iter << ")" << std::endl);
+    myCrypt.decryptFile(iter, iter.substr(0, iter.length() - 4));
+    
+    addMsg(fileVec, "sessionID ", sessionID);
+    addMsg( fileVec, currentStatus );
+    writeVec( fileVec, tmpFile);
+  }
+  
+  //DEBUG_PRINT(std::cout << ".encryptFile(" << oFile << ")" << std::endl);
+  //myCrypt.encryptFile(oFile, oFile.append(".egg"));
+
+  DEBUG_PRINT(std::cout << "write message" << std::endl);
+  addMsg(fileVec, "sessionID ", sessionID);
+  addMsg( fileVec, currentStatus );
+  addMsg(fileVec, "^!done");
+  writeVec( fileVec, tmpFile);
+  /*
   
   for (auto iter : fileList)
   {
@@ -553,6 +610,7 @@ int Control::decryptFiles()
   addMsg(fileVec, "sessionID ", sessionID);
   addMsg( fileVec, currentStatus );
   writeVec( fileVec, tmpFile);
+  // */
   return 0;
 }// End decryption function.
 
@@ -580,7 +638,11 @@ int Control::writeVec(std::vector<std::string> &lines, std::string targetFile)
   else
   {
     struct stat buf;                                          // If there is already a file of this name, delete it.
-    if( stat( targetFile.c_str(), &buf ) != -1) remove( targetFile.c_str() );
+    if( stat( targetFile.c_str(), &buf ) != -1)
+    {
+      DEBUG_PRINT("Removing temp file");
+      remove( targetFile.c_str() );
+    }
     
     outfile.open(targetFile.c_str(),std::ios::app);         // Open the file and write contents of vector to it.
     if(!outfile)
@@ -588,7 +650,11 @@ int Control::writeVec(std::vector<std::string> &lines, std::string targetFile)
       std::cout << "Could not open temporary file at: " << tmpFile << std::endl;
       return 1;  
     }
-    for (i=0; i < lines.size(); i++ ) outfile << lines[i] << std::endl;
+    for (i=0; i < lines.size(); i++ )
+    {
+      DEBUG_PRINT(std::cout << lines[i] << std::endl);
+      outfile << lines[i] << std::endl;
+    }
     lines.clear();                                            // Clear the vector.
     outfile.close();
   }

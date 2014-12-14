@@ -23,6 +23,7 @@ class SecDialog : public QDialog
     Q_OBJECT
 
 public:
+    explicit SecDialog(EggBeater::InvokeCLI*, QWidget* parent = 0);
     explicit SecDialog(QWidget *parent = 0);
     ~SecDialog();
 

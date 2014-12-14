@@ -5,9 +5,10 @@
 #include <iterator>
 #include "InvokeCLI.h"
 
-SecDialog::SecDialog(QWidget *parent) :
+SecDialog::SecDialog(EggBeater::InvokeCLI* i, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::SecDialog)
+    ui(new Ui::SecDialog),
+    invoke(i)
 {
     ui->setupUi(this);
 
@@ -196,9 +197,12 @@ void SecDialog::on_encrypt_clicked()
             if(temp>0)
             {
                 cipherMode = SelectCipher.getCipherMode();
-                invoke->encryptFiles(this, fileNames, folderName, cipherMode, proc);
                 pd->setLabelText("Encrypting file(s)...");
+                pd->setModal(true);
+                pd->setWindowModality(Qt::ApplicationModal);
+                pd->show();
                 t->start();
+                invoke->encryptFiles(this, fileNames, folderName, cipherMode, proc);
             }
         }
     }
@@ -261,9 +265,17 @@ void SecDialog::on_decrypt_clicked()
             if(temp>0)
             {
                 cipherMode = SelectCipher.getCipherMode();
+                pd->setLabelText("Encrypting file(s)...");
+                pd->setModal(true);
+                pd->setWindowModality(Qt::ApplicationModal);
+                pd->show();
+                t->start();
+                invoke->decryptFiles(this, fileNames, folderName, cipherMode, proc);
+                /*
+                cipherMode = SelectCipher.getCipherMode();
                 invoke->decryptFiles(this, fileNames, folderName, cipherMode, proc);
                 pd->setLabelText("Decrypting file(s)...");
-                t->start();
+                t->start(); // */
             }
         }
     }

@@ -27,7 +27,9 @@ namespace EggBeater
       int progresscount;
       int sessionID;
       QString errormessage;
+      QString currentFile;
       int done;
+      int discover;
   };
   public:
     InvokeCLI();
@@ -41,7 +43,7 @@ namespace EggBeater
     /**
       Start the session and get the session ID.
     **/
-    void startSession(SecDialog* curr, QProcess* proc);
+    bool startSession(QWidget* curr, QProcess* proc);
 
     /**
       Refresh the current session.
@@ -53,7 +55,7 @@ namespace EggBeater
     **/
     void closeSession(SecDialog* curr, QProcess* proc);
 
-    parse fileParse(SecDialog* curr);
+    parse fileParse(QWidget* curr);
 
     //function to update the progressbar
     void progressBarPopUp(SecDialog* curr, QTimer * t);

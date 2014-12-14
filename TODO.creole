@@ -1,0 +1,14 @@
+=== Embedded code ===
+# Refactor so all required code is in Fingerprint_Task.
+# Reorganize files to seperate logic code from RTOS task code
+
+=== Command line interface ===
+# Clean up status message code (addMsg, writeVec)
+# Check usability of old SerialCommunication code for use on Linux
+# Check usability of code on Mac
+# Check if Linux discovery code works on Mac
+
+=== GUI ===
+# Correct spelling errors in user-facing text
+# Update progress dialog text for decryption path
+# Refactor InvokeCLI and SecDialog for less interdependence

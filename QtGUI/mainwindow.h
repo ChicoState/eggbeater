@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "secdialog.h"
+#include "invokeCLI.h"
 
 namespace Ui
 {
@@ -23,6 +24,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    EggBeater::InvokeCLI invoke;
 };
 
 #endif // MAINWINDOW_H

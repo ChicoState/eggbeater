@@ -16,9 +16,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_authentication_clicked()
 {
-    // If user could get Authentication, go to second window
-    SecDialog secdialog;
-    secdialog.setModal(true);
-    secdialog.setWindowTitle("EncryptApp");
-    secdialog.exec();
+    if (invoke.startSession(this, NULL))
+    {
+
+        // If user could get Authentication, go to second window
+        SecDialog secdialog(&invoke);
+        secdialog.setModal(true);
+        secdialog.setWindowTitle("EncryptApp");
+        secdialog.exec();
+    }
+    else
+    {
+        QMessageBox::critical(this, "Authentication", "Could not create an authenticated session", "Ok");
+    }
 }
