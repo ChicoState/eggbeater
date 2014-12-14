@@ -197,10 +197,8 @@ void SecDialog::on_encrypt_clicked()
             {
                 pd->setLabelText("Encrypting file(s)...");
                 t->start();
-                invoke->startSession(proc);
                 cipherMode = SelectCipher.getCipherMode();
                 invoke->encryptFiles(fileNames, folderName, cipherMode, proc);
-                invoke->closeSession(proc);
             }
         }
     }
@@ -264,10 +262,8 @@ void SecDialog::on_decrypt_clicked()
             {
                 pd->setLabelText("Decrypting file(s)...");
                 t->start();
-                invoke->startSession(proc);
                 cipherMode = SelectCipher.getCipherMode();
                 invoke->decryptFiles(fileNames, folderName, cipherMode, proc);
-                invoke->closeSession(proc);
             }
         }
     }
