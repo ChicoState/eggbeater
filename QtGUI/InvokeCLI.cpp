@@ -25,9 +25,11 @@ namespace EggBeater
     return true;
   }
 
-  void InvokeCLI::startSession(QProcess* proc)
+  void InvokeCLI::startSession(SecDialog* curr, QProcess* proc)
   {
-    //needs to get session ID
+      parse retvals;
+      retvals=fileParse(curr);
+
       QString program = CLI_PATH;
       QStringList attributes;
       attributes << "--start-session";
@@ -220,11 +222,14 @@ namespace EggBeater
       return true;
   }
 
-  void InvokeCLI::encryptFiles(QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc)
+  void InvokeCLI::encryptFiles(SecDialog* curr, QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc)
   {
     /*
      * getOpt.exe --encrypt -f file1 -f file2 -f file3 --session-id 70056 -fd someDrive/someFolder1/ -o option1 --cipher-mode ofb
      */
+    parse retvals;
+    retvals=fileParse(curr);
+
     QString program = CLI_PATH;
     QStringList attributes;
     attributes << "--encrypt";
@@ -254,11 +259,14 @@ namespace EggBeater
     proc->close();
 }
 
-  void InvokeCLI::decryptFiles(QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc)
+  void InvokeCLI::decryptFiles(SecDialog* curr, QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc)
   {
    /*
     * getOpt.exe --decrypt -f file1 -f file2 -f file3 --session-id 70056 -fd someDrive/someFolder1/ -o option1 --cipher-mode ofb
     */
+    parse retvals;
+    retvals=fileParse(curr);
+
     QString program = CLI_PATH;
     QStringList attributes;
     attributes << "--decrypt";

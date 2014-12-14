@@ -41,7 +41,7 @@ namespace EggBeater
     /**
       Start the session and get the session ID.
     **/
-    void startSession(QProcess* proc);
+    void startSession(SecDialog* curr, QProcess* proc);
 
     /**
       Refresh the current session.
@@ -67,13 +67,13 @@ namespace EggBeater
       Encrypt the specified files with the specified cipher mode. Defaults to
       CFB if no cipher mode is passed.
     **/
-    void encryptFiles(QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc);
+    void encryptFiles(SecDialog* curr, QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc);
 
     /**
       Decrypt the specified files with the specified cipher mode. Defaults to
       CFB if no cipher mode is passed.
     **/
-    void decryptFiles(QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc);
+    void decryptFiles(SecDialog* curr, QStringList fileNames, QString folderName, QString cipherMode, QProcess* proc);
 
   private:
     uint32_t sessionID;
